@@ -1,0 +1,367 @@
+
+
+
+.tienda{
+    width: 100%;
+    margin-top: 90px;
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        place-content: center;
+
+        h2{
+            margin-bottom: 40px;
+        }
+        
+        h3{
+            margin: 0;
+        }
+        
+        h4, .precio-unidad, .cabecera-resumen p{
+            color: hsl(7, 20%, 60%);
+            font-weight: 400;
+            margin-bottom: 10px;
+        }
+        
+        p{
+            
+            font-weight: 600;
+        }
+        h3,h4,p{
+            font-size: 16px;
+        }
+        img{
+            display: block;
+        }
+        
+        ul{
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            width: 100%;
+        }
+
+        .productos{
+            margin-left: 6.6%;
+            margin-right: 6.6%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .contenedor-productos{
+            display: grid;
+            column-gap: 25px;
+
+        }
+        
+        @media(min-width:545px){
+
+            .contenedor-productos{
+                grid-template-columns: repeat(2,250px);
+                
+            }
+        
+            .resumen-orden{
+                width: 41%;
+            }
+           
+        }
+        
+        @media(min-width:820px){
+            .contenedor-productos{
+                grid-template-columns: repeat(3,250px);
+            }
+        }
+        
+        @media(min-width:1201px){
+            .contenedor{
+                display: flex;
+            }
+        }
+        
+        .imagen-producto{
+            width: 100%;
+            border-radius: 10px;
+        }
+        .boton{
+            width: 64%;
+            height: 45px;
+            margin-top: -22.5px;
+            margin-left: 18%;
+            margin-right: 18%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            gap: 10px;       
+        }
+        
+        
+        
+        .boton p{
+            font-size: 12px;
+        }
+        
+        
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+          -webkit-appearance: none; 
+          margin: 0; 
+        }
+        input[type=number] { -moz-appearance:textfield; }
+        
+        .boton input{
+            width: 50%;
+            text-align: center;
+            background-color: hsl(14, 86%, 42%);
+            border: none;
+            height: 100%;
+            color: white;
+        }
+        .boton-cantidad, .confirmar-orden{
+            background-color: hsl(14, 86%, 42%);
+            border: 1px solid hsl(14, 86%, 42%) ;
+            
+        }
+        .boton-cantidad:hover{
+            cursor:auto;
+        }
+        .boton-sumar,.boton-restar{
+            background-color: hsl(14, 86%, 42%);
+            border: 1px solid white;
+            height: 15px;
+            width: 15px;
+            border-radius: 50px;
+            display: grid;
+            place-content: center;
+        }
+        
+        
+        .boton-sumar:hover,.boton-restar:hover{
+            background-color: white;
+            cursor: pointer;
+        }
+        
+        .boton-sumar:hover img, .boton-restar:hover img{
+            filter:invert(.4) sepia() hue-rotate(-16deg) saturate(86) brightness(42);
+        }
+        
+        .precio{
+            margin-top: 10px;
+            margin-bottom: 30px;
+            color: hsl(14, 86%, 42%);
+        }
+        .carrito{
+            background-color: hsl(20, 50%, 98%);
+            margin-left: 2.45%;
+            width: 385px;
+            height:fit-content;
+            border-radius: 10px;
+        }
+        
+        .contenido-carrito,.carrito-vacio{
+            display: grid;
+            place-items: center;
+            
+        }
+        
+        .contador-carrito{
+            margin-bottom: 30px;
+        }
+        
+        .carrito h2{
+            margin-top: 30px;
+            color: hsl(14, 86%, 42%);
+            margin-left: 25px;
+        }
+        
+        
+        .texto-carrito-vacio, .precio-total{
+            color: hsl(12, 20%, 44%);
+        }
+        
+        .contenido-carrito{
+            margin-left: 6.5%;
+            margin-right: 6.5%;
+            width: 87%;
+        }
+        
+        .articulo-carrito, .precio-cantidad, .ecologico, .total-orden,.info{
+            display: flex;
+        }
+        
+        
+        .articulo-carrito, .total-orden{
+            justify-content: space-between;
+        }
+        
+        .articulo-carrito{
+            border-bottom: 1px solid lightgray;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .precio-cantidad p{
+            margin-bottom: 25px;
+            margin-top: 15px;
+        }
+        
+        .cantidad{
+            margin-right: 15px;
+            color: hsl(14, 86%, 42%);
+        }
+        .precio-unidad{
+            margin-right: 5px;
+        }
+        
+        .eliminar{
+            width: 15px;
+            height: 15px;
+            border-radius: 50px;
+            display: grid;
+            place-content: center;
+            border: 1px solid gray;
+            background-color: white;
+        }
+        
+        .eliminar:hover{
+            cursor: pointer;
+            border: 1px solid ;
+        }
+        
+        .eliminar:hover img{
+            filter: brightness(0);
+        }
+        
+        .total-orden{
+            width: 100%;
+            align-items: center;
+        }
+        
+        .total-orden p{
+            margin-top: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .precio-final{
+            font-weight: 700;
+            font-size: 25px;
+        }
+        
+        .ecologico{
+            background-color: hsl(13, 31%, 94%);
+            width: 100%;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .ecologico p{
+            color: black;
+        }
+        
+        .confirmar-orden{
+            margin-top: 25px;
+            margin-bottom: 25px;
+            width: 100%;
+            color: white;
+        }
+        
+        .confirmar-orden:hover{
+            color: white;
+            background-color: hsl(14, 86%, 35%);
+            border: 1px solid hsl(14, 86%, 35%) ;
+        }
+        
+        .orden-confirmada{
+            position: fixed;
+            inset: 0;
+            display: grid;
+            place-items: center;
+            background-color: hsla(17, 0%, 0%, .5);
+            
+        }
+        
+        .resumen-orden{
+            max-width: 590px;
+            max-height: 100%;
+            width: 100%;
+            background-color: white;
+            border-radius: 10px;
+            overflow: auto;
+        }
+        
+        .cabecera-resumen{
+            margin-top: 40px;
+        }
+        
+        .cabecera-resumen h2{
+            margin-bottom: 0;
+            font-size: 35px;
+            margin-top: 20px;
+        }
+        .cabecera-resumen p{
+            margin-bottom: 20px;
+            margin-top:0;
+        }
+        
+        .resumen-precio{
+            background-color: hsl(20, 50%, 98%);
+        } 
+        
+        .resumen-precio,.resumen-precio img{
+            border-radius: 5px;
+        } 
+        
+        .resumen-orden button, .resumen-orden .resumen-precio, .cabecera-resumen {
+            margin-right: 6.75%;
+            margin-left: 6.75%;
+            width: 86.5%;
+        }
+        
+        
+        .lista-confirmada{
+            padding-top: 25px;
+        
+        }
+        
+        .lista-confirmada .articulo-carrito .precio-total{
+            margin-top: 0;
+            color: black;
+        }
+        
+        .lista-confirmada, .total-orden{
+            margin-right: 5.6%;
+            margin-left: 5.6%;
+        }
+        
+        .lista-confirmada .articulo-carrito,.total-orden{
+            width: 88.8%;
+        }
+        
+        .lista-confirmada .articulo-carrito{
+            margin-bottom: 15px;
+        }
+        
+        .info{
+            gap: 15px;
+        }
+        
+        .info img{
+            width: 50px;
+            height: 50px;
+        }
+        
+        .datos-articulo p{
+            margin-bottom: 15px;
+        }
+        
+        .ocultar{
+            display: none;
+        }
+        
+        .articulo-seleccionado {
+            outline: 3px solid hsl(14, 86%, 42%);
+        }
+
+}
+

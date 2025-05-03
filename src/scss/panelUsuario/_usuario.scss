@@ -1,0 +1,45 @@
+ @use '../base/variables' as v;
+
+ .usuario{
+    margin:0 10% 0 10%;
+    &__contenedor{
+        display: flex;
+    }
+
+   &__navegacion{margin-right: 5rem;
+    ul{
+        list-style: none;
+        padding: 0;
+    }
+   }
+
+   .datos{
+    &__tipo{
+        font-weight: v.$bold;
+        text-transform: uppercase;
+    }
+   }
+
+   &__acciones{
+    margin-bottom: 3rem;
+   }
+
+   .formulario{
+    &__contenedor{
+        display: flex;
+        
+    }
+
+    &__cerrar{
+        height: 30px;
+        width: 30px;
+        border-radius: 50px;
+        &:hover{
+            cursor: pointer;
+        }
+    }
+    &--ocultar{
+        display: none;
+    }
+   }
+ }

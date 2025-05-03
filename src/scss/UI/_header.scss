@@ -1,0 +1,49 @@
+@use '../base/variables' as v;
+
+.header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: v.$rose400;
+    height: 8rem;
+    width: 89%;
+    padding-left: 5.5%;
+    padding-right: 5.5%;
+    margin-bottom: 50px;
+    &__logo{
+        font-size: 3rem;
+        color: v.$rose900;
+        font-weight: v.$extrabold;
+        &:hover{
+            font-size: 3.1rem;
+        }
+    }
+
+    &__navegacion{
+        width: 50%;
+        ul{
+            display: flex;
+            justify-content: end;
+            list-style: none;
+            gap: 2rem;
+            padding: 0;
+            width: 100%;
+        }
+    }
+
+    &__enlace{
+        color: white;
+        font-size: 1.2rem;
+        font-weight: v.$bold;
+        &:hover{
+            cursor: pointer;
+            color: v.$red;
+        }
+    }
+
+    &__submit{
+        background-color: transparent;
+        border: none;
+        @extend .header__enlace;
+    }
+}

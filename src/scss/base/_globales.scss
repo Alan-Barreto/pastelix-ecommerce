@@ -1,0 +1,34 @@
+@use 'variables' as v;
+@use 'sass:color';
+body{
+    background-color:hsl(13, 31%, 94%);
+    font-family: Red Hat Text;
+    display: grid;
+    grid-template-rows: auto 1fr auto; /* header, contenido, footer */
+    height: 100vh; /* Usa toda la altura de la ventana */
+    
+}
+
+a{
+    text-decoration: none;
+}
+
+.boton{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 2.5rem;
+    width: 100%;
+    border-radius: 50px;
+    text-transform: uppercase;
+    text-align: center;
+    color: white;
+    font-weight: v.$bold;
+    background-color: v.$red;
+    &:hover{
+        cursor: pointer;
+        background-color: color.adjust(v.$red, $lightness: -10%);
+    }
+    
+
+}

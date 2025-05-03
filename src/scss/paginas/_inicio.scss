@@ -1,0 +1,29 @@
+@use '../base/variables' as v;
+
+.inicio{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    &__tienda{
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        width: 33%;
+    }
+    &__usuario{
+        display: flex;
+        justify-content: space-between;
+        width: 75%;
+        margin-top: 5rem;
+        text-align: center;
+    }
+    &__elemento{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 40%;
+    }
+}

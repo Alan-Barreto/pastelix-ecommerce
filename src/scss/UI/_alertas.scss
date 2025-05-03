@@ -1,0 +1,24 @@
+
+@use '../base/variables' as v;
+@use 'sass:color';
+
+.alerta{
+    box-sizing: border-box;
+    min-width: 325px;
+    width: 30%;
+    margin-bottom: 20px;
+    padding: 10px 1rem;
+    color: white;
+    font-weight: v.$bold;
+    font-size: 17px;
+    text-transform: uppercase;
+    border-radius: 7px;
+    &__error{
+        background-color: rgb(169, 0, 0);
+    }
+
+    &__exito{
+        background-color: color.adjust(#02db02, $lightness: -10%)  ;
+    }
+    
+}

@@ -1,0 +1,75 @@
+@use '../base/variables' as v;
+@use 'sass:color';
+
+.login,
+.registro{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.formulario{
+    min-width: 325px;
+    width: 30%;
+    margin-bottom: 20px;
+    &__campo{
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 2rem;
+    }
+
+    &__label{
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        font-weight: v.$bold;
+        letter-spacing: .5px;
+        font-size: 1.25rem;
+    }
+
+    &__input{
+        border-radius: .25rem;
+        height: 3rem;
+        border: 1px solid v.$rose400;
+        padding-left: 1rem;
+
+        &::placeholder{
+            color: v.$rose300;
+            font-size: 1.2rem;
+        }
+    }
+
+    &__submit{
+        height: 2.5rem;
+        width: 10rem;
+        text-transform: uppercase;
+        color: white;
+        font-weight: v.$bold;
+        background-color: v.$red;
+        border-radius: 50px;
+        border: none;
+
+        &:hover{
+            cursor: pointer;
+            background-color: color.adjust(v.$red, $lightness: -10%);
+        }
+    }
+}
+
+.acciones{
+    display: flex;
+    min-width: 325px;
+    width: 30%;
+    justify-content: space-between;
+    gap: 5px;
+    &--centrar{
+        justify-content: center;
+    }
+    &__enlace{
+        color: v.$red;
+
+        &:hover{
+            color: v.$rose900;
+        }
+    }
+}
