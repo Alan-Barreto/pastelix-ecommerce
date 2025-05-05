@@ -31,9 +31,15 @@ $router->post('/usuario',[UsuariosController::class, 'usuario']);
 $router->get('/usuario/pedidos',[UsuariosController::class, 'pedidos']);
 $router->get('/usuario/direcciones',[UsuariosController::class, 'direcciones']);
 
+
 //Cambiar datos de usuario
 $router->get('/actualizar',[UsuariosController::class, 'actualizar']);
-$router->get('/actualizar/confirmado',[UsuariosController::class, 'actualizar/confirmado']);
+$router->get('/usuario/direcciones/crear',[UsuariosController::class, 'crear']);
+$router->post('/usuario/direcciones/crear',[UsuariosController::class, 'crear']);
+$router->get('/usuario/direcciones/editar',[UsuariosController::class, 'editar']);
+$router->post('/usuario/direcciones/editar',[UsuariosController::class, 'editar']);
+$router->post('/usuario/direcciones/borrar',[UsuariosController::class, 'borrar']);
+
 
 
 

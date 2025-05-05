@@ -8,6 +8,17 @@ El formato sigue el esquema de versionado semántico: MAJOR.MINOR.PATCH
 - MINOR: nuevas funcionalidades compatibles
 - PATCH: correcciones o mejoras internas sin cambios visibles importantes
 
+## [0.3.0] - 2025-05-05 
+### ➕ Agregado
+- Creada la tabla `direcciones` en la base de datos con sus respectivas relaciones.
+- Implementado el modelo `Direccion` para interactuar con la base de datos.
+- Añadidas las rutas de creación y edición de direcciones:
+    - `usuario/direcciones/crear`
+    - `usuario/direcciones/editar`
+- Añadida la función para borrar direcciones guardadas por los usuarios.
+
+### 📅 Pendiente
+- Agregar funcionalidad para que las alertas persistan después de una redirección.
 
 ## [0.2.0] - 2025-05-02
 ### 🔧 Cambiado
@@ -20,6 +31,7 @@ El formato sigue el esquema de versionado semántico: MAJOR.MINOR.PATCH
 
 ### 🐛 Corregido
 - Ajustadas funciones afectadas por los cambios en los modelos.
+
 
 ## [0.1.0] - 2025-05-01
 ### Inicial

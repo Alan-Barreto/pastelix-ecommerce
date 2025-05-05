@@ -4,6 +4,7 @@ namespace Controllers;
 
 use Classes\Email;
 use DateTime;
+use Model\Direccion;
 use MVC\Router;
 use Model\Token;
 use Model\Usuario;
@@ -197,11 +198,91 @@ class UsuariosController{
             header('Location: /');
             exit();
         }else{
-
-
-            $router->render('/usuario/direcciones',[
-                'titulo' => 'Mi Cuenta - Direcciones'
+            $direcciones = Direccion::allWhere('usuario_id', $_SESSION['id'], 'ASC');
+        
+            $router->render('/usuario/direcciones/direcciones',[
+                'titulo' => 'Mi Cuenta - Direcciones',
+                'direcciones' => $direcciones
             ]);
         }   
+    }
+
+    public static function crear(Router $router){
+        if(!is_auth()){
+            header('Location: /');
+            exit();
+        }else{
+            $direccion = new Direccion();
+            $alertas = [];
+           if($_SERVER['REQUEST_METHOD'] === 'POST'){
+                $direccion->sincronizar($_POST);
+                $alertas = $direccion->validarFormulario();
+
+                if(empty($alertas)){
+                    $direccion->usuario_id = $_SESSION['id'];
+                    $direccion->setFechaCreacion();
+                    $direccion->guardar();
+                    //AQUI FALTA SETEAR ALERTA DE EXITO
+                    header('Location: /usuario/direcciones');
+                }
+           }
+        
+            $router->render('/usuario/direcciones/crear',[
+                'titulo' => 'Mi Cuenta - Direcciones/crear',
+                'direccion' => $direccion,
+                'alertas' => $alertas
+            ]);
+        }   
+    }
+
+    public static function editar(Router $router){
+        if(!is_auth()){
+            header('Location: /');
+            exit();
+        }else{
+
+           $direccion = Direccion::validarIdDireccion();
+
+           if(!$direccion){
+                header('Location: /usuario/direcciones');
+                exit();
+           }else{
+                if($_SERVER['REQUEST_METHOD'] === 'POST'){
+                    $direccion->sincronizar($_POST);
+                    $alertas = $direccion->validarFormulario();
+
+                    if(empty($alertas)){
+                        $direccion->setFechaActualizacion();
+                        $direccion->guardar();
+                        //AQUI FALTA SETEAR ALERTA DE EXITO
+                        header('Location: /usuario/direcciones');   
+                    }
+                }
+           }
+            
+            $router->render('/usuario/direcciones/editar',[
+                'titulo' => 'Mi Cuenta - Direcciones/editar',
+                'direccion' => $direccion,
+                'alertas' => $alertas
+            ]);
+        }   
+    }
+
+    public static function borrar(){
+        if(!is_auth()){
+            header('Location: /');
+            exit();
+        }else{
+            $direccion = Direccion::validarIdDireccion();
+            if(!$direccion){
+                header('Location: /usuario/direcciones');
+                exit();
+           }else{
+                $direccion->delete();
+                //Hace falta el aviso de borrado correctamente
+                header('Location: /usuario/direcciones');
+                exit();
+           }
+        }
     }
 }

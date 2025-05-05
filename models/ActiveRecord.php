@@ -74,24 +74,36 @@ class ActiveRecord{
         }
         return $sanitizado;
     }
+
+    //Devuelve todo el contenido de la tabla
     public static function all ($orden = 'DESC'){
         $query = " SELECT * FROM " . static::$tabla . " ORDER BY id $orden";
         $resultado = self::consultarSQL($query);
         return $resultado;
     }
 
+    //Devuelve el primer elemento de la tabla que cumpla la condicion
     public static function where($columna,$valor){
         $query = "SELECT * FROM " . static::$tabla . " WHERE $columna = '$valor' ";
         $resultado = self::consultarSQL($query);
         return array_shift($resultado) ;
     }
 
+    //Devuelve el todos los elementos de la tabla que cumplan la condicion
+    public static function allWhere ($columna, $valor ,$orden = 'DESC'){
+        $query = " SELECT * FROM " . static::$tabla . " WHERE $columna = '$valor' ORDER BY id $orden";
+        $resultado = self::consultarSQL($query);
+        return $resultado;
+    }
+
+    //Borra el elemento de la tabla al que se apunta
     public function delete(){
         $query = "DELETE FROM " . static::$tabla . " WHERE id = " . self::$db->escape_string($this->id) . " LIMIT 1";
         $resultado = self::$db->query($query);
         return $resultado;
     }
 
+    //Revisa la existencia del elemento para actualizarlo o crearlo
     public function guardar(){
         $atributos = $this->sanitizarAtributos();
         if(is_null($this->id)){
@@ -105,6 +117,7 @@ class ActiveRecord{
      
     }
 
+    //Crea un nuevo elemento en la tabla
     public function crear($atributos){
 
         $query = "INSERT INTO " . static::$tabla . " (";
@@ -120,6 +133,7 @@ class ActiveRecord{
         ];
     }
 
+    //Actualiza los datos de un elemento en la tabla
     public function actualizar($atributos){
             $nuevosDatos = [];
         foreach($atributos as $key=>$value){

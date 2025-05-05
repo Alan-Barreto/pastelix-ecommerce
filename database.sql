@@ -53,3 +53,20 @@ CREATE TABLE IF NOT EXISTS tokens (
     fecha_expiracion DATETIME DEFAULT NULL,
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS direcciones (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NULL,
+    nombre VARCHAR(45) NULL,
+    apellido VARCHAR(45) NULL,
+    calle VARCHAR(45) NULL,
+    ciudad VARCHAR(45) NULL,
+    provincia VARCHAR(45) NULL,
+    codigo_postal VARCHAR(15) NULL,
+    pais VARCHAR(45) NULL,
+    telefono VARCHAR(45) NULL,
+    fecha_creacion DATETIME NULL,
+    fecha_actualizacion DATETIME NULL,
+    predeterminada TINYINT NULL,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
