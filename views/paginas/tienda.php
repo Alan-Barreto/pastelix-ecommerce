@@ -7,7 +7,7 @@
         //Aqui se hara llamado a la DB para rellenar con los datos de esta
         foreach ($productos as $producto){?>
           <article class="articulo">
-            <img src="<?php echo $producto->imagen;?>" alt="Imagen Producto" class="imagen-producto">
+            <img src="<?php echo '/img/productos/'.  $producto->imagen . '.webp';?>" alt="Imagen Producto" class="imagen-producto">
             <button class="boton boton-añadir">
               <img src="/build/img/icon-add-to-cart.svg" alt="Icono Carrito">
               <p>Add to Cart</p>

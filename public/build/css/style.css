@@ -704,6 +704,12 @@ a {
   background-color: transparent;
   border: none;
 }
+.header__admin {
+  display: flex;
+}
+.header__admin .admin__fecha {
+  display: flex;
+}
 
 .footer {
   display: flex;
@@ -836,6 +842,77 @@ a {
 .usuario .formulario--ocultar {
   display: none;
 }
+
+.admin__layout {
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  grid-template-rows: 100px 1fr;
+}
+.admin__layout header {
+  grid-column: 2;
+  grid-row: 1/2;
+}
+.admin__layout nav {
+  grid-row: 1/3;
+  grid-column: 1;
+  height: 100%;
+  position: static;
+}
+.admin__layout main {
+  grid-column: 2;
+  grid-row: 2/3;
+}
+/*!*********************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./src/scss/admin/_index.scss ***!
+  \*********************************************************************************************************************/
+.admin__layout {
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  grid-template-rows: 100px 1fr;
+}
+.admin__layout header {
+  grid-column: 2;
+  grid-row: 1/2;
+}
+.admin__layout nav {
+  grid-row: 1/3;
+  grid-column: 1;
+  height: 100%;
+  position: static;
+}
+.admin__layout main {
+  grid-column: 2;
+  grid-row: 2/3;
+}
+/*!**********************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./src/scss/admin/_layout.scss ***!
+  \**********************************************************************************************************************/
+.admin__layout {
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  grid-template-rows: 100px 1fr;
+}
+.admin__layout header {
+  grid-column: 2;
+  grid-row: 1/2;
+}
+.admin__layout nav {
+  grid-row: 1/3;
+  grid-column: 1;
+  height: 100%;
+  position: static;
+}
+.admin__layout main {
+  grid-column: 2;
+  grid-row: 2/3;
+}
+/*!***********************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./src/scss/admin/_sidebar.scss ***!
+  \***********************************************************************************************************************/
+
 /*!***********************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./src/scss/base/_globales.scss ***!
   \***********************************************************************************************************************/
@@ -2395,6 +2472,12 @@ template {
   background-color: transparent;
   border: none;
 }
+.header__admin {
+  display: flex;
+}
+.header__admin .admin__fecha {
+  display: flex;
+}
 /*!******************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./src/scss/UI/_index.scss ***!
   \******************************************************************************************************************/
@@ -2440,6 +2523,12 @@ template {
 .header__submit {
   background-color: transparent;
   border: none;
+}
+.header__admin {
+  display: flex;
+}
+.header__admin .admin__fecha {
+  display: flex;
 }
 
 .footer {

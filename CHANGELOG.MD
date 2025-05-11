@@ -8,6 +8,49 @@ El formato sigue el esquema de versionado semántico: MAJOR.MINOR.PATCH
 - MINOR: nuevas funcionalidades compatibles
 - PATCH: correcciones o mejoras internas sin cambios visibles importantes
 
+## [0.4.0] - 2025-05-11 
+### ➕ Agregado
+- Funcionalidad para mantener las alertas persistentes tras redirecciones
+- Rutas iniciales para el panel de administración:
+    -`admin`
+    -`admin/productos`
+    -`admin/productos/crear`
+    -`admin/productos/editar`
+    -`admin/resumen`
+    -`admin/pedidos`
+- Creación del controlador `AdminController.php` para gestionar las rutas administrativas
+- Integración de la librería `Intervention Image` para la conversión de imágenes al formato WebP
+- Función para redimensionar y convertir imágenes subidas por el usuario a WebP
+- Función para eliminar las imágenes asociadas a un producto cuando este es eliminado o se reemplaza su imagen
+
+### 🔧 Cambiado
+- Añadido parámetro `layout` en el método `render` de `Router.php` para utilizar una plantilla diferente en las rutas de administración
+- Nuevas validaciones en el modelo `Producto`
+- Actualización de los datos de imagen en la columna `imagen` de la tabla `productos` para unificarlos con el formato de las imágenes subidas por el usuario
+- Modificado el valor de `imagen` dentro de la tabla `productos` en `database.sql` para reflejar el nuevo formato.
+- Imágenes de muestra convertidas a formato WebP
+
+### 🧹 Eliminado
+- Eliminada columna `miniatura` de la tabla `productos`
+- Eliminada columna `miniatura` del modelo `Producto`
+- Eliminada la columna `miniatura` en la tabla `productos` del archivo `database.sql` para mantener coherencia con la nueva estructura
+
+### 🐛 Corregido
+- Solucionado un error que duplicaba las solicitudes de actualización de datos en la ruta `/usuario`
+- Añadidas validaciones de acceso faltantes en rutas:
+    - `olvide`
+    - `recuperar`
+    - `mensaje`
+- Actualización del valor de `password` en la tabla `usuarios` de `database.sql` por un hash
+- Corrección del llamado a imágenes en la ruta `/tienda` para ajustarse al nuevo formato de nombres y extensiones.
+
+### 📅 Pendiente
+- Implementar funcionalidad en las siguientes rutas:
+    -`admin`
+    -`admin/resumen`
+    -`admin/pedidos`
+    -`usuario/pedidos`
+
 ## [0.3.0] - 2025-05-05 
 ### ➕ Agregado
 - Creada la tabla `direcciones` en la base de datos con sus respectivas relaciones.

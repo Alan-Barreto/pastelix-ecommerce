@@ -4,6 +4,12 @@
         <h1>direcciones</h1>
     <div class="usuario__direcciones"> 
         <a href="/usuario/direcciones/crear"><button>Nueva Direccion</button></a>
+        <?php
+            if(isset($_SESSION['alerta'])){
+                $alertas = getAlertaSession();
+            }
+            include_once __DIR__ .'/../../templates/alertas.php';
+        ?>
         <ul>
             <?php 
                 if (!empty($direcciones)){

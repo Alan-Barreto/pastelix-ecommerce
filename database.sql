@@ -13,16 +13,16 @@ CREATE TABLE IF NOT EXISTS productos (
 );
 
 -- Insertar datos de ejemplo en productos
-INSERT INTO productos (nombre, categoria, precio, imagen, miniatura) VALUES
-('Waffle with Berries', 'Waffle', 6.50, './img/productos/image-waffle-tablet.jpg', './images/image-waffle-thumbnail.jpg'),
-('Vanilla Bean Crème Brûlée', 'Crème Brûlée', 7.00, './img/productos/image-creme-brulee-tablet.jpg', './images/image-creme-brulee-thumbnail.jpg'),
-('Macaron Mix of Five', 'Macaron', 8.00, './img/productos/image-macaron-tablet.jpg', './images/image-macaron-thumbnail.jpg'),
-('Classic Tiramisu', 'Tiramisu', 5.50, './img/productos/image-tiramisu-tablet.jpg', './images/image-tiramisu-thumbnail.jpg'),
-('Pistachio Baklava', 'Baklava', 4.00, './img/productos/image-baklava-tablet.jpg', './images/image-baklava-thumbnail.jpg'),
-('Lemon Meringue Pie', 'Pie', 5.00, './img/productos/image-meringue-tablet.jpg', './images/image-meringue-thumbnail.jpg'),
-('Red Velvet Cake', 'Cake', 4.50, './img/productos/image-cake-tablet.jpg', './images/image-cake-thumbnail.jpg'),
-('Salted Caramel Brownie', 'Brownie', 4.50, './img/productos/image-brownie-tablet.jpg', './images/image-brownie-thumbnail.jpg'),
-('Vanilla Panna Cotta', 'Panna Cotta', 6.50, './img/productos/image-panna-cotta-tablet.jpg', './images/image-panna-cotta-thumbnail.jpg');
+INSERT INTO productos (nombre, categoria, precio, imagen) VALUES
+('Waffle with Berries', 'Waffle', 6.50, 'image-waffle'),
+('Vanilla Bean Crème Brûlée', 'Crème Brûlée', 7.00, 'image-creme-brulee'),
+('Macaron Mix of Five', 'Macaron', 8.00, 'image-macaron'),
+('Classic Tiramisu', 'Tiramisu', 5.50, 'image-tiramisu'),
+('Pistachio Baklava', 'Baklava', 4.00, 'image-baklava'),
+('Lemon Meringue Pie', 'Pie', 5.00, 'image-meringue'),
+('Red Velvet Cake', 'Cake', 4.50, 'image-cake'),
+('Salted Caramel Brownie', 'Brownie', 4.50, 'image-brownie'),
+('Vanilla Panna Cotta', 'Panna Cotta', 6.50, 'image-panna-cotta');
 
 -- Tabla: usuarios
 CREATE TABLE IF NOT EXISTS usuarios (
@@ -37,8 +37,8 @@ CREATE TABLE IF NOT EXISTS usuarios (
 
 -- Insertar usuarios de ejemplo (passwords sin hashear para pruebas locales)
 INSERT INTO usuarios (nombre, apellido, email, password, confirmado, admin) VALUES
-('Admin', 'User', 'admin@pastelix.com', '123456', 1, 1),
-('Cliente', 'Ejemplo', 'cliente@pastelix.com', '123456', 1, 0);
+('Admin', 'User', 'admin@pastelix.com', '$2y$10$R.9tOuQ1OcLn6LDNWiRZ7.gp1YG08zjlE/JC3qOuudUutAVTbw6s.', 1, 1),
+('Cliente', 'Ejemplo', 'cliente@pastelix.com', '$2y$10$Lf51rawlegGW9AvcPcVHUe6gt5FgIHJ3FJXEKjT//sAslpKBnSPAW', 1, 0);
 
 -- Tabla: tokens
 CREATE TABLE IF NOT EXISTS tokens (

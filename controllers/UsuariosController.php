@@ -3,7 +3,6 @@
 namespace Controllers;
 
 use Classes\Email;
-use DateTime;
 use Model\Direccion;
 use MVC\Router;
 use Model\Token;
@@ -27,7 +26,7 @@ class UsuariosController{
                     $nuevosDatos['nombre']= $_POST['nombre'];
                     $nuevosDatos['apellido'] = $_POST['apellido'];
                     if(empty($_POST['nombre']) || empty($_POST['apellido'])){
-                        $alertas = usuario::setAlerta('error', 'Los ninguno de los espacios puede ir vacio');
+                        $alertas = usuario::setAlerta('error', 'Ninguno de los espacios puede ir vacio');
                     }
                    
                     if(empty($alertas)){
@@ -37,7 +36,9 @@ class UsuariosController{
                         }else{
                             $usuario->sincronizar($_POST);
                             $usuario->guardar();
-                            $alertas = usuario::setAlerta('exito', 'Datos actualizados con exito');
+                            setAlertaSession('exito', 'Datos actualizados con exito');
+                            header('Location: /usuario');
+                            exit;
                         }
                         
                     }
@@ -61,7 +62,10 @@ class UsuariosController{
                             $mail->enviarCorreo();
                             $token->hashearToken();
                             $token->guardar();
-                             $alertas = Usuario::setAlerta('exito', 'Se enviara un correo de confirmacion a su E-mail actual');
+
+                            setAlertaSession('exito', 'Se enviara un correo de confirmacion a su E-mail actual');
+                            header('Location: /usuario');
+                            exit;
                         }
                     }
                 }
@@ -87,7 +91,10 @@ class UsuariosController{
                             $token->hashearToken();
                             $token->hashearPassword();
                             $token->guardar();
-                            $alertas = Usuario::setAlerta('exito', 'Se enviara un correo de confirmacion a su E-mail');                 
+                        
+                            setAlertaSession('exito', 'Se enviara un correo de confirmacion a su E-mail');
+                            header('Location: /usuario');
+                            exit;                
                         }                      
                     }
                 }
@@ -217,12 +224,11 @@ class UsuariosController{
            if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 $direccion->sincronizar($_POST);
                 $alertas = $direccion->validarFormulario();
-
                 if(empty($alertas)){
                     $direccion->usuario_id = $_SESSION['id'];
                     $direccion->setFechaCreacion();
                     $direccion->guardar();
-                    //AQUI FALTA SETEAR ALERTA DE EXITO
+                    setAlertaSession('exito', 'Direccion Creada con exito');
                     header('Location: /usuario/direcciones');
                 }
            }
@@ -242,7 +248,7 @@ class UsuariosController{
         }else{
 
            $direccion = Direccion::validarIdDireccion();
-
+            
            if(!$direccion){
                 header('Location: /usuario/direcciones');
                 exit();
@@ -254,7 +260,7 @@ class UsuariosController{
                     if(empty($alertas)){
                         $direccion->setFechaActualizacion();
                         $direccion->guardar();
-                        //AQUI FALTA SETEAR ALERTA DE EXITO
+                        setAlertaSession('exito', 'Direccion actualizada con exito');
                         header('Location: /usuario/direcciones');   
                     }
                 }
@@ -279,7 +285,7 @@ class UsuariosController{
                 exit();
            }else{
                 $direccion->delete();
-                //Hace falta el aviso de borrado correctamente
+                setAlertaSession('exito', 'Direccion eliminada con exito');
                 header('Location: /usuario/direcciones');
                 exit();
            }

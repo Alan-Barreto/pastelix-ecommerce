@@ -2,7 +2,6 @@
 
 namespace Controllers;
 
-use DateTime;
 use MVC\Router;
 use Model\Token;
 use Classes\Email;
@@ -116,13 +115,21 @@ class LoginController{
     }
 
     public static function mensaje(Router $router){
-
+        if(is_auth()){
+            header('Location: /usuario');
+            exit();
+        }
+        
         $router->render('auth/mensaje',[
             'titulo' => 'Termina tu registro',
         ]);
     }
 
     public static function olvide(Router $router){
+        if(is_auth()){
+            header('Location: /usuario');
+            exit();
+        }
         $usuario = new Usuario();
 
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
@@ -152,6 +159,11 @@ class LoginController{
     }
 
     public static function recuperar(Router $router){
+        if(is_auth()){
+            header('Location: /usuario');
+            exit();
+        }
+
         $selector = filter_var($_GET['selector'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $token = Token::where('selector', $selector);   
         $tokenInput = $_GET['token']; 

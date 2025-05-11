@@ -89,16 +89,17 @@ Funcionalidades implementadas
 
     Validaciones del lado cliente y servidor
 
-En desarrollo
+    Conversión automática de imágenes a WebP
+
     Panel de administración para gestionar productos
+
+En desarrollo
 
     Pagos con integración a PayPal
 
     Historial de pedidos para usuarios
 
     Vista de estadísticas para administradores
-
-    Conversión automática de imágenes a WebP o AVIF
 
     Diseño visual y mejoras en UI
 

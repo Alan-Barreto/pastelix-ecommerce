@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../includes/app.php';
 
 use MVC\Router;
+use Controllers\AdminController;
 use Controllers\LoginController;
 use Controllers\PaginasController;
 use Controllers\UsuariosController;
@@ -40,6 +41,16 @@ $router->get('/usuario/direcciones/editar',[UsuariosController::class, 'editar']
 $router->post('/usuario/direcciones/editar',[UsuariosController::class, 'editar']);
 $router->post('/usuario/direcciones/borrar',[UsuariosController::class, 'borrar']);
 
+//Area de administración
+$router->get('/admin',[AdminController::class, 'admin']);
+$router->get('/admin/productos',[AdminController::class, 'productos']);
+$router->get('/admin/productos/crear',[AdminController::class, 'crearProducto']);
+$router->post('/admin/productos/crear',[AdminController::class, 'crearProducto']);
+$router->get('/admin/productos/editar',[AdminController::class, 'editarProducto']);
+$router->post('/admin/productos/editar',[AdminController::class, 'editarProducto']);
+$router->post('/admin/productos/borrar',[AdminController::class, 'borrarProducto']);
+$router->get('/admin/resumen',[AdminController::class, 'resumen']); 
+$router->get('/admin/pedidos',[AdminController::class, 'pedidos']); 
 
 
 

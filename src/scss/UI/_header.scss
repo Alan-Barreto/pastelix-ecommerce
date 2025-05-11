@@ -46,4 +46,11 @@
         border: none;
         @extend .header__enlace;
     }
+
+    &__admin{
+        display: flex;
+        .admin__fecha{
+            display: flex;
+        }
+    }
 }

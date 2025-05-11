@@ -24,7 +24,12 @@
                 <button class="accion correo">Modificar E-mail</button>
                 <button class="accion contraseña">Cambiar contraseña</button>
             </div>
-            <?php include_once  __DIR__.'/../templates/alertas.php'; ?>
+            <?php 
+            if(isset($_SESSION['alerta'])){
+                $alertas = getAlertaSession();
+            }       
+            include_once  __DIR__.'/../templates/alertas.php'; 
+            ?>
             <div class="formulario__contenedor formulario--ocultar">
                 <form method='post' class="formulario formulario__datos">
                     <div class="formulario__campo">
