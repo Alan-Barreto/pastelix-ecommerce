@@ -2,7 +2,9 @@
 require_once __DIR__ . '/../includes/app.php';
 
 use MVC\Router;
+use Controllers\API;
 use Controllers\AdminController;
+use Controllers\APICarrito;
 use Controllers\LoginController;
 use Controllers\PaginasController;
 use Controllers\UsuariosController;
@@ -57,6 +59,15 @@ $router->get('/admin/pedidos',[AdminController::class, 'pedidos']);
 //AREA PUBLICA
 $router->get('/', [PaginasController::class, 'index']);
 $router->get('/tienda', [PaginasController::class, 'tienda']);
+$router->get('/checkout', [PaginasController::class, 'checkout']);
+
+//APIS
+$router->get('/api/recuperarCatalogo', [APICarrito::class, 'recuperarCatalogo']);
+$router->get('/api/recuperarCarrito', [APICarrito::class, 'recuperarCarrito']);
+$router->post('/api/recuperarPrecio', [APICarrito::class, 'recuperarPrecio']);
+$router->get('/api/añadirProducto', [APICarrito::class, 'añadirProducto']);
+$router->put('/api/actualizarCantidadProductoDelCarrito', [APICarrito::class, 'actualizarCantidadProductoDelCarrito']);
+$router->delete('/api/eliminarProductoDelCarrito', [APICarrito::class, 'eliminarProductoDelCarrito']);
 
 
 $router->comprobarRutas();

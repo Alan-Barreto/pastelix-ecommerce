@@ -1,6 +1,7 @@
 <?php
 namespace Controllers;
 
+use Model\CarritoProducto;
 use Model\Producto;
 use MVC\Router;
 
@@ -12,13 +13,18 @@ class PaginasController{
         ]);
     }
 
-    public static function Tienda(Router $router){
-        $productos = Producto::all('ASC');
-
-
+    public static function tienda(Router $router){
+  
         $router->render('paginas/tienda', [
-            'titulo' => 'Tienda',
-            'productos' => $productos
+            'titulo' => 'Tienda'
+        ]);
+    }
+
+    public static function checkout(Router $router){
+        
+
+        $router->render('paginas/checkout', [
+            'titulo' => 'Checkout'
         ]);
     }
 }

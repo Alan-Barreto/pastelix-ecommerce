@@ -84,4 +84,5 @@ class Producto extends ActiveRecord{
 
         return $producto;
     }
+    
 }

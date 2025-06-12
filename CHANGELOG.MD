@@ -8,6 +8,36 @@ El formato sigue el esquema de versionado semántico: MAJOR.MINOR.PATCH
 - MINOR: nuevas funcionalidades compatibles
 - PATCH: correcciones o mejoras internas sin cambios visibles importantes
 
+## [0.4.0] - 2025-06-12 
+### ➕ Agregado
+- Creada las tablas:
+    -`carritos`
+    -`carrito_productos`
+- Creado el controlador `APICarrito.php` para gestionar las apis referentes al funcionamiento de la tienda y su carrito
+- Rutas para los llamados a la api:
+    -`/api/recuperarCatalogo`
+    -`/api/recuperarCarrito`
+    -`/api/recuperarPrecio`
+    -`/api/añadirProducto` 
+    -`/api/actualizarCantidadProductoDelCarrito` 
+    -`/api/eliminarProductoDelCarrito` 
+
+### 🔧 Cambiado
+- Refactorizado el archivo `tienda.js` para integrar llamado a la api en su funcionamiento
+- Refactorizado el archivo `tienda.php` para pasar el renderizado de la pagina a `tienda.js`
+- Añadida funcion `whereArray` en el modelo `ActiveRecord`
+
+### 🐛 Corregido
+- Arreglada la funcionalidad de `/tienda`
+
+### 📅 Pendiente
+- Implementar procesamiento del pedido y pago
+- Implementar funcionalidad en las siguientes rutas:
+    -`admin`
+    -`admin/resumen`
+    -`admin/pedidos`
+    -`usuario/pedidos`
+
 ## [0.4.0] - 2025-05-11 
 ### ➕ Agregado
 - Funcionalidad para mantener las alertas persistentes tras redirecciones

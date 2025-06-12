@@ -70,3 +70,27 @@ CREATE TABLE IF NOT EXISTS direcciones (
     predeterminada TINYINT NULL,
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS carritos (
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  usuario_id INT NULL,
+  INDEX `usuarios-carritos_idx` (usuario_id) VISIBLE,
+  CONSTRAINT `usuarios-carritos`
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE ON UPDATE NO ACTION
+);
+
+CREATE TABLE IF NOT EXISTS carrito_productos (
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  carrito_id INT NULL,
+  producto_id INT NULL,
+  cantidad INT NULL,
+
+  UNIQUE KEY un_carrito_producto (carrito_id, producto_id),
+  
+  INDEX `carritos-carrito_productos_idx` (carrito_id) VISIBLE,
+  INDEX `productos-carrito_productos_idx` (producto_id) VISIBLE,
+  CONSTRAINT `carritos-carrito_productos`
+    FOREIGN KEY (carrito_id) REFERENCES carritos (id) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `productos-carrito_productos`
+    FOREIGN KEY (producto_id) REFERENCES productos (id) ON DELETE CASCADE ON UPDATE NO ACTION
+);
