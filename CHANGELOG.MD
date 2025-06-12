@@ -8,19 +8,19 @@ El formato sigue el esquema de versionado semántico: MAJOR.MINOR.PATCH
 - MINOR: nuevas funcionalidades compatibles
 - PATCH: correcciones o mejoras internas sin cambios visibles importantes
 
-## [0.4.0] - 2025-06-12 
+## [0.5.0] - 2025-06-12 
 ### ➕ Agregado
 - Creada las tablas:
-    -`carritos`
-    -`carrito_productos`
+    - `carritos`
+    - `carrito_productos`
 - Creado el controlador `APICarrito.php` para gestionar las apis referentes al funcionamiento de la tienda y su carrito
 - Rutas para los llamados a la api:
-    -`/api/recuperarCatalogo`
-    -`/api/recuperarCarrito`
-    -`/api/recuperarPrecio`
-    -`/api/añadirProducto` 
-    -`/api/actualizarCantidadProductoDelCarrito` 
-    -`/api/eliminarProductoDelCarrito` 
+    - `/api/recuperarCatalogo`
+    - `/api/recuperarCarrito`
+    - `/api/recuperarPrecio`
+    - `/api/añadirProducto` 
+    - `/api/actualizarCantidadProductoDelCarrito` 
+    - `/api/eliminarProductoDelCarrito` 
 
 ### 🔧 Cambiado
 - Refactorizado el archivo `tienda.js` para integrar llamado a la api en su funcionamiento
@@ -33,21 +33,22 @@ El formato sigue el esquema de versionado semántico: MAJOR.MINOR.PATCH
 ### 📅 Pendiente
 - Implementar procesamiento del pedido y pago
 - Implementar funcionalidad en las siguientes rutas:
-    -`admin`
-    -`admin/resumen`
-    -`admin/pedidos`
-    -`usuario/pedidos`
+    - `checkout`
+    - `admin`
+    - `admin/resumen`
+    - `admin/pedidos`
+    - `usuario/pedidos`
 
 ## [0.4.0] - 2025-05-11 
 ### ➕ Agregado
 - Funcionalidad para mantener las alertas persistentes tras redirecciones
 - Rutas iniciales para el panel de administración:
-    -`admin`
-    -`admin/productos`
-    -`admin/productos/crear`
-    -`admin/productos/editar`
-    -`admin/resumen`
-    -`admin/pedidos`
+    - `admin`
+    - `admin/productos`
+    - `admin/productos/crear`
+    - `admin/productos/editar`
+    - `admin/resumen`
+    - `admin/pedidos`
 - Creación del controlador `AdminController.php` para gestionar las rutas administrativas
 - Integración de la librería `Intervention Image` para la conversión de imágenes al formato WebP
 - Función para redimensionar y convertir imágenes subidas por el usuario a WebP
@@ -76,10 +77,10 @@ El formato sigue el esquema de versionado semántico: MAJOR.MINOR.PATCH
 
 ### 📅 Pendiente
 - Implementar funcionalidad en las siguientes rutas:
-    -`admin`
-    -`admin/resumen`
-    -`admin/pedidos`
-    -`usuario/pedidos`
+    - `admin`
+    - `admin/resumen`
+    - `admin/pedidos`
+    - `usuario/pedidos`
 
 ## [0.3.0] - 2025-05-05 
 ### ➕ Agregado

@@ -38,6 +38,7 @@ git clone https://github.com/Alan-Barreto/pastelix-ecommerce.git
 cd pastelix-ecommerce
 
 Configurar el entorno
+
 Renombrá el archivo .env.example a .env
 
 Completá los datos con tu configuración local:
