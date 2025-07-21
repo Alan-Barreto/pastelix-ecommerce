@@ -5,7 +5,6 @@ namespace Controllers;
 use Model\Carrito;
 use Model\CarritoProducto;
 use Model\Producto;
-use Model\Usuario;
 
 class APICarrito{
     public static function recuperarCatalogo(){

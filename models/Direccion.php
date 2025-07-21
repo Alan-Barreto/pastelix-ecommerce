@@ -4,19 +4,20 @@ namespace Model;
 
 class Direccion extends ActiveRecord{
     protected static $tabla = 'direcciones';
-    protected static $columnasDB = ['id', 'usuario_id', 'nombre', 'apellido', 'calle', 'ciudad', 'provincia', 'codigo_postal', 'pais',
-                                     'telefono', 'fecha_creacion', 'fecha_actualizacion', 'predeterminada'];
+    protected static $columnasDB = ['id', 'usuario_id', 'calle', 'ciudad', 'provincia', 'codigo_postal', 'pais_codigo', 'pais_nombre',
+                                     'fecha_creacion', 'fecha_actualizacion', 'predeterminada'];
+    protected static $codigosPais = ['ES', 'PT', 'FR'];
+    protected static $nombresPais = ['España', 'Portugal', 'Francia'];
 
     public $id;
     public $usuario_id;
-    public $nombre;
-    public $apellido;
     public $calle;
     public $ciudad;
     public $provincia;
     public $codigo_postal;
     public $pais;
-    public $telefono;
+    public $pais_codigo;
+    public $pais_nombre;
     public $fecha_creacion;
     public $fecha_actualizacion;
     public $predeterminada;
@@ -25,14 +26,11 @@ class Direccion extends ActiveRecord{
     {
         $this->id = $args['id'] ?? null;
         $this->usuario_id = $args['usuario_id'] ?? '';
-        $this->nombre = $args['nombre'] ?? '';
-        $this->apellido = $args['apellido'] ?? '';
         $this->calle = $args['calle'] ?? '';
         $this->ciudad = $args['ciudad'] ?? '';
         $this->provincia = $args['provincia'] ?? '';
         $this->codigo_postal = $args['codigo_postal'] ?? '';
         $this->pais = $args['pais'] ?? '';
-        $this->telefono = $args['telefono'] ?? '';
         $this->predeterminada = $args['predeterminada'] ?? 0;
     }
 
@@ -46,14 +44,27 @@ class Direccion extends ActiveRecord{
         $this->fecha_actualizacion = date('Y-m-d H:i:s');
     }
 
-    public function validarFormulario(){
-        if(!$this->nombre){
-            self::$alertas['error'][]= 'El nombre no puede ir vacio';
-        }
+    public function setPaisCodigo(){
+        $this->pais_codigo = $this->pais;
+    }
 
-        if(!$this->apellido){
-            self::$alertas['error'][] ='El apellido no puede ir vacio';
+    public function setPaisNombre(){
+        switch($this->pais){
+            case 'ES':
+                $this->pais_nombre = 'España';
+                break;
+
+            case 'PT':
+                $this->pais_nombre = 'Portugal';
+                break;
+
+            case 'FR':
+                $this->pais_nombre = 'Francia';
+                break;
         }
+    }
+
+    public function validarFormulario(){
 
         if(!$this->calle){
             self::$alertas['error'][] = 'La calle no puede ir vacia';
@@ -72,11 +83,11 @@ class Direccion extends ActiveRecord{
         }
 
         if(!$this->pais){
-            self::$alertas['error'][]= 'El pais no puede ir vacio';
+            $errores['error'][]= 'Debe seleccionar un país';
         }
 
-        if(!$this->telefono){
-            self::$alertas['error'][] = 'El telefono no puede ir vacio';
+        if($this->pais && !in_array($this->pais, self::$codigosPais)){
+            $errores['error'][]= 'Error con la opcion elegida, recargue la pagina e intentelo de nuevo';
         }
 
         return self::$alertas;
@@ -92,5 +103,35 @@ class Direccion extends ActiveRecord{
             return false;
         }
         return $direccion;
+    }
+
+    public function validarFormularioCheckout(){
+        $errores = [];
+
+        if(!$this->calle){
+            $errores['calle'][] = 'La calle no puede ir vacia';
+        }
+
+        if(!$this->ciudad){
+            $errores['ciudad'][] = 'La ciudad no puede ir vacia';
+        }
+
+        if(!$this->provincia){
+            $errores['provincia'][] = 'La provincia no puede ir vacia';
+        }
+
+        if(!$this->codigo_postal){
+            $errores['codigo_postal'][] = 'El codigo postal no puede ir vacio';
+        }
+
+        if(!$this->pais){
+            $errores['pais'][]= 'Debe seleccionar un país';
+        }
+
+        if($this->pais && !in_array($this->pais, self::$codigosPais)){
+            $errores['pais'][]= 'Error con la opcion elegida, recargue la pagina e intentelo de nuevo';
+        }
+
+        return $errores;
     }
 }

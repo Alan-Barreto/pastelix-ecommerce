@@ -29,6 +29,26 @@ a{
         cursor: pointer;
         background-color: color.adjust(v.$red, $lightness: -10%);
     }
-    
+}
 
+.modal{
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(#1b1a1a,  .9);
+    z-index: 9999;
+    &__formulario{
+        background-color:  v.$rose100;
+        padding: 2rem;
+        
+    }
+    &__botones{
+        display: flex;
+    }
+    &--abierto{
+        overflow: hidden;
+    }
 }

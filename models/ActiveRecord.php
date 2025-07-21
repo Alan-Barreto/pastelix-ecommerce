@@ -81,7 +81,7 @@ class ActiveRecord{
     }
 
     //Devuelve todo el contenido de la tabla
-    public static function all ($orden = 'DESC'){
+    public static function all ($orden = 'ASC'){
         $query = " SELECT * FROM " . static::$tabla . " ORDER BY id $orden";
         $resultado = self::consultarSQL($query);
         return $resultado;
@@ -95,7 +95,7 @@ class ActiveRecord{
     }
 
     //Devuelve el todos los elementos de la tabla que cumplan la condicion
-    public static function allWhere ($columna, $valor ,$orden = 'DESC'){
+    public static function allWhere ($columna, $valor ,$orden = 'ASC'){
         $query = " SELECT * FROM " . static::$tabla . " WHERE $columna = '$valor' ORDER BY id $orden";
         $resultado = self::consultarSQL($query);
         return $resultado;
@@ -105,7 +105,7 @@ class ActiveRecord{
     /**
     * Devuelve solo los datos pedidos de los elementos que cumplan la condicion
     *
-    * @param array $datos   Nombre de la o las columnas que se desea recuperar.
+    * @param array $datos   Nombre de la o las columnas que se desea recuperar. Ej: ['id', 'nombre', 'precio', 'imagen'].
     * @param string $columna   Nombre de la columna que revisará la condicion (ej. 'id').
     * @param string $valores Valor o valores a buscar.
     * @param string $operador  Operador SQL permitido: '=', 'IN'.
@@ -142,6 +142,15 @@ class ActiveRecord{
         $resultado = self::consultarSQL($query);
         return $resultado ;
     }
+
+    //Cuenta todos los elementos de la tabla que cumplan la condicion
+    public static function count($columna,$valor){
+        $query = "SELECT COUNT(*) as total FROM " . static::$tabla . " WHERE $columna = '$valor' ";
+        $resultado = self::$db->query($query);
+        $total = $resultado->fetch_assoc();
+        return (int)$total['total'];
+    }
+
     //Borra el elemento de la tabla al que se apunta
     public function delete(){
         $query = "DELETE FROM " . static::$tabla . " WHERE id = " . self::$db->escape_string($this->id) . " LIMIT 1";

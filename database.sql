@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
     nombre VARCHAR(45) DEFAULT NULL,
     apellido VARCHAR(45) DEFAULT NULL,
     email VARCHAR(45) DEFAULT NULL,
+    telefono VARCHAR(20) DEFAULT NULL,
     password VARCHAR(60) DEFAULT NULL,
     confirmado TINYINT DEFAULT NULL,
     admin TINYINT DEFAULT NULL
@@ -57,14 +58,12 @@ CREATE TABLE IF NOT EXISTS tokens (
 CREATE TABLE IF NOT EXISTS direcciones (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     usuario_id INT NULL,
-    nombre VARCHAR(45) NULL,
-    apellido VARCHAR(45) NULL,
     calle VARCHAR(45) NULL,
     ciudad VARCHAR(45) NULL,
     provincia VARCHAR(45) NULL,
     codigo_postal VARCHAR(15) NULL,
-    pais VARCHAR(45) NULL,
-    telefono VARCHAR(45) NULL,
+    pais_codigo VARCHAR(2) NULL,
+    pais_nombre VARCHAR(45) NULL,
     fecha_creacion DATETIME NULL,
     fecha_actualizacion DATETIME NULL,
     predeterminada TINYINT NULL,
@@ -93,4 +92,63 @@ CREATE TABLE IF NOT EXISTS carrito_productos (
     FOREIGN KEY (carrito_id) REFERENCES carritos (id) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `productos-carrito_productos`
     FOREIGN KEY (producto_id) REFERENCES productos (id) ON DELETE CASCADE ON UPDATE NO ACTION
+);
+
+
+CREATE TABLE IF NOT EXISTS pedidos (
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  usuario_id INT NULL,
+  fecha DATETIME NULL,
+  total DECIMAL(6,2) NULL,
+  entrega VARCHAR(15) NULL,
+  estado VARCHAR(15) NULL,
+  pedido_id_paypal VARCHAR(30) NULL,
+
+  UNIQUE INDEX `pedido_id_paypal_UNIQUE` (`pedido_id_paypal`)
+
+  INDEX `usuarios-pedidos_idx` (usuario_id) VISIBLE,
+  CONSTRAINT `usuarios-pedidos`
+    FOREIGN KEY (usuario_id) REFERENCES usuarios (id) ON DELETE SET NULL ON UPDATE NO ACTION
+);
+
+CREATE TABLE IF NOT EXISTS pedido_productos (
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  pedido_id INT NULL,
+  producto_id INT NULL,
+  cantidad INT NULL,
+  precio_unitario DECIMAL(5,2) NULL,
+  INDEX `productos-predido_productos_idx` (producto_id) VISIBLE,
+  INDEX `pedidos-pedido_productos_idx` (pedido_id) VISIBLE,
+  CONSTRAINT `productos-predido_productos`
+    FOREIGN KEY (producto_id) REFERENCES productos (id) ON DELETE RESTRICT ON UPDATE NO ACTION,
+  CONSTRAINT `pedidos-pedido_productos`
+    FOREIGN KEY (pedido_id) REFERENCES pedidos (id) ON DELETE RESTRICT ON UPDATE NO ACTION
+);
+
+CREATE TABLE IF NOT EXISTS pedido_direccion (
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  pedido_id INT NULL,
+  calle VARCHAR(45) NULL,
+  ciudad VARCHAR(45) NULL,
+  provincia VARCHAR(45) NULL,
+  codigo_postal VARCHAR(15) NULL,
+  pais_codigo VARCHAR(2) NULL,
+  pais_nombre VARCHAR(45) NULL,
+
+  INDEX `pedidos-pedido_direccion_idx` (pedido_id) VISIBLE,
+  CONSTRAINT `pedidos-pedido_direccion`
+    FOREIGN KEY (pedido_id) REFERENCES pedidos (id) ON DELETE RESTRICT ON UPDATE NO ACTION
+);
+
+CREATE TABLE IF NOT EXISTS pedido_cliente (
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+  pedido_id INT NULL,
+  nombre VARCHAR(45) NULL,
+  apellido VARCHAR(45) NULL,
+  email VARCHAR(45) NULL,
+  telefono VARCHAR(45) NULL,
+
+  INDEX `pedidos-pedido_cliente_idx` (pedido_id) VISIBLE,
+  CONSTRAINT `pedidos-pedido_cliente`
+    FOREIGN KEY (pedido_id) REFERENCES pedidos (id) ON DELETE RESTRICT ON UPDATE NO ACTION   
 );

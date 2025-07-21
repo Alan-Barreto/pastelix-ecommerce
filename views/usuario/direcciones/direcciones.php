@@ -16,10 +16,11 @@
                     foreach ($direcciones as $key=>$direccion) { ?>
 
                         <li>
-                            <h3>Direccion <?php echo $key + 1; ?></p>
-                            <p><?php echo $direccion->nombre . " " . $direccion->apellido; ?>
+                            <h3>Direccion <?php echo $key + 1; ?></h3>
+                            <p>
+                                <?php echo $direccion->calle . ", " . $direccion->ciudad; ?>
                                 <span>
-                                    <?php echo $direccion->calle . " " . $direccion->ciudad. " " . $direccion->codigo_postal. " " . $direccion->provincia. " " . $direccion->pais; ?>
+                                    <?php echo $direccion->codigo_postal. ", " . $direccion->provincia. ", " . $direccion->pais; ?>
                                 </span>    
                             </p>
                             
@@ -37,7 +38,7 @@
                     }
                 }else{ ?>
                 <li>
-                    <p>Las direccions que guardes apareceran aqui</p>
+                    <p>Las direcciones que guardes apareceran aqui</p>
                 </li>
             <?php } ?>
         </ul>

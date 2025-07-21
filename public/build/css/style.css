@@ -340,6 +340,27 @@ a {
   background-color: hsl(14, 86%, 32%);
 }
 
+.modal {
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(27, 26, 26, 0.9);
+  z-index: 9999;
+}
+.modal__formulario {
+  background-color: hsl(13, 31%, 94%);
+  padding: 2rem;
+}
+.modal__botones {
+  display: flex;
+}
+.modal--abierto {
+  overflow: hidden;
+}
+
 .inicio {
   display: flex;
   flex-direction: column;
@@ -661,6 +682,13 @@ a {
   outline: 3px solid hsl(14, 86%, 42%);
 }
 
+.checkout {
+  display: flex;
+  width: 100%;
+  max-width: 12500px;
+  justify-content: space-between;
+}
+
 .header {
   display: flex;
   justify-content: space-between;
@@ -944,6 +972,27 @@ a {
 .boton:hover {
   cursor: pointer;
   background-color: hsl(14, 86%, 32%);
+}
+
+.modal {
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(27, 26, 26, 0.9);
+  z-index: 9999;
+}
+.modal__formulario {
+  background-color: hsl(13, 31%, 94%);
+  padding: 2rem;
+}
+.modal__botones {
+  display: flex;
+}
+.modal--abierto {
+  overflow: hidden;
 }
 /*!********************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./src/scss/base/_index.scss ***!
@@ -1286,6 +1335,27 @@ a {
   cursor: pointer;
   background-color: hsl(14, 86%, 32%);
 }
+
+.modal {
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(27, 26, 26, 0.9);
+  z-index: 9999;
+}
+.modal__formulario {
+  background-color: hsl(13, 31%, 94%);
+  padding: 2rem;
+}
+.modal__botones {
+  display: flex;
+}
+.modal--abierto {
+  overflow: hidden;
+}
 /*!************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./src/scss/base/_normalize.scss ***!
   \************************************************************************************************************************/
@@ -1601,6 +1671,15 @@ template {
   !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./src/scss/base/_variables.scss ***!
   \************************************************************************************************************************/
 
+/*!**************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./src/scss/paginas/_checkout.scss ***!
+  \**************************************************************************************************************************/
+.checkout {
+  display: flex;
+  width: 100%;
+  max-width: 12500px;
+  justify-content: space-between;
+}
 /*!***********************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./src/scss/paginas/_index.scss ***!
   \***********************************************************************************************************************/
@@ -1923,6 +2002,13 @@ template {
 }
 .tienda .articulo-seleccionado {
   outline: 3px solid hsl(14, 86%, 42%);
+}
+
+.checkout {
+  display: flex;
+  width: 100%;
+  max-width: 12500px;
+  justify-content: space-between;
 }
 /*!************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./src/scss/paginas/_inicio.scss ***!

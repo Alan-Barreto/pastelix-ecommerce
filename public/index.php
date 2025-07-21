@@ -2,10 +2,11 @@
 require_once __DIR__ . '/../includes/app.php';
 
 use MVC\Router;
-use Controllers\API;
-use Controllers\AdminController;
 use Controllers\APICarrito;
+use Controllers\APICheckout;
+use Controllers\AdminController;
 use Controllers\LoginController;
+use Controllers\PaypalController;
 use Controllers\PaginasController;
 use Controllers\UsuariosController;
 
@@ -68,6 +69,16 @@ $router->post('/api/recuperarPrecio', [APICarrito::class, 'recuperarPrecio']);
 $router->get('/api/añadirProducto', [APICarrito::class, 'añadirProducto']);
 $router->put('/api/actualizarCantidadProductoDelCarrito', [APICarrito::class, 'actualizarCantidadProductoDelCarrito']);
 $router->delete('/api/eliminarProductoDelCarrito', [APICarrito::class, 'eliminarProductoDelCarrito']);
+$router->get('/api/verificarLogin', [APICheckout::class, 'verificarLogin']);
+$router->get('/api/recuperarDirecciones', [APICheckout::class, 'recuperarDirecciones']);
+$router->post('/api/guardarNuevaDireccion', [APICheckout::class, 'guardarNuevaDireccion']);
+$router->post('/api/recuperarDatosProductos', [APICheckout::class, 'recuperarDatosProductos']);
+$router->post('/api/validarDatosFormulario', [APICheckout::class, 'validarDatosFormulario']);
+$router->post('/api/guardarDatosPedido', [APICheckout::class, 'guardarDatosPedido']);
+
+//PAYPAL
+$router->post('/api/orders', [PaypalController::class, 'crearPedido']);
+$router->post('/api/orders/capture', [PaypalController::class, 'capturarPedido']);
 
 
 $router->comprobarRutas();

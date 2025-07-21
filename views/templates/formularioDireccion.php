@@ -4,15 +4,6 @@
     ?>
 
     <form method="post" class="direccion__formulario formulario">
-        <div class="formulario__campo">
-            <label for="nombre" class="formulario__label">Nombre</label>
-            <input type="text" name="nombre" id="nombre" placeholder="Ingresa el Nombre del destinatario" class="formulario__input" value="<?php echo $direccion->nombre; ?>">
-        </div>
-
-        <div class="formulario__campo">
-            <label for="apellido" class="formulario__label">Apellido</label>
-            <input type="text" name="apellido" id="apellido" placeholder="Ingresa el Apellido del destinatario" class="formulario__input" value="<?php echo $direccion->apellido; ?>">
-        </div>
 
         <div class="formulario__campo">
             <label for="calle" class="formulario__label">Calle</label>
@@ -37,9 +28,4 @@
         <div class="formulario__campo">
             <label for="pais" class="formulario__label">Pais</label>
             <input type="text" name="pais" id="pais" placeholder="Ingresa tu Pais" class="formulario__input" value="<?php echo $direccion->pais; ?>">
-        </div>
-
-        <div class="formulario__campo">
-            <label for="telefono" class="formulario__label">Telefono</label>
-            <input type="text" name="telefono" id="telefono" placeholder="Ingresa tu Telefono" class="formulario__input" value="<?php echo $direccion->telefono; ?>">
-        </div>
+        </div>  

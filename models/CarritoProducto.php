@@ -2,8 +2,6 @@
 
 namespace Model;
 
-use mysqli;
-
 class CarritoProducto extends ActiveRecord{
     protected static $tabla = 'carrito_productos';
     protected static $columnasDB = ['id', 'carrito_id', 'producto_id', 'cantidad'];
@@ -30,5 +28,11 @@ class CarritoProducto extends ActiveRecord{
         $productos = $resultado->fetch_all(MYSQLI_ASSOC);
   
         return $productos;
+    }
+
+    public static function limparCarrito($carrito_id){
+        $query = "DELETE FROM " . static::$tabla . " WHERE carrito_id = " . self::$db->escape_string($carrito_id);
+        $resultado = self::$db->query($query);
+        return $resultado;
     }
 }

@@ -8,11 +8,65 @@ El formato sigue el esquema de versionado semántico: MAJOR.MINOR.PATCH
 - MINOR: nuevas funcionalidades compatibles
 - PATCH: correcciones o mejoras internas sin cambios visibles importantes
 
+## [0.6.0] - 2025-07-21 
+### ➕ Agregado
+- Creada las tablas:
+    - `pedidos`
+    - `pedido_productos`
+    - `pedido_direccion`
+    - `pedido_cliente`
+- Implementado los modelos:
+    - `Pedido`
+    - `PedidoCliente`
+    - `PedidoProducto`
+    - `PedidoDireccion`
+- Creado el controlador `APICheckout.php` para gestionar las apis referentes al funcionamiento de la ruta `checkout`
+- Rutas para los llamados a la api:
+    - `/api/verificarLogin`
+    - `/api/recuperarDirecciones`
+    - `/api/guardarNuevaDireccion`
+    - `/api/recuperarDatosProductos` 
+    - `/api/validarDatosFormulario` 
+    - `/api/guardarDatosPedido` 
+    - `/api/orders` 
+    - `/api/orders/capture` 
+- Creada ruta para tramitar el pago `/checkout`
+- Creado archivo `checkout.js` para dar dinamismo a la ruta `/checkout` 
+- Agregadas imágenes de muestra tipo `thumb`
+- Integración de `paypal-server-sdk` para el manejo de los pagos
+- Creado el controlador `PaypalController.php` para gestionar la integración de paypal
+- Integrado el sdk de paypal para gestionar los pagos
+- Añadida funcion `count` en el modelo `ActiveRecord`
+
+### 🔧 Cambiado
+- Modificados los archivos `direcciones.php` y `formularioDireccion.php` para mantener coherencia con la nueva estructura del modelo `Direccion`
+- Añadida funcion `validarFormularioCheckout` en el modelo `Direccion`
+- Añadida la columna `telefono` en la tabla `usuario`
+- Modificado el modelo `Usuario` para mantener coherencia con la nueva estructura
+- Añadida funcion  `validarFormularioCheckout` en el modelo `Usuario`
+- Modificado el archivo `.env` y `.env.example` para agregar las credenciales de paypal `PAYPAL_CLIENT_ID` y `PAYPAL_CLIENT_SECRET`
+- Añadida las columnas `pais_codigo` y `pais_nombre` en la tabla `direcciones`
+- Modificado el modelo `Direccion` para mantener coherencia con la nueva estructura
+- Añadida las columnas `pais_codigo` y `pais_nombre` en la tabla `pedido_direccion`
+- Modificado el modelo `PedidoDireccion` para mantener coherencia con la nueva estructura
+- Modificado el archivo `database.sql` para mantener coherencia con la nueva estructura
+
+### 🧹 Eliminado
+- Eliminadas las columnas `nombre`, `apellido`, `telefono` y `pais` de la tabla `direcciones`
+- Eliminada la columna `pais` de la tabla `pedido_direccion`
+
+### 📅 Pendiente
+- Arreglar las funciones de guardar/editar direcciones del usuario para mantener coherencia con la nueva estructura de la tabla `direcciones`
+- Arreglar el mensaje de pago completado en la ruta `checkout`
+
 ## [0.5.0] - 2025-06-12 
 ### ➕ Agregado
 - Creada las tablas:
     - `carritos`
     - `carrito_productos`
+- Implementado los modelos:
+    - `Carrito`
+    - `CarritoProducto`
 - Creado el controlador `APICarrito.php` para gestionar las apis referentes al funcionamiento de la tienda y su carrito
 - Rutas para los llamados a la api:
     - `/api/recuperarCatalogo`
@@ -28,7 +82,7 @@ El formato sigue el esquema de versionado semántico: MAJOR.MINOR.PATCH
 - Añadida funcion `whereArray` en el modelo `ActiveRecord`
 
 ### 🐛 Corregido
-- Arreglada la funcionalidad de `/tienda`
+- Arreglada la funcionalidad de la ruta `/tienda`
 
 ### 📅 Pendiente
 - Implementar procesamiento del pedido y pago

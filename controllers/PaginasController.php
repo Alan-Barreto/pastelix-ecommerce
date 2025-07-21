@@ -1,9 +1,10 @@
 <?php
 namespace Controllers;
 
-use Model\CarritoProducto;
-use Model\Producto;
 use MVC\Router;
+use Model\Usuario;
+use Model\Producto;
+use Model\CarritoProducto;
 
 class PaginasController{
     public static function index(Router $router){
@@ -20,11 +21,14 @@ class PaginasController{
         ]);
     }
 
-    public static function checkout(Router $router){
-        
+    public static function checkout(Router $router){   
+        if(is_auth()){
+            $usuario = Usuario::thisWhere(['nombre', 'apellido', 'email', 'telefono'], 'id', $_SESSION['id']);
+        }
 
         $router->render('paginas/checkout', [
-            'titulo' => 'Checkout'
+            'titulo' => 'Checkout',
+            'usuario' => $usuario[0] ?? ''
         ]);
     }
 }

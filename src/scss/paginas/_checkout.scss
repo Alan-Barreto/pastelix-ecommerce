@@ -1,0 +1,8 @@
+@use '../base/variables' as v;
+
+.checkout{
+    display: flex;
+    width: 100%;
+    max-width: 12500px;
+    justify-content: space-between;
+}

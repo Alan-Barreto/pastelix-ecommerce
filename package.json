@@ -4,7 +4,8 @@
   "description": "Proyecto de tienda online con pasarela de pago desarrollado en PHP nativo con arquitectura MVC ",
   "main": "index.js",
   "scripts": {
-    "dev": "gulp dev"
+    "dev": "gulp dev",
+    "start": "cd public && php -S localhost:3000"
   },
   "author": "Alan Barreto",
   "license": "ISC",

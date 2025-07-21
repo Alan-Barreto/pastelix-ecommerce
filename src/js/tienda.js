@@ -1,5 +1,5 @@
 (function(){
-  let tienda = document.querySelector('.tienda');
+  const tienda = document.querySelector('.tienda');
   if(tienda){
   
     renderizarPagina()
@@ -459,7 +459,7 @@
         
         const precioTotal= document.createElement('P');
         precioTotal.classList.add('precio-total');
-        precioTotal.innerText = `$${precioArticulo.toFixed(2)}`;
+        precioTotal.innerText = `$${(precioArticulo * cantidadArticulo).toFixed(2)}`;
         precioCantidad.appendChild(precioTotal);
                
         const eliminarProducto= document.createElement('BUTTON');
@@ -567,7 +567,7 @@
       
     async function rearmarCarrito() {
       const carritoProductos = await recuperarCarrito();
-      let carritoNormalizado;
+      let carritoNormalizado = [];
       if(carritoProductos.error){
         console.log(carritoProductos.error);
         const carritoLocalStorage = JSON.parse(localStorage.getItem('carrito') || '[]');
@@ -584,7 +584,7 @@
             seccionProductos.insertBefore(alerta,contenedorProductos);
             return;
           }else{
-            carritoRearmado = carritoLocalStorage.map(item=>{
+            const carritoRearmado = carritoLocalStorage.map(item=>{
               precio = productosPrecios.find(p => p.id === item.producto_id)
               return{
                 ...item,
@@ -601,10 +601,9 @@
       if(carritoProductos[0]?.producto_id){
         carritoNormalizado = normalizarListaCarrito(carritoProductos);
       }
-
+       
       carritoNormalizado.forEach(producto => {
         const cantidadArticulos = producto.cantidad;
-          
         crearCarrito(producto,cantidadArticulos);
       });
       calcularPrecioCantidad();
@@ -699,6 +698,5 @@
     }
 
   }//Fin de la verificacion que revisa estar en la pagina correcta 
-  
 })();
 

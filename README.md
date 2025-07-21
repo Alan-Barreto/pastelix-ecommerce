@@ -94,9 +94,9 @@ Funcionalidades implementadas
 
     Panel de administración para gestionar productos
 
-En desarrollo
-
     Pagos con integración a PayPal
+
+En desarrollo
 
     Historial de pedidos para usuarios
 
