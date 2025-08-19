@@ -367,9 +367,12 @@ class APICheckout{
                 $producto['pedido_id'] = $resultadoQuery1['id'];
             }
             unset($producto);
-
-            $resultadoQuery3 = PedidoProducto::guardarVarios($carritoRearmado);
-            if (!$resultadoQuery3['resultado']) {
+            $arrayCarritoRearmado = [];
+            foreach($carritoRearmado as $producto){
+                $arrayCarritoRearmado[] = new PedidoProducto($producto);
+            }
+            $resultadoQuery3 = PedidoProducto::guardarVarios($arrayCarritoRearmado);
+            if (!$resultadoQuery3) {
                 throw new Exception("Error el carrito del pedido");
             }
 

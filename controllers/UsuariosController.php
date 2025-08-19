@@ -2,12 +2,12 @@
 
 namespace Controllers;
 
-use Classes\Email;
-use DateTime;
-use Model\Direccion;
 use MVC\Router;
 use Model\Token;
+use Model\Pedido;
+use Classes\Email;
 use Model\Usuario;
+use Model\Direccion;
 
 class UsuariosController{
     public static function usuario(Router $router){
@@ -19,20 +19,22 @@ class UsuariosController{
             $nuevosDatos = [
                 'nombre' => $_SESSION['nombre'],
                 'apellido' => $_SESSION['apellido'],
-                'email' => $_SESSION['email']
+                'email' => $_SESSION['email'],
+                'telefono' => $_SESSION['telefono']
             ];
             if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 
                 if(isset($_POST['nombre'])){
                     $nuevosDatos['nombre']= $_POST['nombre'];
                     $nuevosDatos['apellido'] = $_POST['apellido'];
-                    if(empty($_POST['nombre']) || empty($_POST['apellido'])){
+                    $nuevosDatos['telefono'] = $_POST['telefono'];
+                    if(empty($_POST['nombre']) || empty($_POST['apellido']) || empty($_POST['telefono'])){
                         $alertas = usuario::setAlerta('error', 'Ninguno de los espacios puede ir vacio');
                     }
                    
                     if(empty($alertas)){
                         $usuario = usuario::where('id', $_SESSION['id']);
-                        if($_POST['nombre'] === $usuario->nombre && $_POST['apellido'] === $usuario->apellido){
+                        if($_POST['nombre'] === $usuario->nombre && $_POST['apellido'] === $usuario->apellido && $_POST['telefono'] === $usuario->telefono){
                             $alertas = usuario::setAlerta('error', 'No hubo cambios en los datos, actualizacion cancelada');
                         }else{
                             $usuario->sincronizar($_POST);
@@ -193,10 +195,11 @@ class UsuariosController{
             header('Location: /');
             exit();
         }else{
-
+            $listaPedidos = Pedido::thisWhere(['id', 'fecha', 'total', 'entrega'], 'usuario_id', $_SESSION['id']);
 
             $router->render('/usuario/pedidos',[
-                'titulo' => 'Mi Cuenta - Pedidos'
+                'titulo' => 'Mi Cuenta - Pedidos',
+                'listaPedidos' => $listaPedidos
             ]);
         }   
     }
@@ -221,13 +224,22 @@ class UsuariosController{
             exit();
         }else{
             $direccion = new Direccion();
+            $paisesAceptados = Direccion::getPaisesAceptados();
             $alertas = [];
            if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 $direccion->sincronizar($_POST);
                 $alertas = $direccion->validarFormulario();
                 if(empty($alertas)){
                     $direccion->usuario_id = $_SESSION['id'];
+                    $direccion->setPaisCodigo();
+                    $direccion->setPaisNombre();
                     $direccion->setFechaCreacion();
+
+                    $contadorDirecciones = Direccion::count('usuario_id', $_SESSION['id']);
+                    if($contadorDirecciones === 0){
+                        $direccion->predeterminada = 1;
+                    }
+
                     $direccion->guardar();
                     setAlertaSession('exito', 'Direccion Creada con exito');
                     header('Location: /usuario/direcciones');
@@ -237,7 +249,8 @@ class UsuariosController{
             $router->render('/usuario/direcciones/crear',[
                 'titulo' => 'Mi Cuenta - Direcciones/crear',
                 'direccion' => $direccion,
-                'alertas' => $alertas
+                'alertas' => $alertas,
+                'paises' => $paisesAceptados
             ]);
         }   
     }
@@ -249,16 +262,19 @@ class UsuariosController{
         }else{
 
            $direccion = Direccion::validarIdDireccion();
-            
+                      
            if(!$direccion){
                 header('Location: /usuario/direcciones');
                 exit();
            }else{
+                $paisesAceptados = Direccion::getPaisesAceptados();
+                $direccion->pais = $direccion->pais_codigo;
                 if($_SERVER['REQUEST_METHOD'] === 'POST'){
                     $direccion->sincronizar($_POST);
                     $alertas = $direccion->validarFormulario();
-
                     if(empty($alertas)){
+                        $direccion->setPaisCodigo();
+                        $direccion->setPaisNombre();
                         $direccion->setFechaActualizacion();
                         $direccion->guardar();
                         setAlertaSession('exito', 'Direccion actualizada con exito');
@@ -270,7 +286,8 @@ class UsuariosController{
             $router->render('/usuario/direcciones/editar',[
                 'titulo' => 'Mi Cuenta - Direcciones/editar',
                 'direccion' => $direccion,
-                'alertas' => $alertas
+                'alertas' => $alertas,
+                'paises' => $paisesAceptados
             ]);
         }   
     }
@@ -285,7 +302,20 @@ class UsuariosController{
                 header('Location: /usuario/direcciones');
                 exit();
            }else{
+                $direccionPredeterminada = false;
+                if($direccion->predeterminada == 1){
+                    $direccionPredeterminada = true;
+
+                    
+                }
                 $direccion->delete();
+                if($direccionPredeterminada == true){
+                    $nuevaDireccionPredetermianda = Direccion::where('usuario_id', $_SESSION['id']);
+                    if($nuevaDireccionPredetermianda){
+                        $nuevaDireccionPredetermianda->predeterminada = 1;
+                        $nuevaDireccionPredetermianda->guardar();
+                    } 
+                }
                 setAlertaSession('exito', 'Direccion eliminada con exito');
                 header('Location: /usuario/direcciones');
                 exit();

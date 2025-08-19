@@ -8,8 +8,7 @@ CREATE TABLE IF NOT EXISTS productos (
     nombre VARCHAR(35) DEFAULT NULL,
     categoria VARCHAR(35) DEFAULT NULL,
     precio DECIMAL(5,2) DEFAULT NULL,
-    imagen VARCHAR(45) DEFAULT NULL,
-    miniatura VARCHAR(45) DEFAULT NULL
+    imagen VARCHAR(45) DEFAULT NULL
 );
 
 -- Insertar datos de ejemplo en productos
@@ -32,14 +31,21 @@ CREATE TABLE IF NOT EXISTS usuarios (
     email VARCHAR(45) DEFAULT NULL,
     telefono VARCHAR(20) DEFAULT NULL,
     password VARCHAR(60) DEFAULT NULL,
+    fecha_registro  DATETIME DEFAULT NULL,
     confirmado TINYINT DEFAULT NULL,
-    admin TINYINT DEFAULT NULL
+    admin TINYINT DEFAULT NULL,
+    baneo TINYINT DEFAULT NULL,
+
+    UNIQUE INDEX `email_UNIQUE` (`email`)
 );
 
--- Insertar usuarios de ejemplo (passwords sin hashear para pruebas locales)
-INSERT INTO usuarios (nombre, apellido, email, password, confirmado, admin) VALUES
-('Admin', 'User', 'admin@pastelix.com', '$2y$10$R.9tOuQ1OcLn6LDNWiRZ7.gp1YG08zjlE/JC3qOuudUutAVTbw6s.', 1, 1),
-('Cliente', 'Ejemplo', 'cliente@pastelix.com', '$2y$10$Lf51rawlegGW9AvcPcVHUe6gt5FgIHJ3FJXEKjT//sAslpKBnSPAW', 1, 0);
+INSERT INTO usuarios (id, nombre, confirmado, admin) VALUES
+(1, 'Invitado', 1, 0);
+
+-- Insertar usuarios de ejemplo 
+INSERT INTO usuarios (nombre, apellido, email, telefono, password, confirmado, admin, baneo) VALUES
+('Admin', 'User', 'admin@pastelix.com', '1234567', '$2y$10$R.9tOuQ1OcLn6LDNWiRZ7.gp1YG08zjlE/JC3qOuudUutAVTbw6s.', 1, 1, 0),
+('Cliente', 'Ejemplo', 'cliente@pastelix.com', '1234567' '$2y$10$Lf51rawlegGW9AvcPcVHUe6gt5FgIHJ3FJXEKjT//sAslpKBnSPAW', 1, 0, 0);
 
 -- Tabla: tokens
 CREATE TABLE IF NOT EXISTS tokens (
@@ -104,7 +110,7 @@ CREATE TABLE IF NOT EXISTS pedidos (
   estado VARCHAR(15) NULL,
   pedido_id_paypal VARCHAR(30) NULL,
 
-  UNIQUE INDEX `pedido_id_paypal_UNIQUE` (`pedido_id_paypal`)
+  UNIQUE INDEX `pedido_id_paypal_UNIQUE` (`pedido_id_paypal`),
 
   INDEX `usuarios-pedidos_idx` (usuario_id) VISIBLE,
   CONSTRAINT `usuarios-pedidos`

@@ -8,6 +8,61 @@ El formato sigue el esquema de versionado semántico: MAJOR.MINOR.PATCH
 - MINOR: nuevas funcionalidades compatibles
 - PATCH: correcciones o mejoras internas sin cambios visibles importantes
 
+## [0.7.0] - 2025-08-19 
+### ➕ Agregado
+- Creado el controlador `APIDatosUsuario.php` para gestionar las apis referentes al funcionamiento de la ruta `usuario` y derivados
+- Creado el archivo `usuarioPedidos.js` para dar funcionalidad a la ruta `usuario/pedidos`  
+- Añadida funcionalidad a la ruta `admin/pedidos`
+- Creadas las rutas:
+    - `admin/pedidos/pedido`
+    - `admin/ventas`
+    - `admin/usuarios`
+- Creadas nuevas funciones dentro del controllador `AdminController`:
+    - `detallesPedido`
+    - `usuarios`
+    - `ventas` 
+
+### 🔧 Cambiado
+- Reemplazados las variables `codigosPais` y `nombresPais` del modelo `Direccion` por la variable `paisesAceptados`
+- Actualizadas las funciones `validarFormulario` y `validarFormularioCheckout` del modelo `Direccion` para mantener coherencia con su nueva estructura 
+- Añadida funcion `getPaisesAceptados` en el modelo `Direccion` 
+- Actualizada función `recuperarCarrito` del controlador `APICarrito` para crear un carrito nuevo en caso de que el usuario no tenga uno asignado
+- Se quito la opcion `Pay Later` del boton de Paypal
+- Agregada funcion `actualizarCarritoDB` al controlador `APICarrito`
+- Agregadas varias funciones al modelo `ActiveRecord`:
+    - `guardarVarios`
+    - `allPaginated`
+    - `countByDate`
+    - `thisByDate`
+    - `this` 
+- Cambios en la ruta `/usuario` para añadir la columna `telefono` al mostrar y editar los datos del usuario
+- Cambiada ruta `admin/resumen` a `admin/dashboard`
+- Cambiado nombre del archivo `resumen.php` a `dashboard.php`
+- Cambiado nombre de la funcion `resumen` dentro del controlador `AdminController` a `dashboard`
+- Agregadas varias funciones al modelo `Producto`:
+    - `paginacionVentas`
+    - `paginacionVentasAll`
+    - `masVendido`
+    - `masVendidoAll`
+- Se agregó un índice único (`email_UNIQUE`) sobre la columna `email` de la tabla `usuarios`.
+- Agregadas varias columnas a la tabla `usuarios`:
+    - `fecha_creacion`
+    - `baneo`
+- Actualizado modelo `usuario` para mantener coherencia con su nueva estructura 
+- Se modificó el archivo `database.sql` para mantener coherencia con la nueva estructura
+
+### 🧹 Eliminado
+- Eliminada funcion `guardarVarios` del modelo `PedidoProducto`
+
+### 🐛 Corregido
+- Arreglados varios errores de la ruta `usuario/direcciones` y sus derivados
+- Arreglado un error en la creacion de la tabla `pedidos` en el archivo `database.sql`
+
+### 📅 Pendiente
+- Verificacion de baneo del usuario al loguear
+- Mejoras menores en varias rutas
+- Mejoras del diseño visual
+
 ## [0.6.0] - 2025-07-21 
 ### ➕ Agregado
 - Creada las tablas:

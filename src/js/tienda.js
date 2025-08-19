@@ -298,7 +298,6 @@
             const imagenArticulo = articulo.querySelector('.imagen-producto');
             imagenArticulo.classList.add('articulo-seleccionado');
 
-            console.log(datosProducto);
             crearCarrito(datosProducto)
 
             const btnCantidad = crearBtnCantidad(articulo);
@@ -574,7 +573,12 @@
         if(carritoLocalStorage.length <= 0){
           console.log('localStorage vacio');
         }else{
-          
+          if(carritoProductos.login == true){
+            const carritoDB = await actualizarCarritoDB(carritoLocalStorage);
+            if(carritoDB.error){
+              console.log(carritoDB.error);
+            }
+          }
           productosPrecios = await recuperarPrecio(carritoLocalStorage);
           if(productosPrecios.error){
             const seccionProductos = document.querySelector('.productos');
@@ -641,6 +645,21 @@
       const productos = await resultado.json();
 
       return (productos);
+    }
+
+     async function actualizarCarritoDB(carrito = []){
+      const url = `/api/actualizarCarritoDB`;
+      const resultado = await fetch(url, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json' 
+        },
+        body: JSON.stringify(carrito)
+      });
+        
+      const consulta = await resultado.json();
+
+      return (consulta);
     }
 
     async function recuperarPrecio(carrito = []){

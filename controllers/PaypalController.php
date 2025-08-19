@@ -4,33 +4,21 @@ namespace Controllers;
 
 use Exception;
 use Model\Producto;
-use Psr\Log\LogLevel;
+
 use PaypalServerSdkLib\Environment;
-use PaypalServerSdkLib\Models\ItemCategory;
-use PaypalServerSdkLib\Models\ShippingType;
-use PaypalServerSdkLib\Models\CallbackEvents;
-use PaypalServerSdkLib\Models\ShippingPreference;
+
 use PaypalServerSdkLib\Models\Builders\ItemBuilder;
 use PaypalServerSdkLib\Models\Builders\MoneyBuilder;
-use PaypalServerSdkLib\Models\CheckoutPaymentIntent;
+
 use PaypalServerSdkLib\PaypalServerSdkClientBuilder;
-use PaypalServerSdkLib\Models\PaypalExperienceUserAction;
-use PaypalServerSdkLib\Models\PaypalExperienceLandingPage;
-use PaypalServerSdkLib\Logging\LoggingConfigurationBuilder;
+
 use PaypalServerSdkLib\Models\Builders\OrderRequestBuilder;
-use PaypalServerSdkLib\Models\Builders\PaypalWalletBuilder;
-use PaypalServerSdkLib\Models\Builders\ShippingNameBuilder;
-use PaypalServerSdkLib\Models\Builders\PaymentSourceBuilder;
-use PaypalServerSdkLib\Models\Builders\ShippingOptionBuilder;
+
 use PaypalServerSdkLib\Models\Builders\AmountBreakdownBuilder;
-use PaypalServerSdkLib\Models\Builders\ShippingDetailsBuilder;
-use PaypalServerSdkLib\Logging\RequestLoggingConfigurationBuilder;
+
 use PaypalServerSdkLib\Models\Builders\AmountWithBreakdownBuilder;
 use PaypalServerSdkLib\Models\Builders\PurchaseUnitRequestBuilder;
-use PaypalServerSdkLib\Logging\ResponseLoggingConfigurationBuilder;
-use PaypalServerSdkLib\Models\Builders\CallbackConfigurationBuilder;
-use PaypalServerSdkLib\Models\Builders\PhoneNumberWithCountryCodeBuilder;
-use PaypalServerSdkLib\Models\Builders\PaypalWalletExperienceContextBuilder;
+
 use PaypalServerSdkLib\Authentication\ClientCredentialsAuthCredentialsBuilder;
 
 class PaypalController{
@@ -63,23 +51,9 @@ class PaypalController{
         ];
     }
 
-    // $endpoint = $_SERVER["REQUEST_URI"];
-    // if ($endpoint === "/") {
-    //     try {
-    //         $response = [
-    //             "message" => "Server is running",
-    //         ];
-    //         header("Content-Type: application/json");
-    //         echo json_encode($response);
-    //     } catch (Exception $e) {
-    //         echo json_encode(["error" => $e->getMessage()]);
-    //         http_response_code(500);
-    //     }
-    // }
-
     /**
      * Create an order to start the transaction.
-     * @see https://developer.paypal.com/docs/api/orders/v2/#orders_create
+     *
      */
     public static function createOrder($cart,$shipping,$clientName){
         

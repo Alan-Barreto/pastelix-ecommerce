@@ -5,6 +5,7 @@ use MVC\Router;
 use Controllers\APICarrito;
 use Controllers\APICheckout;
 use Controllers\AdminController;
+use Controllers\APIDatosUsuario;
 use Controllers\LoginController;
 use Controllers\PaypalController;
 use Controllers\PaginasController;
@@ -52,8 +53,13 @@ $router->post('/admin/productos/crear',[AdminController::class, 'crearProducto']
 $router->get('/admin/productos/editar',[AdminController::class, 'editarProducto']);
 $router->post('/admin/productos/editar',[AdminController::class, 'editarProducto']);
 $router->post('/admin/productos/borrar',[AdminController::class, 'borrarProducto']);
-$router->get('/admin/resumen',[AdminController::class, 'resumen']); 
+$router->get('/admin/dashboard',[AdminController::class, 'dashboard']); 
+$router->get('/admin/usuarios',[AdminController::class, 'usuarios']); 
+$router->get('/admin/usuarios/usuario',[AdminController::class, 'detallesUsuario']); 
+$router->post('/admin/usuarios/usuario',[AdminController::class, 'detallesUsuario']); 
+$router->get('/admin/ventas',[AdminController::class, 'ventas']); 
 $router->get('/admin/pedidos',[AdminController::class, 'pedidos']); 
+$router->get('/admin/pedidos/pedido',[AdminController::class, 'detallesPedido']); 
 
 
 
@@ -63,8 +69,10 @@ $router->get('/tienda', [PaginasController::class, 'tienda']);
 $router->get('/checkout', [PaginasController::class, 'checkout']);
 
 //APIS
+$router->get('/api/recuperarPedido', [APIDatosUsuario::class, 'recuperarPedido']);
 $router->get('/api/recuperarCatalogo', [APICarrito::class, 'recuperarCatalogo']);
 $router->get('/api/recuperarCarrito', [APICarrito::class, 'recuperarCarrito']);
+$router->post('/api/actualizarCarritoDB', [APICarrito::class, 'actualizarCarritoDB']);
 $router->post('/api/recuperarPrecio', [APICarrito::class, 'recuperarPrecio']);
 $router->get('/api/añadirProducto', [APICarrito::class, 'añadirProducto']);
 $router->put('/api/actualizarCantidadProductoDelCarrito', [APICarrito::class, 'actualizarCantidadProductoDelCarrito']);

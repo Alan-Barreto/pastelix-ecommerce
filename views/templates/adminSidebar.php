@@ -12,7 +12,17 @@
 
         <li>
             <img src="" alt="Icono">
-            <a href="/admin/resumen">Resumen</a>
+            <a href="/admin/dashboard">Dashboard</a>
+        </li>
+
+        <li>
+            <img src="" alt="Icono">
+            <a href="/admin/usuarios">Usuarios</a>
+        </li>
+
+        <li>
+            <img src="" alt="Icono">
+            <a href="/admin/ventas">Ventas</a>
         </li>
 
         <li>

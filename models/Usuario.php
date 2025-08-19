@@ -2,9 +2,11 @@
 
 namespace Model;
 
+use DateTime;
+
 class Usuario extends ActiveRecord{
     protected static $tabla = 'usuarios';
-    protected static $columnasDB = ['id', 'nombre', 'apellido', 'email', 'telefono', 'password', 'confirmado', 'admin'];
+    protected static $columnasDB = ['id', 'nombre', 'apellido', 'email', 'telefono', 'password', 'fecha_registro', 'confirmado', 'admin', 'baneo'];
 
     public $id;
     public $nombre;
@@ -13,8 +15,10 @@ class Usuario extends ActiveRecord{
     public $telefono;
     public $password;
     public $password2;
+    public $fecha_registro;
     public $confirmado;
     public $admin;
+    public $baneo;
 
     public $contraseñaActual;
     public $contraseñaNueva;
@@ -30,6 +34,11 @@ class Usuario extends ActiveRecord{
         $this->password2 = $args['password2'] ?? '';
         $this->confirmado = $args['confirmado'] ?? 0;
         $this->admin = $args['admin'] ?? 0;
+        $this->baneo = $args['baneo'] ?? 0;
+    }
+
+    public function setFechaCreacion(){
+        $this->fecha_registro = date('Y-m-d H:i:s');
     }
 
     public function validar_registro()
@@ -190,5 +199,4 @@ class Usuario extends ActiveRecord{
 
         return $errores;
     }
-
 }

@@ -40,28 +40,4 @@ class PedidoProducto extends ActiveRecord{
         return $valoresSanitizados;
     }
 
-    public static function guardarVarios($pedidoProductos){
-        $columnas = "(pedido_id, producto_id, cantidad, precio_unitario)";
-        $pedidoSanitizado = self::sanitizarVarios($pedidoProductos);
-
-        $valores = [];
-
-        foreach($pedidoSanitizado as $pedido){
-            $valores[] = "(" . implode(', ', $pedido) . ")";
-        }
-
-        $query = "INSERT INTO ". self::$tabla. " " . $columnas;
-        $query .= " VALUES ";
-        $query .= implode(', ', $valores);
-        $query .= ";";
-        
-        //return $query;
-
-        $resultado =  self::$db->query($query);
-
-        return [
-            'resultado' => $resultado,
-            'id' => self::$db->insert_id
-        ];
-    }
 }

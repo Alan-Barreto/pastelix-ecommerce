@@ -20,7 +20,7 @@
                             <p>
                                 <?php echo $direccion->calle . ", " . $direccion->ciudad; ?>
                                 <span>
-                                    <?php echo $direccion->codigo_postal. ", " . $direccion->provincia. ", " . $direccion->pais; ?>
+                                    <?php echo $direccion->codigo_postal. ", " . $direccion->provincia. ", " . $direccion->pais_nombre; ?>
                                 </span>    
                             </p>
                             

@@ -6,8 +6,13 @@ class Direccion extends ActiveRecord{
     protected static $tabla = 'direcciones';
     protected static $columnasDB = ['id', 'usuario_id', 'calle', 'ciudad', 'provincia', 'codigo_postal', 'pais_codigo', 'pais_nombre',
                                      'fecha_creacion', 'fecha_actualizacion', 'predeterminada'];
-    protected static $codigosPais = ['ES', 'PT', 'FR'];
-    protected static $nombresPais = ['España', 'Portugal', 'Francia'];
+    
+    protected static $paisesAceptados = [
+                                            ['codigo' => 'ES', 'nombre' => 'España'],
+                                            ['codigo' => 'PT', 'nombre' => 'Portugal'],
+                                            ['codigo' => 'FR', 'nombre' => 'Francia']
+                                        ];
+
 
     public $id;
     public $usuario_id;
@@ -64,8 +69,13 @@ class Direccion extends ActiveRecord{
         }
     }
 
-    public function validarFormulario(){
+    public static function getPaisesAceptados(){
+        return self::$paisesAceptados;
+    }
 
+    public function validarFormulario(){
+        $codigosPais = array_column(self::$paisesAceptados, 'codigo');
+       
         if(!$this->calle){
             self::$alertas['error'][] = 'La calle no puede ir vacia';
         }
@@ -82,12 +92,12 @@ class Direccion extends ActiveRecord{
             self::$alertas['error'][] = 'El codigo postal no puede ir vacio';
         }
 
-        if(!$this->pais){
-            $errores['error'][]= 'Debe seleccionar un país';
+        if(!$this->pais || $this->pais == ""){
+            self::$alertas['error'][]= 'Debe seleccionar un país';
         }
 
-        if($this->pais && !in_array($this->pais, self::$codigosPais)){
-            $errores['error'][]= 'Error con la opcion elegida, recargue la pagina e intentelo de nuevo';
+        if($this->pais && !in_array($this->pais, $codigosPais)){
+            self::$alertas['error'][]= 'Error con la opcion elegida, recargue la pagina e intentelo de nuevo';
         }
 
         return self::$alertas;
@@ -106,6 +116,7 @@ class Direccion extends ActiveRecord{
     }
 
     public function validarFormularioCheckout(){
+        $codigosPais = array_column(self::$paisesAceptados, 'codigo');
         $errores = [];
 
         if(!$this->calle){
@@ -128,7 +139,7 @@ class Direccion extends ActiveRecord{
             $errores['pais'][]= 'Debe seleccionar un país';
         }
 
-        if($this->pais && !in_array($this->pais, self::$codigosPais)){
+        if($this->pais && !in_array($this->pais, $codigosPais)){
             $errores['pais'][]= 'Error con la opcion elegida, recargue la pagina e intentelo de nuevo';
         }
 

@@ -55,7 +55,7 @@
 </main>
                                                
 <script
-    src="https://www.paypal.com/sdk/js?client-id=<?php echo $_ENV['PAYPAL_CLIENT_ID']; ?>&buyer-country=US&currency=USD&components=buttons&enable-funding=venmo,paylater,card"
+    src="https://www.paypal.com/sdk/js?client-id=<?php echo $_ENV['PAYPAL_CLIENT_ID']; ?>&buyer-country=US&currency=USD&components=buttons&enable-funding=venmo,card&disable-funding=paylater"
     data-sdk-integration-source="developer-studio"
 ></script>
 

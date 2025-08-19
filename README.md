@@ -83,6 +83,7 @@ Funcionalidades implementadas
     Confirmación de cuenta por correo
 
     Recuperación de contraseña
+    
 
     Carrito de compras funcional
 
@@ -96,11 +97,11 @@ Funcionalidades implementadas
 
     Pagos con integración a PayPal
 
-En desarrollo
-
     Historial de pedidos para usuarios
 
     Vista de estadísticas para administradores
+
+En desarrollo
 
     Diseño visual y mejoras en UI
 

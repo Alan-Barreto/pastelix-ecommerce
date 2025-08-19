@@ -18,6 +18,11 @@
                     <span class="datos__tipo">E-mail:</span>
                     <span class="datos__dato"><?php echo $_SESSION['email']; ?></span>
                 </p>
+
+                <p class="datos__telefono">
+                    <span class="datos__tipo">Telefono:</span>
+                    <span class="datos__dato"><?php echo $_SESSION['telefono']; ?></span>
+                </p>
             </div>
             <div class="usuario__acciones">
                 <button class="accion modificar">Modificar datos</button>
@@ -40,6 +45,10 @@
                     <div class="formulario__campo">
                         <label for="apellido" class="formulario__label">Apellido</label>
                         <input type="text" name="apellido" id="apellido" placeholder="Ingresa tu apellido" class="formulario__input" value="<?php echo $nuevosDatos['apellido']; ?>">
+                    </div>
+                    <div class="formulario__campo">
+                        <label for="telefono" class="formulario__label">Telefono</label>
+                        <input type="text" name="telefono" id="telefono" placeholder="Ingresa tu telefono" class="formulario__input" value="<?php echo $nuevosDatos['telefono']; ?>">
                     </div>
                     <input type="submit" class="formulario__submit" value="Actualizar datos">
                 </form>

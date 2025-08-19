@@ -5,9 +5,7 @@
         <ul>
             <li>
                 <!-- Cambiar esto por una comprobacion que agregue la clase "actual" para marcar en que pagina se está -->
-                <?php if($_SERVER['PATH_INFO'] !== '/tienda'){ ?>
                 <a href="/tienda" class="header__enlace">Comprar</a>
-                <?php } ?>
             </li>
 
             <?php 

@@ -23,12 +23,13 @@ class CarritoProducto extends ActiveRecord{
         $query = " SELECT cp.producto_id, p.nombre, p.precio, cp.cantidad " ;
         $query .= " FROM " . self::$tabla . " cp ";
         $query .= " JOIN productos p ON cp.producto_id = p.id ";
-        $query .= " WHERE cp.carrito_id = " . $carritoId;
+        $query .= " WHERE cp.carrito_id = " . $carritoId . " ORDER BY cp.id ASC";
         $resultado = self::$db->query($query);
         $productos = $resultado->fetch_all(MYSQLI_ASSOC);
   
         return $productos;
     }
+
 
     public static function limparCarrito($carrito_id){
         $query = "DELETE FROM " . static::$tabla . " WHERE carrito_id = " . self::$db->escape_string($carrito_id);

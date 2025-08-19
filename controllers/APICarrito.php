@@ -26,19 +26,55 @@ class APICarrito{
        if(is_auth()){
             $carrito = Carrito::where('usuario_id', $_SESSION['id']);
             if(!$carrito){
-                http_response_code(404);
-                echo json_encode(['error' => 'Carrito no encontrado']);
-                exit;
+                $carrito = new Carrito();
+                $carrito->usuario_id = $_SESSION['id'];
+                $resultado = $carrito->guardar();
+                    if(!$resultado['resultado']){
+                        http_response_code(404);
+                        echo json_encode(['error' => 'Carrito no encontrado',  'login' => true]);
+                        exit;
+                    }
+                $carrito->id = $resultado['id'];
             }
             $carritoProductos = CarritoProducto::recuperarProductos($carrito->id);
             if(empty($carritoProductos)){
-                echo json_encode(['error' => 'Carrito vacio']);
+                echo json_encode(['error' => 'Carrito vacio', 'login' => true]);
                 exit;
             }
             echo json_encode($carritoProductos);
             exit;
         }
+            echo json_encode(['error' => 'Usuario no logueado',  'login' => false]);
+            exit;
+    }
+
+    public static function actualizarCarritoDB(){
+        header('Content-Type: application/json');
+
+        $getContent =  file_get_contents('php://input');
+        $carritoLocal = json_decode($getContent, true);
+        
+        if(is_auth()){
+            $carrito = Carrito::where('usuario_id', $_SESSION['id']);
+            if(!$carrito){
+                http_response_code(404);
+                echo json_encode(['error' => 'Carrito no encontrado']);
+                exit;
+            }
+            $arrayCarritoProductos = [];
+            foreach($carritoLocal as $producto){
+                $carritoProducto = new CarritoProducto($producto);
+                $carritoProducto->carrito_id = $carrito->id;
+                $arrayCarritoProductos[] = $carritoProducto;
+            }
+
+            $resultado = CarritoProducto::guardarVarios($arrayCarritoProductos);
+            echo json_encode($resultado);
+            exit;
+        }else{
             echo json_encode(['error' => 'Usuario no logueado']);
+            exit;
+        }
     }
 
     public static function añadirProducto(){

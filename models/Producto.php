@@ -84,5 +84,102 @@ class Producto extends ActiveRecord{
 
         return $producto;
     }
+
+    /**
+     * Devuelve los los productos junto a la cantidad ventida y dinero ganado por cada uno
+     * 
+     * @param string    $columna Cual columna se usará para ordenar los resultados
+     * @param string    $orden 'ASC' o 'DESC'.Define si se mostraran de forma ascendente o decendente.
+     * @param int       $limit Define la cantidad de elementos que se devolveran
+     * @param int       $offset Define desde que indice se recuperaran los elementos
+     * @param string    $fechaInicio Define en que rango de fecha antes de hoy buscar los pedidos. Ej: '1 DAY', '1 MONTH'
+     * @param string    $fechaFin Define hasta que rango de fecha buscar los pedidos. Ej: '1 DAY', '1 MONTH'
+     *  
+     */
+    public static function paginacionVentas(string $columna,string $orden, int $limit, int $offset, string $fechaInicio = '', string $fechaFin = '1 DAY'){
+
+        $query = " SELECT p.id, p.nombre, "; 
+        $query .= " IFNULL(SUM(CASE
+                            WHEN pe.fecha BETWEEN (CURDATE() - INTERVAL $fechaInicio) 
+                                           AND (CURDATE() + INTERVAL $fechaFin) 
+                            THEN pp.cantidad ELSE 0 END), 0) AS cantidad_vendida, ";
+        
+
+        $query .= " IFNULL(SUM(CASE
+                            WHEN pe.fecha BETWEEN (CURDATE() - INTERVAL $fechaInicio) 
+                                           AND (CURDATE() + INTERVAL $fechaFin) 
+                            THEN pp.cantidad * pp.precio_unitario ELSE 0 END), 0) AS dinero_recaudado ";
+        
+        $query .= " FROM " . self::$tabla ." p ";
+        $query .=  " LEFT JOIN pedido_productos pp ";
+        $query .=  " ON pp.producto_id = p.id ";
+        $query .=  " LEFT JOIN pedidos pe "; 
+        $query .=  " ON pe.id = pp.pedido_id ";
+        $query .= " GROUP BY p.id, p.nombre ";
+        $query .= " ORDER BY $columna $orden ";
+        $query .= " LIMIT $limit OFFSET $offset;";
+
+        $resultado = self::$db->query($query);
+        return $resultado->fetch_all(MYSQLI_ASSOC);
+    }
+
+     public static function paginacionVentasAll(string $columna,string $orden, int $limit, int $offset){
+
+        $query = " SELECT p.id, p.nombre, "; 
+        $query .= " IFNULL(SUM(pp.cantidad), 0) AS cantidad_vendida, ";
+        $query .= " IFNULL(SUM(pp.cantidad * pp.precio_unitario), 0) AS dinero_recaudado";     
+        $query .= " FROM " . self::$tabla ." p ";
+        $query .=  " LEFT JOIN pedido_productos pp ";
+        $query .=  " ON pp.producto_id = p.id ";
+        $query .=  " LEFT JOIN pedidos pe "; 
+        $query .=  " ON pe.id = pp.pedido_id ";
+        $query .= " GROUP BY p.id, p.nombre ";
+        $query .= " ORDER BY $columna $orden ";
+        $query .= " LIMIT $limit OFFSET $offset;";
+
+        $resultado = self::$db->query($query);
+        return $resultado->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public static function masVendido(string $fechaInicio = '', string $fechaFin = '1 DAY'){
+        $query = " SELECT p.id, p.nombre, ";
+        $query .=  " SUM(pp.cantidad) AS cantidad_vendida, ";
+        $query .=  " SUM(pp.cantidad * pp.precio_unitario) AS dinero_recaudado ";
+        $query .=  " FROM " . self::$tabla ." p ";
+        $query .=  " LEFT JOIN pedido_productos pp ";
+        $query .=  " ON pp.producto_id = p.id ";
+        $query .=  " LEFT JOIN pedidos pe ";
+        $query .=  " ON pe.id = pp.pedido_id ";
+        $query .=  " WHERE pe.fecha >= CURDATE() ";
+
+        if($fechaInicio !== ''){
+             $query .= "- INTERVAL $fechaInicio ";
+        }
+
+        $query .= " AND pe.fecha <= CURDATE() + INTERVAL $fechaFin ";
+        $query .=  " GROUP BY p.id, p.nombre ";
+        $query .= " ORDER BY cantidad_vendida DESC ";
+        $query .= " LIMIT 1; ";
+
+        $resultado = self::$db->query($query);
+        return $resultado->fetch_assoc();
+    }
+
+    public static function masVendidoAll(){
+        $query = " SELECT p.id, p.nombre, ";
+        $query .=  " SUM(pp.cantidad) AS cantidad_vendida, ";
+        $query .=  " SUM(pp.cantidad * pp.precio_unitario) AS dinero_recaudado ";
+        $query .=  " FROM " . self::$tabla ." p ";
+        $query .=  " LEFT JOIN pedido_productos pp ";
+        $query .=  " ON pp.producto_id = p.id ";
+        $query .=  " LEFT JOIN pedidos pe ";
+        $query .=  " ON pe.id = pp.pedido_id ";
+        $query .=  " GROUP BY p.id, p.nombre ";
+        $query .= " ORDER BY cantidad_vendida DESC ";
+        $query .= " LIMIT 1; ";
+
+        $resultado = self::$db->query($query);
+        return $resultado->fetch_assoc();
+    }
     
 }

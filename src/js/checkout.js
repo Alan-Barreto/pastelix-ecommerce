@@ -793,9 +793,7 @@
                     color: "gold",
                     label: "paypal",
                 },
-                message: {
-                    amount: 100,
-                },
+                
                 async onClick(data, actions){
                     datosFormulario = await validarFormulario();
                     if(datosFormulario.error == true || datosFormulario == 'error'){

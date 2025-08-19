@@ -27,5 +27,14 @@
 
         <div class="formulario__campo">
             <label for="pais" class="formulario__label">Pais</label>
-            <input type="text" name="pais" id="pais" placeholder="Ingresa tu Pais" class="formulario__input" value="<?php echo $direccion->pais; ?>">
+            <!-- <input type="text" name="pais" id="pais" placeholder="Ingresa tu Pais" class="formulario__input" value="<?php //echo $direccion->pais; ?>"> -->
+            <select name="pais" id="pais" class="formulario__input campo-pais">
+                <option value="" disabled selected>Seleccione un país</option>
+                <?php 
+                    foreach($paises as $pais){ ?>
+                    
+                        <option value="<?php echo $pais['codigo']; ?>" <?php echo $direccion->pais==$pais['codigo'] ? 'selected' : ''; ?>><?php echo $pais['nombre']; ?></option>
+
+                <?php } ?>
+            </select>
         </div>  
