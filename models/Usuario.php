@@ -199,4 +199,25 @@ class Usuario extends ActiveRecord{
 
         return $errores;
     }
+
+    public static function contarRegistros($fecha = 'all'){
+        $query = "SELECT COUNT(*) AS total_usuarios, ";
+        $query .= " SUM(CASE WHEN confirmado = 1 THEN 1 ELSE 0 END) AS usuarios_confirmados, ";
+        $query .= " SUM(CASE WHEN confirmado = 0 THEN 1 ELSE 0 END) AS usuarios_no_confirmados ";
+        $query .= " FROM " . static::$tabla ;
+        $query .= " WHERE admin = 0 ";
+        $query .= " AND id != 1";
+
+        if($fecha != 'all'){
+            $query .= " AND fecha_registro >= CURDATE() ";
+            if($fecha !== ''){
+                $query .= "- INTERVAL $fecha ";
+            }
+            $query .= " AND fecha_registro <= CURDATE() + INTERVAL 1 DAY";
+        }
+
+        $resultado = self::$db->query($query);
+        $total = $resultado->fetch_assoc();
+        return $total;
+    }
 }

@@ -72,3 +72,15 @@ function borrarImagen ($ruta){
         unlink($ruta . '_thumb.webp');
     }
 }
+
+function rutaActual($ruta, $admin = false){
+    $actual = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
+    if($admin == false){
+        $clase = 'ruta_actual';
+    }else{
+        $clase = 'ruta_actual--admin';
+    }
+
+    return $actual === $ruta ? $clase : '';
+}

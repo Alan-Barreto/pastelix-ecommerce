@@ -1,0 +1,27 @@
+@use '../base/variables' as v;
+
+.admin__layout{
+    .usuario-detalles{
+         &__datos{
+            display: grid;
+            width: 100%;
+            max-width: 1000px;
+            border: 1px solid v.$grisAzul200;
+            border-radius: 8px;
+            margin-top: 30px;
+            grid-template-columns: repeat(3, 1fr)
+         }
+
+         &__dato{
+            margin-left: 25px;
+            span{
+                font-weight: v.$bold;
+            }
+        }
+
+        .acciones{
+            width: 100%;
+            max-width: 1000px;
+        }
+    }
+}

@@ -1,0 +1,41 @@
+@use '../base/variables' as v;
+
+.admin__layout{
+    .pedido{
+        &__datos{
+            display: grid;
+            width: 100%;
+            max-width: 1000px;
+            border: 1px solid v.$grisAzul200;
+            border-radius: 8px;
+            margin-top: 30px;
+            &:not(.pedido__datos--productos){
+                grid-template-columns: repeat(3, 1fr);
+                h2{
+                    grid-column: 1/4;
+                }
+            }
+
+            &:last-of-type{
+                margin-bottom: 50px;
+            }
+        }
+        
+        &__subtitulo{
+            color: v.$grisOscuroFrio;
+            margin-left: 25px;
+
+        }
+
+        &__dato{
+            margin-left: 25px;
+            span{
+                font-weight: v.$bold;
+            }
+        }
+
+        .tabla{
+            margin-bottom: 0;
+        }
+    }
+}

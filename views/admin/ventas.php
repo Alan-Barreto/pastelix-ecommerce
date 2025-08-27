@@ -1,8 +1,8 @@
 <main class="ventas">
     <h1>Ventas</h2>
 
-    <form>
-        <select name="fecha" id="fecha">
+    <form class="filtro">
+        <select name="fecha" id="fecha" class="filtro__select">
             <option 
                 value="hoy" 
                 <?php echo (isset($_GET['fecha']) && $_GET['fecha'] == 'hoy' ) 
@@ -48,7 +48,11 @@
                Todo
             </option>
         </select>
-        <button type="submit"><img src="" alt="Icono buscar"></button>
+        <button type="submit" class="filtro__boton">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+            </svg>
+        </button>
     </form>
 
     <?php if($listaVacia == true){ ?>
@@ -57,18 +61,18 @@
         <div class="mas_vendido">
             <h2>Producto mas vendido:</h2>
             <div class="mas_vendido__datos">
-                <span>ID: <?php echo $productoMasVendido['id']; ?></span>
-                <span>Nombre: <?php echo $productoMasVendido['nombre']; ?></span>
-                <span>Cantidad: <?php echo $productoMasVendido['cantidad_vendida']; ?></span>
-                <span>Ganancia: $<?php echo number_format($productoMasVendido['dinero_recaudado'], 2, '.', ''); ?></span>
+                <p><strong>Nombre: </strong><?php echo $productoMasVendido['nombre']; ?></p>
+                <p><strong>ID: </strong><?php echo $productoMasVendido['id']; ?></p>
+                <p><strong>Cantidad: </strong><?php echo $productoMasVendido['cantidad_vendida']; ?></p>
+                <p><strong>Ganancia: </strong>$<?php echo number_format($productoMasVendido['dinero_recaudado'], 2, '.', ''); ?></p>
             </div>
         </div>
 
         <div class="vendidos">
-            <table>
-                <thead>
-                    <tr>
-                        <th>
+            <table class="tabla tabla--admin">
+                <thead class="tabla__header">
+                    <tr class="tabla__fila tabla__fila--head">
+                        <th class="tabla__celda tabla__celda--head">
                             <a href="/admin/ventas?orden=<?php 
                                 echo (
                                     (($_GET['orden'] ?? 'numero-asc') !== 'numero-desc' ) 
@@ -80,7 +84,7 @@
                             </a>
                         </th>
 
-                        <th>
+                        <th class="tabla__celda tabla__celda--head">
                             <a href="/admin/ventas?orden=<?php 
                                 echo (
                                     (($_GET['orden'] ?? 'nombre-asc') !== 'nombre-desc' ) 
@@ -92,7 +96,7 @@
                             </a>
                         </th>
 
-                        <th>
+                        <th class="tabla__celda tabla__celda--head">
                             <a href="/admin/ventas?orden=<?php 
                                 echo (
                                     (($_GET['orden'] ?? 'cantidad-asc') !== 'cantidad-desc' ) 
@@ -104,7 +108,7 @@
                             </a>
                         </th>
 
-                        <th>
+                        <th class="tabla__celda tabla__celda--head">
                             <a href="/admin/ventas?orden=<?php 
                                 echo (
                                     (($_GET['orden'] ?? 'recaudado-asc') !== 'recaudado-desc' ) 
@@ -118,30 +122,30 @@
                     </tr>
                 </thead>
 
-                <tbody>
+                <tbody class="tabla__body">
                     <?php foreach($listaProductos as $producto){ ?>
-                        <tr>
-                            <td>
-                                <span><?php echo $producto['id']; ?></span>
+                        <tr class="tabla__fila tabla__fila--no-hover">
+                            <td class="tabla__celda">
+                                <?php echo $producto['id']; ?>
                             </td>
 
-                            <td>
-                                <span><?php echo $producto['nombre']; ?></span>
+                            <td class="tabla__celda">
+                                <?php echo $producto['nombre']; ?>
                             </td>
 
-                            <td>
-                                <span><?php echo $producto['cantidad_vendida']; ?></span>
+                            <td class="tabla__celda">
+                                <?php echo $producto['cantidad_vendida']; ?>
                             </td>
 
-                            <td>
-                                <span><?php echo $producto['dinero_recaudado']; ?></span>
+                            <td class="tabla__celda">
+                                <?php echo $producto['dinero_recaudado']; ?>
                             </td>
                         </tr>
                     <?php } ?>
                 </tbody>
             </table>
 
-            <div class="tabla__paginador">
+            <div class="paginacion paginacion--admin">
                 <?php if($paginaActual > 1){ ?>
                     <a 
                         href="/admin/ventas?pagina=<?php 
@@ -157,7 +161,7 @@
                 <?php } ?>
                 <?php for($contadorPaginas = 1; $contadorPaginas <= $numeroPaginas; $contadorPaginas++) { 
                 if ($contadorPaginas == $paginaActual) {?>
-                        <p><?php echo $contadorPaginas ?></p>
+                        <span><?php echo $contadorPaginas ?></span>
                     <?php } else { ?>
 
                         <a 

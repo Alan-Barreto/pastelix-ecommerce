@@ -9,14 +9,12 @@
     <link rel="stylesheet" href="/build/css/style.css">
     <link rel="icon" href="/build/img/pastelix-icon.ico" type="image/x-icon">
 </head>
-<body>
-    <div class="admin__layout">
-        <?php 
-            include_once __DIR__ . '/templates/adminHeader.php';
-            include_once __DIR__ . '/templates/adminSidebar.php';
-            echo $contenido;
-        ?>
-    </div>    
-     <script src="/build/js/main.js" defer></script> 
+<body class="admin__layout">
+    <?php 
+        include_once __DIR__ . '/templates/adminHeader.php';
+        include_once __DIR__ . '/templates/adminSidebar.php';
+        echo $contenido;
+    ?>    
+    <script src="/build/js/main.js" defer></script> 
 </body>
 </html>

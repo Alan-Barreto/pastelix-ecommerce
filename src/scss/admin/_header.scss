@@ -1,0 +1,27 @@
+@use '../base/variables' as v;
+
+.header__admin{
+        grid-column: 2;
+        grid-row: 1/2;
+        display: flex;
+        justify-content: space-evenly;
+        width: 100%;
+        margin-top: 50px;
+        line-height: 50px;
+        
+        h2{
+            color: v.$grisOscuro;
+            margin: 0;
+        }
+        p{
+            margin: 0;
+        }
+
+        .admin__fecha{
+            display: flex;
+            align-items: center;
+            svg{
+                margin-left: 10px;
+            }
+        }
+    }

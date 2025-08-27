@@ -157,7 +157,7 @@ class ActiveRecord{
         $query .= " FROM " . static::$tabla;
         $query .= " WHERE $columna $operador ";
 
-        if($operador === '=' || $operador === '!='){
+        if($operador === '=' || $operador === '!=' || $operador === 'LIKE'){
             $query .= " '$valores' ";
         }
         if($operador === 'IN' || $operador === 'NOT IN'){
@@ -165,6 +165,7 @@ class ActiveRecord{
         }
         $query .= " ORDER BY $orden $sentido ";
         $query .= "LIMIT $limit OFFSET $offset";
+
         $resultado = self::consultarSQL($query);
         return $resultado;
     }
@@ -265,6 +266,7 @@ class ActiveRecord{
 
     public static function count($columna,$valor, $operador = '='){
         $query = "SELECT COUNT(*) as total FROM " . static::$tabla . " WHERE $columna $operador '$valor' ";
+        
         $resultado = self::$db->query($query);
         $total = $resultado->fetch_assoc();
         return (int)$total['total'];

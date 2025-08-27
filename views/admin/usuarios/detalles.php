@@ -1,4 +1,4 @@
-<main class="usuario_detalles">
+<main class="usuario-detalles">
     <h1>Detalles del Usuario</h1>
     <?php if($error == true){ ?>
 
@@ -8,68 +8,102 @@
     <?php  }else{ ?>
 
          <div class="acciones">
-            <a href="/admin/usuarios">Volver a la lista</a>
+            <a href="/admin/usuarios" class="boton boton--admin">Volver a la lista</a>
             <?php if($usuario->admin != 1){ ?>
                 <form method="POST">
                     <input type="hidden" name="id" value="<?php echo $usuario->id?>">
-                    <input type="submit" value="<?php echo ($usuario->baneo == 1 ) ? 'Desbanear' : 'Banear'; ?>">
+                    <input type="submit" value="<?php echo ($usuario->baneo == 1 ) ? 'Desbanear' : 'Banear'; ?>"  class="boton boton--admin">
                 </form>
             <?php } ?>      
         </div>
         
-        <div class="cuenta">
-            <p>
-                ID: 
-                <span><?php echo $usuario->id; ?></span>
+        <section class="usuario-detalles__datos usuario-detalles__datos--cuenta">
+            <p class="usuario-detalles__dato">
+                <span>ID: </span>
+                 
+                <?php echo $usuario->id; ?>
             </p>
 
-            <p>
-                Rol: 
-                <span><?php echo ($usuario->admin == 1) ? 'Admin' : 'Cliente'; ?></span>
+            <p class="usuario-detalles__dato">
+                <span>Rol: </span>
+                 
+                <?php echo ($usuario->admin == 1) ? 'Admin' : 'Cliente'; ?>
             </p>
 
-            <p>
-                Fecha Registro: 
-                <span><?php echo $usuario->fecha_registro; ?></span>
+            <p class="usuario-detalles__dato">
+                <span>Fecha Registro: </span>
+                
+                <?php echo $usuario->fecha_registro; ?>
             </p>
                 
-            <p>
-                Confirmado: 
-                <span><?php echo ($usuario->confirmado == 1 ) ? 'Si' : 'No'; ?></span>
+            <p class="usuario-detalles__dato">
+                <span>Confirmado: </span>
+                
+                <?php echo ($usuario->confirmado == 1 ) ? 'Si' : 'No'; ?>
             </p>
            
-            <p>
-                Estado: 
-                <span><?php echo ($usuario->baneo == 1 ) ? 'Baneado' : 'Activo'; ?></span>
+            <p class="usuario-detalles__dato">
+                <span>Estado: </span>
+                 
+                <?php echo ($usuario->baneo == 1 ) ? 'Baneado' : 'Activo'; ?>
             </p>
            
-        </div>
+        </section>
 
-        <div class="usuario">
-             <p>
-                Nombre y Apellido: 
-                <span><?php echo $usuario->nombre . ' ' . $usuario->apellido; ?></span>
+        <section class="usuario-detalles__datos usuario-detalles__datos--usuario">
+             <p class="usuario-detalles__dato">
+                <span>Nombre y Apellido: </span>                
+                <?php echo $usuario->nombre . ' ' . $usuario->apellido; ?>
             </p>
 
-            <p>
-                Correo: 
-                <span><?php echo $usuario->email; ?></span>
+            <p class="usuario-detalles__dato">
+                <span>Correo: </span>              
+                <?php echo $usuario->email; ?>
             </p>
 
-            <p>
-                Telefono: 
-                <span><?php echo $usuario->telefono; ?></span>
+            <p class="usuario-detalles__dato">
+                <span>Telefono: </span>            
+                <?php echo $usuario->telefono; ?>
             </p>
-        </div>
+        </section>
 
-        <div class="pedidos">
-            <p>Pedidos hechos: <span><?php echo $pedidos['total']; ?></span></p>
-            <p>Completados:<span><?php echo $pedidos['completados']; ?></span></p>
-            <p>Pendientes: <span><?php echo $pedidos['pendientes']; ?></span></p>
-            <p>Cancelados: <span><?php echo $pedidos['cancelados']; ?></span></p>
-            <p>Total Pagado: <span>$ <?php echo number_format($pagado, 2, '.',''); ?></span></p>
-            <p>Retiros en tienda:<span><?php echo $pedidos['retiroEnTienda']; ?></span></p>
-            <p>Envios a domicilio:<span><?php echo $pedidos['domicilio']; ?></span></p>
-        </div>
+        <section class="usuario-detalles__datos usuario-detalles__datos--pedidos">
+            <p class="usuario-detalles__dato">
+                <span>Pedidos hechos: </span>
+                <?php echo $pedidos['total']; ?>
+            </p>
+
+            <p class="usuario-detalles__dato">
+                <span>Completados: </span>
+                <?php echo $pedidos['completados']; ?>
+            </p>
+
+            <p class="usuario-detalles__dato">
+                <span>Pendientes: </span>
+                <?php echo $pedidos['pendientes']; ?>
+            </p>
+
+            <p class="usuario-detalles__dato">
+                <span>Cancelados: </span>
+                <?php echo $pedidos['cancelados']; ?>
+            </p> 
+
+            <p class="usuario-detalles__dato">
+                <span>Retiros en tienda: </span>
+                <?php echo $pedidos['retiroEnTienda']; ?>
+            </p>
+
+            <p class="usuario-detalles__dato">
+                <span>Envios a domicilio: </span>
+                <?php echo $pedidos['domicilio']; ?>
+            </p>
+
+            <p class="usuario-detalles__dato">
+                <span>Total Pagado:</span> 
+                $
+                <?php echo number_format($pagado, 2, '.',''); ?>
+            </p>
+
+        </section>
     <?php  } ?>
 </main>

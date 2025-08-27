@@ -4,7 +4,6 @@ namespace Controllers;
 
 use MVC\Router;
 use Model\Pedido;
-use Model\Carrito;
 use Model\Usuario;
 use Model\Producto;
 use Model\PedidoCliente;
@@ -17,7 +16,7 @@ class AdminController{
             header('Location: /');
             exit();
         }else{
-
+    
             $gananciaDelDia = Pedido::thisByDate(['total'], 'fecha');
             
             $totalGanadoHoy = 0;
@@ -47,11 +46,87 @@ class AdminController{
             header('Location: /');
             exit();
         }else{
-            $productos = Producto::all('ASC');
+            $orden = 'id';
+            $sentido = 'ASC';
+
+            switch($_GET['orden'] ?? 'id-asc'){
+                case 'id-desc':
+                    $orden = 'id';
+                    $sentido = 'DESC';
+                    break;
+
+                case 'id-asc':
+                    $orden = 'id';
+                    $sentido = 'ASC';
+                    break;
+
+                case 'nombre-desc':
+                    $orden = 'nombre';
+                    $sentido = 'DESC';
+                    break;
+
+                case 'nombre-asc':
+                    $orden = 'nombre';
+                    $sentido = 'ASC';
+                    break;
+
+                case 'categoria-desc':
+                    $orden = 'categoria';
+                    $sentido = 'DESC';
+                    break;
+
+                case 'categoria-asc':
+                    $orden = 'categoria';
+                    $sentido = 'ASC';
+                    break;
+
+                case 'precio-desc':
+                    $orden = 'precio';
+                    $sentido = 'DESC';
+                    break;
+
+                case 'precio-asc':
+                    $orden = 'precio';
+                    $sentido = 'ASC';
+                    break;
+            }
+
+            $limitePorPagina = 5;
+            $totalProductos = Producto::countAll();
+            $numeroPaginas = ceil(($totalProductos)/ $limitePorPagina);
+
+            if(!isset($_GET['pagina']) || $_GET['pagina'] <= 0 || $_GET['pagina'] > $numeroPaginas ){
+                $paginaActual = 1;
+            }else{
+                $paginaActual = $_GET['pagina'];
+            }
+            $offset = ($paginaActual - 1) * $limitePorPagina;
+
+            $datoBuscado = htmlspecialchars(trim($_GET['datoBuscado'])) ?? '';
+
+            if($datoBuscado == ''){
+                $productos = Producto::thisPaginated($limitePorPagina, $offset, $orden, $sentido,['id', 'nombre', 'categoria', 'precio']);
+            }else {
+                if(filter_var($datoBuscado, FILTER_VALIDATE_INT)){
+                    $numeroPaginas = 1;
+                    $productos = Producto::thisWherePaginated($limitePorPagina, $offset, $orden, $sentido,['id', 'nombre', 'categoria', 'precio'], 'id', "%$datoBuscado%", 'LIKE');
+                }else {
+                    $productos = Producto::thisWherePaginated(
+                        $limitePorPagina, $offset, $orden, $sentido,['id', 'nombre', 'categoria', 'precio'], 'nombre', "%$datoBuscado%' OR categoria LIKE '%$datoBuscado%", "LIKE"
+                    );
+                    $totalProductos = Producto::count("nombre LIKE '%$datoBuscado%' OR", "%$datoBuscado%", ' categoria LIKE');
+                    $numeroPaginas = ceil(($totalProductos)/ $limitePorPagina);
+                }
+
+                $filtroPagina = "&datoBuscado=$datoBuscado";
+            }            
        
             $router->render('admin/productos/productos',[
                 'titulo' => 'Administracion - Productos',
-                'productos' => $productos
+                'productos' => $productos,
+                'paginaActual' => $paginaActual,
+                'numeroPaginas' => $numeroPaginas,
+                'filtroPagina' => $filtroPagina
             ], 'adminLayout');
         }
     }
@@ -234,6 +309,9 @@ class AdminController{
                         $fechaUsuarios = '3 MONTH';
                         break;
 
+                    case 'all':
+                        $fechaUsuarios = 'all';
+                        break;
                 }
             }
 
@@ -306,16 +384,9 @@ class AdminController{
                         break;
                 }
             }
+    
+            $totalUsuariosRegistrados = Usuario::contarRegistros($fechaUsuarios);
 
-           
-
-            
-            if(isset($_GET['usuarios_fecha']) && $_GET['usuarios_fecha'] == 'all'){
-                 $usuarios = Usuario::thisWhere(['id'], 'fecha_registro', '', 'IS NOT NULL');
-                 $usuariosRegistrados = count($usuarios);
-            }else{
-                $usuariosRegistrados = Usuario::countByDate('fecha_registro', $fechaUsuarios);
-            }
 
             $router->render('admin/dashboard',[
             'titulo' => 'Administracion - Dashboard',
@@ -323,7 +394,7 @@ class AdminController{
             'totalProductosVendidos' => $totalProductosVendidos,
             'tipoUsuario' => $tipoUsuario,
             'estadoPedidos' => $estadoPedido,
-            'usuariosRegistrados' => $usuariosRegistrados,
+            'totalUsuariosRegistrados' => $totalUsuariosRegistrados,
             'tipoEntrega' => $tipoEntrega ?? ''
             ], 'adminLayout');
         }     

@@ -3,32 +3,33 @@
 
     <nav class="header__navegacion">
         <ul>
-            <li>
-                <!-- Cambiar esto por una comprobacion que agregue la clase "actual" para marcar en que pagina se está -->
+            <?php if(is_admin()){ ?>
+                <li>
+                    <a href="/admin" class="header__enlace">Administrar</a>
+                </li>
+            <?php } ?>
+            <li class="<?php echo (rutaActual('/tienda')); ?>">
                 <a href="/tienda" class="header__enlace">Comprar</a>
             </li>
 
             <?php 
             if(!is_auth()){ ?>
-                <li>
-                
-                <a href="/login" class="header__enlace">Iniciar Sesión</a>
+                <li class="<?php echo (rutaActual('/login')); ?>">
+                    <a href="/login" class="header__enlace">Iniciar Sesión</a>
                 </li>
 
-                <li>
-                
-                <a href="/registro" class="header__enlace">Registro</a>
+                <li class="<?php echo (rutaActual('/registro')); ?>">
+                    <a href="/registro" class="header__enlace">Registro</a>
                 </li>
 
             <?php }else{ ?>
-                <?php if(is_admin()){ ?>
-                    <li>
-                    <a href="/admin" class="header__enlace">Administrar</a>
-                    </li>
-                <?php } ?>
-                <li>
-                
-                <a href="/usuario" class="header__enlace">Mi Cuenta</a>
+                <li class="<?php 
+                    echo (rutaActual('/usuario') . rutaActual('/usuario/pedidos') . rutaActual('/usuario/direcciones') . rutaActual('/usuario/direcciones/editar')); ?>"
+                >
+                    <a href="/usuario" class="header__enlace"
+                    >
+                        Mi Cuenta
+                    </a>
                 </li>
 
                 <form action="/logout" method="POST">

@@ -8,6 +8,16 @@ El formato sigue el esquema de versionado semántico: MAJOR.MINOR.PATCH
 - MINOR: nuevas funcionalidades compatibles
 - PATCH: correcciones o mejoras internas sin cambios visibles importantes
 
+## [0.8.0] - 2025-08-26
+### ➕ Agregado
+- Creada funcion `rutaActual` en el archivo `funciones.php`
+- Creado el archivo `formulario.js` para mejoras visuales de los formularios en la pagina
+- Agregados primeros ajustes visuales en la zona de administración
+
+### 📅 Pendiente
+- Verificacion de baneo del usuario al loguear
+- Mejoras del diseño visual en la zona publica
+
 ## [0.7.0] - 2025-08-19 
 ### ➕ Agregado
 - Creado el controlador `APIDatosUsuario.php` para gestionar las apis referentes al funcionamiento de la ruta `usuario` y derivados

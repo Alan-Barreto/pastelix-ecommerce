@@ -1,0 +1,59 @@
+@use '../base/variables' as v;
+
+.admin__layout{
+    .admin{
+        display: grid;
+        grid-template-columns: repeat(2, 475px);
+        grid-template-rows: auto  auto;
+        gap: 20px;
+        align-self: start;
+        justify-content: center;
+        margin-top: 30px;
+        .ganancia_hoy{
+            grid-column: 1/2;
+            grid-row: 1/2;
+
+        }
+
+        .pedidos_hoy{
+            grid-column: 2/3;
+            grid-row: 1/2;
+        }
+
+        .ultimos_pedidos{
+            grid-column: 1/3;
+            grid-row: 2/3;           
+                    
+        }
+
+        .ganancia_hoy,
+        .pedidos_hoy,
+        .ultimos_pedidos{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 2px solid v.$grisAzul200 ;
+            border-radius: 15px;
+            transition: outline 0.5s ease;
+            padding-top: 10px;
+            h3{
+                color: v.$grisOscuroFrio;
+                font-size: 40px;
+            }
+            span{
+                color: v.$grisOscuroFrio;
+                font-size: 50px;
+            }
+        }
+
+        .ganancia_hoy,
+        .pedidos_hoy{
+            padding-bottom: 50px;
+            text-align: center;
+            &:hover{
+                outline: 2px solid v.$grisAzul200 ;
+            }
+        }
+        
+    }
+}

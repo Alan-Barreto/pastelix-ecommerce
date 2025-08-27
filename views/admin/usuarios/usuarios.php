@@ -1,7 +1,7 @@
 <main class="usuarios">
     <h1>Usuarios</h1>
-    <form>
-        <select name="filtro" id="filtro">
+    <form class="filtro">
+        <select name="filtro" id="filtro" class="filtro__select">
             <option 
                 value="all" 
                 <?php echo (isset($_GET['filtro']) && $_GET['filtro'] == 'all' ) 
@@ -26,16 +26,20 @@
                     ? 'selected' 
                     : '' ?>
             >
-                Solo Adminis
+                Solo Admins
             </option> 
 
         </select>
-        <button type="submit"><img src="" alt="Icono buscar"></button>
+        <button type="submit" class="filtro__boton">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+            </svg>
+        </button>
     </form>
-    <table class="tabla">
-        <thead>
-            <tr>
-                <th>
+    <table class="tabla tabla--admin">
+        <thead class="tabla__header">
+            <tr class="tabla__fila tabla__fila--head">
+                <th class="tabla__celda tabla__celda--head">
                     <a href="/admin/usuarios?orden=<?php 
                                 echo (
                                     (($_GET['orden'] ?? 'id-asc') !== 'id-desc' ) 
@@ -47,7 +51,7 @@
                     </a>
                 </th>
 
-                <th>
+                <th class="tabla__celda tabla__celda--head">
                     <a href="/admin/usuarios?orden=<?php 
                                 echo (
                                     (($_GET['orden'] ?? 'correo-asc') !== 'correo-desc' ) 
@@ -59,7 +63,7 @@
                     </a>
                 </th>
 
-                <th>
+                <th class="tabla__celda tabla__celda--head">
                     <a href="/admin/usuarios?orden=<?php 
                                 echo (
                                     (($_GET['orden'] ?? 'nombre_apellido-asc') !== 'nombre_apellido-desc' ) 
@@ -71,7 +75,7 @@
                     </a>
                 </th>
 
-                <th>
+                <th class="tabla__celda tabla__celda--head">
                     <a href="/admin/usuarios?orden=<?php 
                                 echo (
                                     (($_GET['orden'] ?? 'confirmado-asc') !== 'confirmado-desc' ) 
@@ -83,7 +87,7 @@
                     </a>
                 </th>
 
-                <th>
+                <th class="tabla__celda tabla__celda--head">
                     <a href="/admin/usuarios?orden=<?php 
                                 echo (
                                     (($_GET['orden'] ?? 'rol-asc') !== 'rol-desc' ) 
@@ -95,7 +99,7 @@
                     </a>
                 </th>
 
-                <th>
+                <th class="tabla__celda tabla__celda--head">
                     <a href="/admin/usuarios?orden=<?php 
                                 echo (
                                     (($_GET['orden'] ?? 'estado-asc') !== 'estado-desc' ) 
@@ -106,32 +110,30 @@
                                 Estado
                     </a>
                 </th>
-
-                <th>
-                    Acciones
-                </th>
             </tr>
         </thead>
 
-        <tbody>
+        <tbody class="tabla__body">
             <?php foreach($listaUsuarios as $usuario){ 
                      ?>
-                <tr>
-                    <td><?php echo $usuario->id; ?></td>
-                    <td><?php echo $usuario->email; ?></td>
-                    <td><?php echo $usuario->nombre . ' ' . $usuario->apellido; ?></td>
-                    <td><?php echo ($usuario->confirmado == 1) ? 'Si' : 'No'; ?></td>
-                    <td><?php echo ($usuario->admin == 1) ? 'Admin' : 'Cliente'; ?></td>
-                    <td><?php echo ($usuario->baneo == 1) ? 'Baneado' : 'Activo'; ?></td>
-                    <td>
-                        <a href="/admin/usuarios/usuario?id=<?php echo $usuario->id; ?>">Ver Mas</a>
-                    </td>   
+                <tr 
+                    onclick="window.location ='/admin/usuarios/usuario?id=<?php echo $usuario->id; ?>'"
+                    tabindex="0" role="link"
+                    onkeydown="if(event.key==='Enter'){window.location='/admin/usuarios/usuario?id=<?php echo $usuario->id; ?>';}"
+                    class="tabla__fila"
+                >
+                    <td class="tabla__celda"><?php echo $usuario->id; ?></td>
+                    <td class="tabla__celda"><?php echo $usuario->email; ?></td>
+                    <td class="tabla__celda"><?php echo $usuario->nombre . ' ' . $usuario->apellido; ?></td>
+                    <td class="tabla__celda"><?php echo ($usuario->confirmado == 1) ? 'Si' : 'No'; ?></td>
+                    <td class="tabla__celda"><?php echo ($usuario->admin == 1) ? 'Admin' : 'Cliente'; ?></td>
+                    <td class="tabla__celda"><?php echo ($usuario->baneo == 1) ? 'Baneado' : 'Activo'; ?></td> 
                 </tr>
             <?php } ?>
         </tbody>
     </table>
 
-    <div class="tabla__paginador">
+    <div class="paginacion paginacion--admin">
         <?php if($paginaActual > 1){ ?>
             <a 
                 href="/admin/usuarios?pagina=<?php 
@@ -147,7 +149,7 @@
         <?php } ?>
         <?php for($contadorPaginas = 1; $contadorPaginas <= $numeroPaginas; $contadorPaginas++) { 
         if ($contadorPaginas == $paginaActual) {?>
-                <p><?php echo $contadorPaginas ?></p>
+                <span><?php echo $contadorPaginas ?></span>
             <?php } else { ?>
 
                 <a 

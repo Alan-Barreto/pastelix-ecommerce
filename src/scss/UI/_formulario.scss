@@ -10,9 +10,10 @@
 }
 
 .formulario{
-    min-width: 325px;
+    min-width: 350px;
     width: 30%;
     margin-bottom: 20px;
+
     &__campo{
         display: flex;
         flex-direction: column;
@@ -32,10 +33,47 @@
         height: 3rem;
         border: 1px solid v.$rose400;
         padding-left: 1rem;
+        font-size: 1.2rem;
 
         &::placeholder{
             color: v.$rose300;
             font-size: 1.2rem;
+        }
+
+        &--file{
+            padding-left: 0;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 32px;
+        }
+
+        &--img{
+            display: flex;
+            flex-direction: column;
+        }
+    
+        &-button{
+            padding-left: 1rem;
+            padding-right: 1rem;
+            line-height: 3rem;
+            width: 105px;
+            flex: 0 0 auto;
+            height: 100%;
+            white-space: nowrap;  
+            border-right: 1px solid v.$rose400;
+            &:hover{
+                cursor: pointer;
+                font-weight: 600;
+            }
+        }
+
+        &-text{
+            flex: 1 1 auto;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;  
         }
     }
 
@@ -53,6 +91,44 @@
             cursor: pointer;
             background-color: color.adjust(v.$red, $lightness: -10%);
         }
+    }
+
+    &__img{
+        width: 200px;
+        height: auto;
+        border-radius: 15px;
+    }
+
+    &--admin{
+        width: 50%;
+        max-width: 750px;
+        .formulario__label{
+            color: v.$grisOscuro;
+        }
+
+        .formulario__input{
+            border: 1px solid v.$grisAzul200;
+            color: v.$grisOscuroFrio;
+            
+            &::placeholder{
+                color: color.adjust(v.$grisClaro, $lightness: 15%);
+                font-size: 1.2rem;
+            }   
+            
+            &-button{
+                border-right: 1px solid v.$grisAzul200;
+                background-color: v.$grisAzul200;
+                
+                &:hover{
+                    background-color: color.adjust(v.$grisAzul300, $lightness: -5%);
+                }
+            }
+        }
+    }
+
+    .boton{
+        margin-bottom: 20px;
+
     }
 }
 

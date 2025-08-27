@@ -72,7 +72,7 @@ class Router{
         $contenido = ob_get_clean();    
 
         
-        include_once __DIR__ . "/views/". $layout .".php";  //Agregar luego la verificacion de si es pagina de admin o no y así cambiar al layout correspondiente
+        include_once __DIR__ . "/views/". $layout .".php";
         
     }
 
