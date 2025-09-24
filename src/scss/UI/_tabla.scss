@@ -9,11 +9,40 @@
         color: v.$grisOscuroFrio;
     }
 
+
+    &__body{
+
+        .tabla__fila{
+
+            &:nth-child(odd){
+                background-color: v.$marronOscuro;
+                color: v.$beige;
+
+                .boton{
+                    background-color: v.$beige;
+                    color: v.$marronOscuro;
+
+                    &:hover{
+                        background-color: v.$marronOscuro;
+                        color: v.$beige;
+                        outline: 2px solid v.$beige;
+                    }
+                }
+            }
+
+            .boton{
+                border: none;  
+            }
+        }   
+    }
     &__fila{
         height: 45px;
     }
 
     &__celda{
+        text-align: center;
+        padding-left: 15px;
+        padding-right: 15px;
         &--no-wrap{
             white-space: nowrap; 
             overflow: hidden;
@@ -28,6 +57,7 @@
             margin-bottom: 5px;
         }
     }
+
     &--admin{
 
         .tabla__fila{
@@ -37,9 +67,6 @@
         }
         .tabla__celda{
             font-size: 25px;
-            text-align: center;
-            padding-left: 15px;
-            padding-right: 15px;
             &--head{
                 
                 &:hover:not(.tabla__celda--no-hover){

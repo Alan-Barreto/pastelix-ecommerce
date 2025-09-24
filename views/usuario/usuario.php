@@ -6,80 +6,28 @@
                 
             <div class="usuario__datos">
                 
-                <p class="datos__nombre">
-                    <span class="datos__tipo">Nombre:</span>
-                    <span class="datos__dato"><?php echo $_SESSION['nombre']; ?></span>
+                <p class="usuario__nombre">
+                    <b>Nombre: </b>
+                    <?php echo $_SESSION['nombre']; ?>
                 </p>
-                <p class="datos__apellido">
-                    <span class="datos__tipo">Apellido:</span>
-                    <span class="datos__dato"><?php echo $_SESSION['apellido']; ?></span>
+                <p class="usuario__apellido">
+                    <b>Apellido: </b>
+                    <?php echo $_SESSION['apellido']; ?>
                 </p>
-                <p class="datos__email">
-                    <span class="datos__tipo">E-mail:</span>
-                    <span class="datos__dato"><?php echo $_SESSION['email']; ?></span>
+                <p class="usuario__email">
+                    <b>E-mail: </b>
+                    <?php echo $_SESSION['email']; ?>
                 </p>
 
-                <p class="datos__telefono">
-                    <span class="datos__tipo">Telefono:</span>
-                    <span class="datos__dato"><?php echo $_SESSION['telefono']; ?></span>
+                <p class="usuario__telefono">
+                    <b>Telefono: </b>
+                    <?php echo $_SESSION['telefono']; ?>
                 </p>
             </div>
             <div class="usuario__acciones">
-                <button class="accion modificar">Modificar datos</button>
-                <button class="accion correo">Modificar E-mail</button>
-                <button class="accion contraseña">Cambiar contraseña</button>
-            </div>
-            <?php 
-            if(isset($_SESSION['alerta'])){
-                $alertas = getAlertaSession();
-            }       
-            include_once  __DIR__.'/../templates/alertas.php'; 
-            ?>
-            <div class="formulario__contenedor formulario--ocultar">
-                <form method='post' class="formulario formulario__datos">
-                    <div class="formulario__campo">
-                        <label for="nombre" class="formulario__label">Nombre</label>
-                        <input type="text" name="nombre" id="nombre" placeholder="Ingresa tu nombre" class="formulario__input" value="<?php echo $nuevosDatos['nombre']; ?>">
-                    </div>
-
-                    <div class="formulario__campo">
-                        <label for="apellido" class="formulario__label">Apellido</label>
-                        <input type="text" name="apellido" id="apellido" placeholder="Ingresa tu apellido" class="formulario__input" value="<?php echo $nuevosDatos['apellido']; ?>">
-                    </div>
-                    <div class="formulario__campo">
-                        <label for="telefono" class="formulario__label">Telefono</label>
-                        <input type="text" name="telefono" id="telefono" placeholder="Ingresa tu telefono" class="formulario__input" value="<?php echo $nuevosDatos['telefono']; ?>">
-                    </div>
-                    <input type="submit" class="formulario__submit" value="Actualizar datos">
-                </form>
-                <button class="formulario__cerrar">X</button>
-            </div>
-
-            <div class="formulario__contenedor formulario--ocultar">
-                <form method='post' class="formulario formulario__correo">
-                    <div class="formulario__campo">
-                        <label for="email" class="formulario__label">E-mail</label>
-                        <input type="email" name="email" id="email" placeholder="Ingresa tu E-mail" class="formulario__input" value="<?php echo $nuevosDatos['email']; ?>">
-                    </div>
-                    <input type="submit" class="formulario__submit" value="Actualizar E-mail">
-                </form>
-                <button class="formulario__cerrar">X</button>
-            </div>
-
-            <div class="formulario__contenedor formulario--ocultar">
-                <form method='post' class="formulario formulario__contraseña">
-                    <div class="formulario__campo">
-                        <label for="contraseñaActual" class="formulario__label">Contraseña Actual</label>
-                        <input type="password" name="contraseñaActual" id="contraseñaActual" placeholder="Ingresa tu Contraseña" class="formulario__input">
-                    </div>
-
-                    <div class="formulario__campo">
-                        <label for="contraseñaNueva" class="formulario__label">Nueva Contraseña</label>
-                        <input type="password" name="contraseñaNueva" id="contraseñaNueva" placeholder="Elige tu nueva Contraseña" class="formulario__input">
-                    </div>
-                    <input type="submit" class="formulario__submit" value="Cambiar contraseña">
-                </form>
-                <button class="formulario__cerrar">X</button>
+                <button class="usuario__accion modificar boton boton--pequeño">Modificar datos</button>
+                <button class="usuario__accion correo boton boton--pequeño">Modificar E-mail</button>
+                <button class="usuario__accion contraseña boton boton--pequeño">Cambiar contraseña</button>
             </div>
             
         </div>

@@ -2,7 +2,46 @@
 
 .checkout{
     display: flex;
-    width: 100%;
-    max-width: 12500px;
     justify-content: space-between;
+
+    .formulario{
+        width: 60%;
+        
+        @media (max-width: v.$tablet){
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 385px;
+        }
+    }
+
+    .contenedor__metodo-entrega{
+        .formulario__campo{
+            margin-bottom: 0;
+        }
+    }
+
+    .campo-direccionElegida{
+        display: flex;
+        gap: 10px;
+        margin-left: 20px;
+
+        @media (max-width: v.$tablet){
+            margin-left: 0;
+        }
+    }
+
+    @media (max-width: v.$tablet){
+        flex-direction: column;
+        align-items: center;
+
+        .boton--nueva-direccion{
+            margin-right: auto;
+            margin-left: auto;
+        }
+    }
+
+     @media (max-width: v.$telefono){
+        padding: 0 0 0 0;
+    }
 }

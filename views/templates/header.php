@@ -1,5 +1,6 @@
 <header class="header">
-    <a href="/" class="header__logo">Pastelix</a>
+
+     <a href="/" class="header__logo">Pastelix</a>
 
     <nav class="header__navegacion">
         <ul>
@@ -37,9 +38,10 @@
                 </form>
 
             <?php } ?>
-            
-            
+                
+                
         </ul>
-       
+        
     </nav>
+
 </header>

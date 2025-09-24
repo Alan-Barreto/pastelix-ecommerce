@@ -8,7 +8,36 @@ El formato sigue el esquema de versionado semántico: MAJOR.MINOR.PATCH
 - MINOR: nuevas funcionalidades compatibles
 - PATCH: correcciones o mejoras internas sin cambios visibles importantes
 
-## [0.8.0] - 2025-08-26
+## [0.9.0] - 2025-09-24
+### ➕ Agregado
+- Creada funcion `cargarIconos` dentro del archivo `tienda.js`
+- Agregados primeros ajustes visuales en la zona publicas y privadas de la tienda
+- Creada funcion `is_banned` dentro del archivo `funciones.php` para verificar el baneo del usuario
+
+### 🔧 Cambiado
+- Se cambiaron los nombres de varios archivos .svg
+- Se quito la opcion `Card` del boton de Paypal
+- En la ruta `/registro`:
+    - Se agrego el campo `telefono` al formulario
+    - Se cambiaron los mensajes de alerta
+- Reescrito `usuarioDatos.js` para manejar elementos dinámicos y validación vía endpoint
+- Agregadas varias funciones al controlador `APIDatosUsuario`:
+    - `validarDatos`
+    - `validarFormularioUsuario`
+    - `guardarNuevosDatos`
+- En el modelo `Usuario`:
+    - Se cambio el nombre de la funcion `setear_cambio_contraseña` a `setearCambioContraseña`
+    - Se cambio el nombre de la funcion `validar_cambio_contraseña` a `validarCambioContraseña` y su funcionalidad
+    - Se agregaron las funciones:
+        - `validarCambioDatos`
+        - `validarCambioCorreo`
+        - `validarCambioMisDatos`
+- Se actualizo la funcion `usuario` del modelo `UsuariosController` 
+
+### 📅 Pendiente
+- Detalles finales de la tienda
+
+## [0.8.0] - 2025-08-27
 ### ➕ Agregado
 - Creada funcion `rutaActual` en el archivo `funciones.php`
 - Creado el archivo `formulario.js` para mejoras visuales de los formularios en la pagina

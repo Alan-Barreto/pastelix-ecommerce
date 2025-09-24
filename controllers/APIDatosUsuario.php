@@ -2,10 +2,13 @@
 
 namespace Controllers;
 
+use Model\Token;
 use Model\Pedido;
-use Model\PedidoDireccion;
-use Model\PedidoProducto;
+use Classes\Email;
+use Model\Usuario;
 use Model\Producto;
+use Model\PedidoProducto;
+use Model\PedidoDireccion;
 
 class APIDatosUsuario{
     public static function recuperarPedido(){
@@ -64,12 +67,10 @@ class APIDatosUsuario{
         $listaProductos = [];
 
         foreach($datosProductosBuscados as $producto){
-            $subtotal = $pedidoProductosReordenado[$producto->id]['precio_unitario'] * $pedidoProductosReordenado[$producto->id]['cantidad'];
             $listaProductos[] = [
                 'nombre' => $producto->nombre,
                 'precio' => $pedidoProductosReordenado[$producto->id]['precio_unitario'],
                 'cantidad' => $pedidoProductosReordenado[$producto->id]['cantidad'],
-                'subtotal' => $subtotal,
                 'imagen' => $producto->imagen
             ];
         }
@@ -99,6 +100,95 @@ class APIDatosUsuario{
         }
 
         echo json_encode(['error' => false, 'datos' => ['datos' => $datosPedido, 'productos' => $listaProductos, 'direccion' => $direccionPedido ?? '']]);
+        exit;
+    }
+
+    private static function validarDatos($datos){
+        if(!is_auth()){
+            http_response_code(401);
+            echo json_encode(['error' => true, 'mensaje' => 'El usuario no esta logueado']);
+            exit;
+        }
+
+        $errores = Usuario::validarCambioMisDatos($datos);
+
+        if(!empty($errores)){
+            http_response_code(422);
+            echo json_encode([
+                'error' => true, 
+                'mensaje' => 'Error en algun campo del formulario', 
+                'errores' => $errores
+            ]);
+            exit;
+        }
+    }
+
+    public static function validarFormularioUsuario(){
+        self::validarDatos($_POST);
+
+        echo json_encode([
+            'error' => false, 
+            'mensaje' => 'Datos verificados con exito'
+        ]);
+        exit;
+    }
+
+    public static function guardarNuevosDatos(){
+        self::validarDatos($_POST);
+        $usuarioId = $_SESSION['id'];
+        $contraseñaNueva = $_POST['contraseñaNueva'] ?? '';
+        $tipoFormulario = $_POST['tipo_formulario'];
+
+        switch($tipoFormulario){
+            case 'datos':
+                $usuario = Usuario::where('id', $usuarioId);
+                $usuario->sincronizar($_POST);
+                //$usuario->guardar();
+                $mensaje = 'Datos actualizados con exito';
+                            
+                break;
+
+            case 'correo':
+                $usuario = array_shift(Usuario::thisWhere(['nombre', 'email'],'id', $usuarioId));
+                $token = new Token([
+                    'usuario_id' => $usuarioId,
+                    'accion' => 'Cambiar Correo',
+                    'nuevoEmail' => $_POST['correo']
+                ]);
+                $mail = new Email($usuario->email, $usuario->nombre, $token->token, $token->selector, $token->accion);
+                //$mail->enviarCorreo();
+                $token->hashearToken();
+                //$token->guardar();
+                
+                $mensaje = 'Se enviara un correo de confirmacion a su E-mail actual';
+
+                break;
+
+            case 'contraseña':
+                 $usuario = array_shift(Usuario::thisWhere(['nombre', 'email'],'id', $usuarioId));
+
+                $token = new Token([
+                    'usuario_id' => $usuarioId,
+                    'accion' => 'Cambiar Contraseña',
+                    'nuevoPassword' => $contraseñaNueva
+                ]);
+
+                $mail = new Email($usuario->email, $usuario->nombre, $token->token, $token->selector, $token->accion);
+                //$mail->enviarCorreo();
+                $token->hashearToken();
+                $token->hashearPassword();
+                //$token->guardar();
+            
+                $mensaje = 'Se enviara un correo de confirmacion a su E-mail';
+      
+                break;
+        }
+              
+        echo json_encode([
+            'error' => false, 
+            'mensaje' => $mensaje,
+            'datos' => $usuario
+        ]);
         exit;
     }
 }

@@ -95,7 +95,7 @@
 
             const botonNuevaDireccion = document.createElement('button');
             botonNuevaDireccion.classList.add('boton');
-            botonNuevaDireccion.classList.add('boton__nueva-direccion');
+            botonNuevaDireccion.classList.add('boton--nueva-direccion');
             botonNuevaDireccion.type = 'button';
             botonNuevaDireccion.innerText = 'Agregar Nueva Direccion';
             contenedorListaDirecciones.appendChild(botonNuevaDireccion);
@@ -109,6 +109,7 @@
             direccionLabel.classList.add('campo-direccionElegida');
 
             const direccionInputRadio = document.createElement('INPUT');
+            direccionInputRadio.classList.add('formulario__input--radio');  
             direccionInputRadio.type = 'radio';
             direccionInputRadio.name = 'direccionElegida';
             direccionInputRadio.value = direccion.id;
@@ -143,6 +144,7 @@
             
             const formulario = document.createElement('FORM');
             formulario.classList.add('formulario');
+            formulario.classList.add('formulario--modal');
             formulario.classList.add('modal__formulario');
 
             const formularioDireccion = crearFormularioDireccion();
@@ -196,11 +198,11 @@
             if(resultado.error){
                 Object.entries(resultado.errores).forEach(([campo, mensaje]) => {
                     const input = formulario.querySelector(`[name = "${campo}"]`);
-                    input.classList.add('input__error');
+                    input.classList.add('formulario__input--error');
                     const contenedorInput = input.parentElement;
                     const mensajeError = contenedorInput.querySelector('.mensaje__error');
                     if(!mensajeError){
-                        crearAlertaFormulario(contenedorInput,input,mensaje)
+                        crearAlertaFormulario(contenedorInput,mensaje)
                     }
                 });
             }else{
@@ -250,8 +252,13 @@
             contenedorDireccionEntrega.classList.add('contenedor__direccion-entrega');
 
             const legend = document.createElement('LEGEND');
+            legend.classList.add('formulario__legend');
             legend.innerText = 'Direccion de entrega';
             contenedorDireccionEntrega.appendChild(legend);
+
+            const contenedorFormulario =  document.createElement('DIV');
+            contenedorFormulario.classList.add('formulario__contenedor');
+            contenedorDireccionEntrega.appendChild(contenedorFormulario);
 
             //
             const contenedorCalle = document.createElement('DIV');
@@ -271,7 +278,7 @@
             calleInput.classList.add('formulario__input')
             calleInput.classList.add('campo-calle')
             contenedorCalle.appendChild(calleInput);
-            contenedorDireccionEntrega.appendChild(contenedorCalle);
+            contenedorFormulario.appendChild(contenedorCalle);
 
             //
             const contenedorCiudad = document.createElement('DIV');
@@ -291,7 +298,7 @@
             ciudadInput.classList.add('formulario__input')
             ciudadInput.classList.add('campo-ciudad')
             contenedorCiudad.appendChild(ciudadInput);
-            contenedorDireccionEntrega.appendChild(contenedorCiudad);
+            contenedorFormulario.appendChild(contenedorCiudad);
 
             //
             const contenedorProvincia = document.createElement('DIV');
@@ -311,7 +318,7 @@
             provinciaInput.classList.add('formulario__input')
             provinciaInput.classList.add('campo-provincia')
             contenedorProvincia.appendChild(provinciaInput);
-            contenedorDireccionEntrega.appendChild(contenedorProvincia);
+            contenedorFormulario.appendChild(contenedorProvincia);
 
             //
             const contenedorCodigoPostal = document.createElement('DIV');
@@ -331,7 +338,7 @@
             codigoPostalInput.classList.add('formulario__input')
             codigoPostalInput.classList.add('campo-codigo_postal')
             contenedorCodigoPostal.appendChild(codigoPostalInput);
-            contenedorDireccionEntrega.appendChild(contenedorCodigoPostal);
+            contenedorFormulario.appendChild(contenedorCodigoPostal);
 
             //
             const listaPaises = [
@@ -353,6 +360,7 @@
             paisSelect.name = 'pais';
             paisSelect.id = 'pais';
             paisSelect.classList.add('formulario__input')
+            paisSelect.classList.add('formulario__input--select')
             paisSelect.classList.add('campo-pais')
             paisSelect.required = true;
 
@@ -374,25 +382,25 @@
         function crearOptionsPais(listaPaises,paisSelect){
              listaPaises.forEach(pais=>{
                 const paisOption = document.createElement('OPTION');
+                paisOption.classList.add('formulario__option');
                 paisOption.value = pais.codigo;
                 paisOption.innerText= pais.nombre;
                 paisSelect.appendChild(paisOption);
              });
         }
         //Crea una alerta y la inserta antes del input afectado
-        function crearAlertaFormulario(contenedor,input,mensaje){
-            console.log('no olvides cambiar los datos aqui para terminar de definir las alertas nuevas');
+        function crearAlertaFormulario(contenedor,mensaje){
             const alerta = document.createElement('P');
             alerta.classList.add('mensaje__error');
             alerta.innerText = mensaje;
 
-            contenedor.insertBefore(alerta,input);
+            contenedor.appendChild(alerta);
         }
 
         //Limpia los mensajes ya existentes y quita la clase error a los input para volver a validar
         function limpiarAlertasFormulario(formulario){
             const mensajesError = formulario.querySelectorAll('.mensaje__error');
-            const inputsError = formulario.querySelectorAll('.input__error');
+            const inputsError = formulario.querySelectorAll('.formulario__input--error');
             if(mensajesError){
                     mensajesError.forEach(mensaje => {
                     mensaje.remove();
@@ -400,7 +408,7 @@
             }
             if(inputsError){
                     inputsError.forEach(input => {
-                    input.classList.remove('input__error');
+                    input.classList.remove('formulario__input--error');
                 });
             }
         }
@@ -445,15 +453,15 @@
             contenedorResumenPrecioFinal.classList.add('carrito__resumen-precio');
 
             const contadorCarrito = document.createElement('P');
-            contadorCarrito.classList.add('contador-carrito');
+            contadorCarrito.classList.add('carrito__total-articulos');
             const cantidadContador = document.createElement('B');
             cantidadContador.innerText = `${cantidadTotal}`;
             contadorCarrito.appendChild(cantidadContador);
-            contadorCarrito.append(' articulos en tu pedido');
+            contadorCarrito.append(' Articulos en tu pedido');
             contenedorResumenPrecioFinal.appendChild(contadorCarrito);
 
             const precioFinal = document.createElement('P');
-            precioFinal.classList.add('precio-final');
+            precioFinal.classList.add('carrito__total-precio');
             precioFinal.innerText =  `$ ${totalAPagar.toFixed(2)}`
             contenedorResumenPrecioFinal.appendChild(precioFinal);
 
@@ -462,6 +470,7 @@
             const carritoDetallado = document.createElement('BUTTON');
             carritoDetallado.type = 'button';
             carritoDetallado.classList.add('boton');
+            carritoDetallado.classList.add('boton--centrado');
             carritoDetallado.innerText = 'Expandir Carrito';
             funcionalidadCarritoDetallado(carritoDetallado,carrito);
 
@@ -470,7 +479,7 @@
             contenedorCarrito.appendChild(resumenCarrito);
         }
 
-        function funcionalidadCarritoDetallado(boton, carrito = []){
+        function funcionalidadCarritoDetallado(boton, carritoLista = []){
             const bodyPagina = document.querySelector('body');
             const modalExistente = document.querySelector('.modal');
             boton.addEventListener('click', function(e){
@@ -482,19 +491,27 @@
                     const modal = document.createElement('DIV');
                     modal.classList.add('modal');
 
+                    const carrito = document.createElement('DIV');
+                    carrito.classList.add('carrito');
+                    carrito.classList.add('carrito--modal');
+                    modal.appendChild(carrito);
+
+
                     const botonCerrar = document.createElement('BUTTON');
                     botonCerrar.classList.add('boton');
+                    botonCerrar.classList.add('boton--centrado');
+                    botonCerrar.classList.add('boton--modal');
                     botonCerrar.innerText = 'Cerrar';
-                    modal.appendChild(botonCerrar);
+                    carrito.appendChild(botonCerrar);
 
-                    const contenedorCarritoDetallado = document.createElement('DIV');
-                    contenedorCarritoDetallado.classList.add('carrito__detallado');
+                    const carritoContenido = document.createElement('DIV');
+                    carritoContenido.classList.add('carrito__contenido');
 
                     const carritoDetallado = document.createElement('UL');
                     carritoDetallado.classList.add('carrito__lista');
-                    contenedorCarritoDetallado.appendChild(carritoDetallado);
+                    carritoContenido.appendChild(carritoDetallado);
 
-                    carrito.forEach(producto=>{
+                    carritoLista.forEach(producto=>{
                         const articuloCarrito = crearArticuloCarrito(producto);
                         carritoDetallado.appendChild(articuloCarrito);
                         precioTotal += Number(producto.precio) * producto.cantidad;
@@ -502,7 +519,7 @@
                     });
 
                     const contenedorPrecioTotal = document.createElement('DIV');
-                    contenedorPrecioTotal.classList.add('contenedor__precio-total');
+                    contenedorPrecioTotal.classList.add('carrito__total');
                     
                     const textoPrecioTotal = document.createElement('P');
                     textoPrecioTotal.innerText = 'Total a pagar:'
@@ -512,7 +529,7 @@
                     valorPrecioTotal.innerText = `$${precioTotal.toFixed(2)}`;
                     contenedorPrecioTotal.appendChild(valorPrecioTotal);
 
-                    contenedorCarritoDetallado.appendChild(contenedorPrecioTotal);
+                    carritoContenido.appendChild(contenedorPrecioTotal);
 
 
                     modal.addEventListener('click',function(e){
@@ -527,7 +544,7 @@
                         modal.remove();
                     });
 
-                    modal.appendChild(contenedorCarritoDetallado);
+                    carrito.appendChild(carritoContenido);
 
                     bodyPagina.appendChild(modal);
                 }
@@ -537,49 +554,44 @@
 
         function crearArticuloCarrito(producto){
             const articuloCarrito = document.createElement('LI');
-            articuloCarrito.classList.add('carrito__articulo')
-            articuloCarrito.classList.add('articulo')
-
-            const contenedorImagenDatos = document.createElement('DIV');
-            contenedorImagenDatos.classList.add('contenedor__imagen-datos');
+            articuloCarrito.classList.add('carrito__articulo');
 
             const imagenArticulo = document.createElement('IMG');
             imagenArticulo.src = `/img/productos/${producto.imagen}_thumb.webp`;
-            imagenArticulo.alt = 'Imagen Producto';
-            imagenArticulo.classList.add('articulo__imagen');
-            contenedorImagenDatos.appendChild(imagenArticulo);
+            imagenArticulo.alt = `Imagen Producto ${producto.nombre}`;
+            imagenArticulo.classList.add('carrito__imagen');
+            articuloCarrito.appendChild(imagenArticulo);
 
             const contenedorDatosArticulo = document.createElement('DIV');
-            contenedorDatosArticulo.classList.add('articulo__datos');
+            contenedorDatosArticulo.classList.add('carrito__datos');
+            contenedorDatosArticulo.classList.add('carrito__datos--modal');
 
-            const nombreArticulo = document.createElement('P');
-            nombreArticulo.classList.add('articulo__nombre');
+            const nombreArticulo = document.createElement('H3');
+            nombreArticulo.classList.add('carrito__nombre');
             nombreArticulo.innerText = producto.nombre;
             contenedorDatosArticulo.appendChild(nombreArticulo);
 
             const contenedorCantidadPrecio = document.createElement('DIV');
-            contenedorCantidadPrecio.classList.add('articulo__cantidad-precio');
+            contenedorCantidadPrecio.classList.add('carrito__precio-cantidad');
             
             const cantidadArticulo = document.createElement('P');
-            cantidadArticulo.classList.add('articulo__cantidad');
+            cantidadArticulo.classList.add('carrito__cantidad');
             cantidadArticulo.innerText = `X${producto.cantidad}`;
             contenedorCantidadPrecio.appendChild(cantidadArticulo);
 
             const precioArticulo = document.createElement('P');
-            precioArticulo.classList.add('articulo__precio');
+            precioArticulo.classList.add('carrito__precio-unitario');
             precioArticulo.innerText = `@${producto.precio}`;
             contenedorCantidadPrecio.appendChild(precioArticulo);
 
             contenedorDatosArticulo.appendChild(contenedorCantidadPrecio);
 
-            contenedorImagenDatos.appendChild(contenedorDatosArticulo);
-
-            articuloCarrito.appendChild(contenedorImagenDatos);
+            articuloCarrito.appendChild(contenedorDatosArticulo);
 
             const subtotalArticulo = document.createElement('P');
-            subtotalArticulo.classList.add('articulo__subtotal');
+            subtotalArticulo.classList.add('carrito__subtotal');
             subtotalArticulo.innerText = `$${(Number(producto.precio) * producto.cantidad).toFixed(2)}`;
-            articuloCarrito.appendChild(subtotalArticulo);
+            contenedorCantidadPrecio.appendChild(subtotalArticulo);
 
             return articuloCarrito;
         }
@@ -631,8 +643,8 @@
                         const input = document.querySelector(`.campo-${campo}`);
                         const contenedorInput = input.parentElement;
 
-                        input.classList.add('input__error');
-                        crearAlertaFormulario(contenedorInput,input,mensaje);
+                        input.classList.add('formulario__input--error');
+                        crearAlertaFormulario(contenedorInput,mensaje);
                     });       
                 }     
                 return resultado;
@@ -713,8 +725,8 @@
                 const contenedorInput = input.parentElement;
                 const mensajeError = generarMensajeError(campoAfectado);
 
-                input.classList.add('input__error');
-                crearAlertaFormulario(contenedorInput,input,mensajeError);
+                input.classList.add('formulario__input--error');
+                crearAlertaFormulario(contenedorInput,mensajeError);
         }
 
         function generarMensajeError(campo){

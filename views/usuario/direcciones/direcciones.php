@@ -1,33 +1,37 @@
 <?php
     include_once __DIR__ .'/../../templates/navegacionUsuario.php';
 ?>
-        <h1>direcciones</h1>
     <div class="usuario__direcciones"> 
-        <a href="/usuario/direcciones/crear"><button>Nueva Direccion</button></a>
+        <h2>Direcciones</h2>
+
+        <a href="/usuario/direcciones/crear" class="boton">Nueva Direccion</a>
         <?php
             if(isset($_SESSION['alerta'])){
                 $alertas = getAlertaSession();
             }
             include_once __DIR__ .'/../../templates/alertas.php';
         ?>
-        <ul>
+        <ul class="usuario__lista-direcciones">
             <?php 
                 if (!empty($direcciones)){
                     foreach ($direcciones as $key=>$direccion) { ?>
 
-                        <li>
+                        <li class="usuario__direccion">
                             <h3>Direccion <?php echo $key + 1; ?></h3>
-                            <p>
-                                <?php echo $direccion->calle . ", " . $direccion->ciudad; ?>
-                                <span>
-                                    <?php echo $direccion->codigo_postal. ", " . $direccion->provincia. ", " . $direccion->pais_nombre; ?>
-                                </span>    
-                            </p>
-                            
-                            <div class="direcciones__acciones">
-                                <a href="/usuario/direcciones/editar?id=<?php echo $direccion->id ?>"><button>Editar</button></a>
+
+                            <div class="usuario__direccion-datos">
+                                <p>
+                                    <?php echo $direccion->calle . ", " . $direccion->ciudad . ", "; ?>
+                                    <span>
+                                        <?php echo $direccion->codigo_postal. ", " . $direccion->provincia. ", " . $direccion->pais_nombre; ?>
+                                    </span>    
+                                </p>
+                            </div>
+                                             
+                            <div class="usuario__direccion-acciones">
+                                <a class="boton boton--pequeño" href="/usuario/direcciones/editar?id=<?php echo $direccion->id ?>">Editar</a>
                                 <form action="/usuario/direcciones/borrar?id=<?php echo $direccion->id ?>" method="POST">
-                                    <input type="submit" class="" value="Borrar">
+                                    <input type="submit" class="boton boton--pequeño" value="Borrar">
                                 </form>
                             </div>
                             

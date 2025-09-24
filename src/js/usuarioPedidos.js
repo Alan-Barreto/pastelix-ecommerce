@@ -18,7 +18,6 @@
                             } 
                             arrayPedidos[pedidoId] = pedidoBuscado.datos
                         }
-                        console.log(arrayPedidos[pedidoId]);
                         mostrarDetallesPedido(arrayPedidos[pedidoId]);
                     }
                 });
@@ -34,9 +33,27 @@
             modal.classList.add('modal');
 
             const detallesPedido = document.createElement('DIV');
-            detallesPedido.classList.add('pedido__detalles');
+            detallesPedido.classList.add('carrito');
+            detallesPedido.classList.add('carrito--modal');
 
+            const botonCerrar = document.createElement('BUTTON');
+            botonCerrar.classList.add('boton');
+            botonCerrar.classList.add('boton--centrado');
+            botonCerrar.classList.add('boton--modal');
+            botonCerrar.innerText = 'Cerrar';
+            detallesPedido.appendChild(botonCerrar);
+
+            botonCerrar.addEventListener('click', function(e){
+                e.preventDefault();
+                body.classList.remove('modal--abierto');
+                modal.remove();
+            });
+
+            const contenidoPedido = document.createElement('DIV');
+            contenidoPedido.classList.add('carrito__contenido');
+            
             const datosPedido = document.createElement('DIV');
+            datosPedido.classList.add('carrito__numero-fecha');
 
             const numeroPedido = document.createElement('P');
             numeroPedido.innerText = `Nº pedido: ${pedido.datos.numeroPedido}`;
@@ -49,67 +66,19 @@
             datosPedido.appendChild(fechaPedido);
 
 
-            detallesPedido.appendChild(datosPedido);
-
-            const listaProductos = document.createElement('UL');
-        
-            pedido.productos.forEach(producto => {
-                const productoContenedor = document.createElement('LI');
-
-                const productoImagen = document.createElement('IMG');
-                productoImagen.src = `/img/productos/${producto.imagen}_thumb.webp`;
-                productoImagen.alt = 'Imagen Producto';
-                productoImagen.loading = 'lazy';
-
-                productoContenedor.appendChild(productoImagen);
-
-                const productoNombre = document.createElement('P');
-                productoNombre.innerText = producto.nombre;
-                productoContenedor.appendChild(productoNombre);
-
-                const contenedorPrecioCantidad = document.createElement('DIV');
-
-                const productoPrecio = document.createElement('P');
-                productoPrecio.innerText = `$ ${producto.precio}`;
-                contenedorPrecioCantidad.appendChild(productoPrecio);
-
-                const productoCantidad = document.createElement('P');
-                productoCantidad.innerText = producto.cantidad;
-                contenedorPrecioCantidad.appendChild(productoCantidad);
-
-                productoContenedor.appendChild(contenedorPrecioCantidad);
-
-                const productoSubtotal = document.createElement('P');
-                productoSubtotal.innerText = `$ ${producto.subtotal}`;
-
-                productoContenedor.appendChild(productoSubtotal);
-
-                listaProductos.appendChild(productoContenedor);
-            });
-
-            detallesPedido.appendChild(listaProductos);
-
-     
-            const totalPagado = document.createElement('DIV');
-            const textoTotalPagado = document.createElement('P');
-            textoTotalPagado.innerText = 'Total: ';
-            totalPagado.appendChild(textoTotalPagado);
-
-            const valorTotalPagado = document.createElement('P');
-            valorTotalPagado.innerText = `$ ${pedido.datos.total}`;
-            totalPagado.appendChild(valorTotalPagado);
-
-            detallesPedido.appendChild(totalPagado);
-
+            contenidoPedido.appendChild(datosPedido);
 
             if(pedido.direccion !== ''){
                 const direccionPedido = document.createElement('DIV');
+                direccionPedido.classList.add('carrito__direccion');
 
                 const textoDireccionPedido = document.createElement('P');
                 textoDireccionPedido.innerText = 'Direccion';
                 direccionPedido.appendChild(textoDireccionPedido);
 
                 const datosDireccionPedido = document.createElement('DIV');
+                datosDireccionPedido.classList.add('carrito__direccion-datos');
+
                 const calleDireccionPedido = document.createElement('P');
                 calleDireccionPedido.innerText = `Calle: ${pedido.direccion.calle}`;
                 datosDireccionPedido.appendChild(calleDireccionPedido);
@@ -132,10 +101,76 @@
 
                 direccionPedido.appendChild(datosDireccionPedido);
 
-                detallesPedido.appendChild(direccionPedido);
+                contenidoPedido.appendChild(direccionPedido);
             }
 
-            
+
+            const listaProductos = document.createElement('UL');
+            listaProductos.classList.add('carrito__lista');
+        
+            pedido.productos.forEach(producto => {
+                const productoContenedor = document.createElement('LI');
+                productoContenedor.classList.add('carrito__articulo');
+
+                const productoImagen = document.createElement('IMG');
+                productoImagen.classList.add('carrito__imagen');
+                productoImagen.src = `/img/productos/${producto.imagen}_thumb.webp`;
+                productoImagen.alt = `Imagen Producto ${producto.nombre}`;
+                productoImagen.loading = 'lazy';
+
+                productoContenedor.appendChild(productoImagen);
+
+                const contenedorDatos = document.createElement('DIV');
+                contenedorDatos.classList.add('carrito__datos');
+                contenedorDatos.classList.add('carrito__datos--modal');
+
+                const productoNombre = document.createElement('H3')
+                productoNombre.classList.add('carrito__nombre');
+                productoNombre.innerText = producto.nombre;
+                contenedorDatos.appendChild(productoNombre);
+
+                const contenedorPrecioCantidad = document.createElement('DIV');
+                contenedorPrecioCantidad.classList.add('carrito__precio-cantidad');
+
+                const productoCantidad = document.createElement('P');
+                productoCantidad.classList.add('carrito__cantidad');
+                productoCantidad.innerText = `X${producto.cantidad}`;
+                contenedorPrecioCantidad.appendChild(productoCantidad);
+
+                const productoPrecio = document.createElement('P');
+                productoPrecio.classList.add('carrito__precio-unitario');
+                productoPrecio.innerText = `@${producto.precio}`;
+                contenedorPrecioCantidad.appendChild(productoPrecio);      
+
+                contenedorDatos.appendChild(contenedorPrecioCantidad);
+
+                const productoSubtotal = document.createElement('P');
+                productoSubtotal.innerText = `$${(Number(producto.precio) * producto.cantidad).toFixed(2)}`;
+
+                contenedorPrecioCantidad.appendChild(productoSubtotal);
+
+                productoContenedor.appendChild(contenedorDatos);
+
+                listaProductos.appendChild(productoContenedor);
+            });
+
+            contenidoPedido.appendChild(listaProductos);
+
+     
+            const totalPagado = document.createElement('DIV');
+            totalPagado.classList.add('carrito__total');
+
+            const textoTotalPagado = document.createElement('P');
+            textoTotalPagado.innerText = 'Total: ';
+            totalPagado.appendChild(textoTotalPagado);
+
+            const valorTotalPagado = document.createElement('P');
+            valorTotalPagado.innerText = `$ ${pedido.datos.total}`;
+            totalPagado.appendChild(valorTotalPagado);
+
+            contenidoPedido.appendChild(totalPagado);
+
+            detallesPedido.appendChild(contenidoPedido);
             
             modal.appendChild(detallesPedido);
 

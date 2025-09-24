@@ -2,6 +2,7 @@
 
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
+use Model\Usuario;
 
 date_default_timezone_set('Europe/Madrid');
 
@@ -27,6 +28,14 @@ function is_admin(){
     }
     return isset($_SESSION['rol']) && !empty($_SESSION['rol'] && $_SESSION['rol'] === 'admin');
 }
+
+function is_banned(){
+    $usuario = Usuario::thisWhere(['baneo'], 'id', $_SESSION['id']);
+    $usuario = array_shift($usuario);
+    
+    return $usuario->baneo == 1;
+}
+
 
  
 function setAlertaSession($tipo, $mensaje){

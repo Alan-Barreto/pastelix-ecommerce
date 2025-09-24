@@ -14,10 +14,27 @@
     width: 30%;
     margin-bottom: 20px;
 
+    &__contenedor{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        column-gap: 100px;
+
+        @media (max-width: v.$xl_desktop) {
+            grid-template-columns: 1fr;
+            max-width: 500px;
+            width: 80%;   
+        }
+    }
+
+    &__legend{
+        font-size: 1.25rem;
+        margin-bottom: 15px;
+        font-weight: v.$bold;
+    }
+
     &__campo{
         display: flex;
         flex-direction: column;
-        margin-bottom: 2rem;
     }
 
     &__label{
@@ -25,18 +42,31 @@
         text-transform: uppercase;
         font-weight: v.$bold;
         letter-spacing: .5px;
-        font-size: 1.25rem;
+        font-size: 1.15rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        &--input{
+            width: fit-content;
+            margin-bottom: 0;
+            &:hover{
+                cursor: pointer;
+            }
+        }
     }
 
     &__input{
         border-radius: .25rem;
         height: 3rem;
-        border: 1px solid v.$rose400;
+        border: 1px solid v.$marronOscuro;
+        margin-bottom: 2rem;
         padding-left: 1rem;
         font-size: 1.2rem;
+        color: v.$marronOscuro;
 
         &::placeholder{
-            color: v.$rose300;
+            color: color.adjust(v.$marronOscuro, $lightness: 35%);
             font-size: 1.2rem;
         }
 
@@ -75,21 +105,53 @@
             text-overflow: ellipsis;
             white-space: nowrap;  
         }
+
+        &--radio{
+            accent-color: v.$marronOscuro;
+            margin-bottom: 0;
+            &:hover{
+                cursor: pointer;
+            }
+        }
+
+        &--select{
+            &:hover{
+                cursor: pointer;
+            }
+        }
+
+        &--error:not(.campo-entrega){
+            border: 1px solid v.$rojoCalido;
+            color: v.$rojoCalido;
+            margin-bottom: 0;
+            
+            &::placeholder{
+                color: color.adjust(v.$rojoCalido, $lightness: 25%);
+            }
+        }
+    }
+
+    &__option{
+        &:hover{
+            background-color: v.$beige;
+        }
     }
 
     &__submit{
         height: 2.5rem;
         width: 10rem;
         text-transform: uppercase;
-        color: white;
+        color: v.$beige;
         font-weight: v.$bold;
-        background-color: v.$red;
+        background-color: v.$marronOscuro;
         border-radius: 50px;
         border: none;
 
         &:hover{
             cursor: pointer;
-            background-color: color.adjust(v.$red, $lightness: -10%);
+            background-color: v.$beige;
+            color: v.$marronOscuro;
+            outline: 2px v.$marronOscuro solid;
         }
     }
 
@@ -126,9 +188,38 @@
         }
     }
 
+    &--modal{
+        width: fit-content;
+        border-radius: 15px;
+
+        .formulario__contenedor{
+            @media (max-width: v.$tablet) {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .campo-pais{
+            width: 256px;
+            @media (max-width: v.$tablet) {
+                width: 100%;
+            }
+        }
+    }
+
     .boton{
         margin-bottom: 20px;
+    }
 
+    &__acciones{
+        display: flex;
+        justify-content: space-between;
+
+        a{
+            display: flex;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+        }
     }
 }
 
@@ -142,10 +233,18 @@
         justify-content: center;
     }
     &__enlace{
-        color: v.$red;
-
+        color: v.$marronOscuro;
         &:hover{
-            color: v.$rose900;
+            color: v.$doradoMetalico;
         }
     }
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #fff inset !important; /* tu color de fondo */
+  -webkit-text-fill-color: v.$marronOscuro !important;               /* color del texto */
+  transition: background-color 5000s ease-in-out 0s;      /* truco para evitar el parpadeo */
 }

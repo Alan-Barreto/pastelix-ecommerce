@@ -15,98 +15,15 @@ class UsuariosController{
             header('Location: /');
             exit();
         }else{
-            $alertas = [];
-            $nuevosDatos = [
-                'nombre' => $_SESSION['nombre'],
-                'apellido' => $_SESSION['apellido'],
-                'email' => $_SESSION['email'],
-                'telefono' => $_SESSION['telefono']
-            ];
-            if($_SERVER['REQUEST_METHOD'] === 'POST'){
-                
-                if(isset($_POST['nombre'])){
-                    $nuevosDatos['nombre']= $_POST['nombre'];
-                    $nuevosDatos['apellido'] = $_POST['apellido'];
-                    $nuevosDatos['telefono'] = $_POST['telefono'];
-                    if(empty($_POST['nombre']) || empty($_POST['apellido']) || empty($_POST['telefono'])){
-                        $alertas = usuario::setAlerta('error', 'Ninguno de los espacios puede ir vacio');
-                    }
-                   
-                    if(empty($alertas)){
-                        $usuario = usuario::where('id', $_SESSION['id']);
-                        if($_POST['nombre'] === $usuario->nombre && $_POST['apellido'] === $usuario->apellido && $_POST['telefono'] === $usuario->telefono){
-                            $alertas = usuario::setAlerta('error', 'No hubo cambios en los datos, actualizacion cancelada');
-                        }else{
-                            $usuario->sincronizar($_POST);
-                            $usuario->guardar();
-                            setAlertaSession('exito', 'Datos actualizados con exito');
-                            header('Location: /usuario');
-                            exit;
-                        }
-                        
-                    }
-                }
-                if(isset($_POST['email'])){
-                    
-                    if(!$_POST['email'] || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)){
-                        $alertas = usuario::setAlerta('error', 'E-mail no valido');
-                    }else{
-                        $usuario = usuario::where('email', $_POST['email']);
-                        if($usuario){
-                        $alertas = usuario::setAlerta('error', 'El E-mail ya está en uso');
-                        }else{
-                            $usuario = usuario::where('email', $_SESSION['email']);
-                            $token = new Token([
-                                'usuario_id' => $usuario->id,
-                                'accion' => 'Cambiar Correo',
-                                'nuevoEmail' => $_POST['email']
-                            ]);
-                            $mail = new Email($usuario->email, $usuario->nombre, $token->token, $token->selector, $token->accion);
-                            $mail->enviarCorreo();
-                            $token->hashearToken();
-                            $token->guardar();
-
-                            setAlertaSession('exito', 'Se enviara un correo de confirmacion a su E-mail actual');
-                            header('Location: /usuario');
-                            exit;
-                        }
-                    }
-                }
-                if(isset($_POST['contraseñaActual'])){
-                  
-                    if(empty($_POST['contraseñaActual']) || empty($_POST['contraseñaNueva'])){
-                        $alertas = Usuario::setAlerta('error', 'Los campos no pueden ir vacios');
-                    }else{
-                        $usuario = Usuario::where('id', $_SESSION['id']);
-                        
-                        $usuario->setear_cambio_contraseña($_POST);
-                        $alertas = $usuario->validar_cambio_contraseña();
-                        
-                        if(empty($alertas)){
-                            $token = new Token([
-                                'usuario_id' => $usuario->id,
-                                'accion' => 'Cambiar Contraseña',
-                                'nuevoPassword' => $usuario->contraseñaNueva
-                            ]);
-
-                            $mail = new Email($usuario->email, $usuario->nombre, $token->token, $token->selector, $token->accion);
-                            $mail->enviarCorreo();
-                            $token->hashearToken();
-                            $token->hashearPassword();
-                            $token->guardar();
-                        
-                            setAlertaSession('exito', 'Se enviara un correo de confirmacion a su E-mail');
-                            header('Location: /usuario');
-                            exit;                
-                        }                      
-                    }
-                }
+            if(is_banned()){
+                $_SESSION = [];
+                header('Location: /');
+                exit();
+            }else{
+                $router->render('/usuario/usuario',[
+                    'titulo' => 'Mi Cuenta'
+                ]);
             }
-            $router->render('/usuario/usuario',[
-                'titulo' => 'Mi Cuenta',
-                'alertas' => $alertas,
-                'nuevosDatos' => $nuevosDatos
-            ]);
         }   
     }
 
@@ -195,12 +112,19 @@ class UsuariosController{
             header('Location: /');
             exit();
         }else{
-            $listaPedidos = Pedido::thisWhere(['id', 'fecha', 'total', 'entrega'], 'usuario_id', $_SESSION['id']);
+            if(is_banned()){
+                $_SESSION = [];
+                header('Location: /');
+                exit();
+            }else{
+                $listaPedidos = Pedido::thisWhere(['id', 'fecha', 'total', 'entrega'], 'usuario_id', $_SESSION['id']);
 
-            $router->render('/usuario/pedidos',[
-                'titulo' => 'Mi Cuenta - Pedidos',
-                'listaPedidos' => $listaPedidos
-            ]);
+                $router->render('/usuario/pedidos',[
+                    'titulo' => 'Mi Cuenta - Pedidos',
+                    'listaPedidos' => $listaPedidos
+                ]);
+            }
+            
         }   
     }
 
@@ -209,12 +133,18 @@ class UsuariosController{
             header('Location: /');
             exit();
         }else{
-            $direcciones = Direccion::allWhere('usuario_id', $_SESSION['id'], 'ASC');
-        
-            $router->render('/usuario/direcciones/direcciones',[
-                'titulo' => 'Mi Cuenta - Direcciones',
-                'direcciones' => $direcciones
-            ]);
+            if(is_banned()){
+                $_SESSION = [];
+                header('Location: /');
+                exit();
+            }else{
+                $direcciones = Direccion::allWhere('usuario_id', $_SESSION['id'], 'ASC');
+            
+                $router->render('/usuario/direcciones/direcciones',[
+                    'titulo' => 'Mi Cuenta - Direcciones',
+                    'direcciones' => $direcciones
+                ]);
+            }
         }   
     }
 

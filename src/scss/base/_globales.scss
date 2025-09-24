@@ -1,15 +1,19 @@
 @use 'variables' as v;
 @use 'sass:color';
 body{
-    background-color:#f2f2f0;
-    //background-color:hsl(13, 31%, 94%);
+    background-color: v.$beige;
     font-family: Red Hat Text;
     display: grid;
     grid-template-rows: auto 1fr auto; /* header, contenido, footer */
     height: 100vh; /* Usa toda la altura de la ventana */
+    color: v.$marronOscuro;
     
 }
 
+main{
+    padding-left: 5.5%;
+    padding-right: 5.5%;
+}
 a{
     text-decoration: none;
 }
@@ -30,11 +34,29 @@ ul{
     border-radius: 50px;
     width: fit-content;
     text-align: center;
-    color: white;
-    background-color: v.$red;
+    color: v.$beige;
+    background-color: v.$marronOscuro;
     &:hover{
         cursor: pointer;
-        background-color: color.adjust(v.$red, $lightness: -10%);
+        background-color: v.$beige;
+        color: v.$marronOscuro;
+        outline: 2px v.$marronOscuro solid;
+    }
+
+    &--centrado{
+        margin-right: auto;
+        margin-left: auto;
+    }
+
+    &--pequeño{
+        height: 25px;
+        font-size: 17px;
+        border: none;
+    }
+
+    &--modal{
+        margin-top: 10px;
+        margin-bottom: 25px;
     }
 
     &--admin{
@@ -65,6 +87,7 @@ ul{
     }
     &__botones{
         display: flex;
+        justify-content: space-between;
     }
     &--abierto{
         overflow: hidden;
@@ -72,6 +95,10 @@ ul{
 }
 
 .ruta_actual{
+    
+    a{
+        color: v.$doradoMetalico;
+    }
 
     &--admin{
         background-color:  v.$grisAzul300;

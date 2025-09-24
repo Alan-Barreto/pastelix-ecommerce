@@ -23,23 +23,28 @@ class LoginController{
                         $alertas= $usuario->validar_contraseña($_POST['password']);
                         if(empty($alertas)){
                             if($usuario->confirmado == 1){
-                                session_start();
-                                session_regenerate_id(true);
-                                $_SESSION['id'] = $usuario->id;
-                                $_SESSION['nombre'] = $usuario->nombre;
-                                $_SESSION['apellido'] =  $usuario->apellido;
-                                $_SESSION['email'] = $usuario->email;
-                                $_SESSION['telefono'] = $usuario->telefono;
-                                if($usuario->admin == 1){
-                                    $_SESSION['rol'] = 'admin';
+                                if($usuario->baneo == 1){
+                                    $alertas = Usuario::setAlerta('error', 'La cuenta en la que intenta loguearse se encuentra baneada');
                                 }else{
-                                    $_SESSION['rol'] = 'usuario';
+                                    session_start();
+                                    session_regenerate_id(true);
+                                    $_SESSION['id'] = $usuario->id;
+                                    $_SESSION['nombre'] = $usuario->nombre;
+                                    $_SESSION['apellido'] =  $usuario->apellido;
+                                    $_SESSION['email'] = $usuario->email;
+                                    $_SESSION['telefono'] = $usuario->telefono;
+                                    if($usuario->admin == 1){
+                                        $_SESSION['rol'] = 'admin';
+                                    }else{
+                                        $_SESSION['rol'] = 'usuario';
+                                    }
+                                    if(is_admin()){
+                                        header('Location: /admin');
+                                    }else{
+                                        header('Location: /usuario');
+                                    }
                                 }
-                                if(is_admin()){
-                                    header('Location: /admin');
-                                }else{
-                                    header('Location: /usuario');
-                                }
+                                
                             }else{
                                 $alertas = Usuario::setAlerta('error', 'Cuenta no confirmada, desea que le reenviemos la confirmacion?');
                             }                       
@@ -77,14 +82,16 @@ class LoginController{
             exit();
             
         }else{
+            $errores = [];
             $usuario = new Usuario();
             if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 $usuario->sincronizar($_POST);
-                $alertas= $usuario->validar_registro();
-                if(empty($alertas)){
+                $errores = $usuario->validar_registro();
+                if(empty($errores)){
                     $resultado = $usuario->where('email', $usuario->email);
                     if($resultado){
-                        $alertas = Usuario::setAlerta('error', 'E-mail ya registrado');
+                        // $errores = Usuario::setAlerta('error', 'E-mail ya registrado');
+                        $errores['email'] = 'E-mail ya registrado';
                     }else{
                         $usuario->hashearPassword();    
                         $resultado = $usuario->guardar();
@@ -105,11 +112,10 @@ class LoginController{
                     }
                 }
             }
-
             $router->render('auth/registro',[
             'titulo' => 'Registro',
             'usuario' => $usuario,
-            'alertas' => $alertas
+            'errores' => $errores
         ]);
         }
         

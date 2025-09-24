@@ -1,0 +1,155 @@
+ @use '../base/variables' as v;
+
+
+.carrito{
+    background-color: hsl(20, 50%, 98%);
+    width: 385px;
+    height:fit-content;
+    border-radius: 10px;
+
+    &--modal{
+        width: 480px;
+        max-height: 100%;
+        overflow: auto;
+    }
+
+    &__resumen{
+        text-align: center;
+        font-size: 22.5px;
+        padding-top: 25px;
+        padding-bottom: 15px;
+        margin-bottom: 20px;
+    }
+
+    &__contador{
+        margin-bottom: 30px;
+        margin-top: 30px;
+        margin-left: 25px;
+    }
+
+    &__numero-fecha{
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+
+    &__direccion{
+        font-size: 20px;
+        width: 100%;
+        margin-bottom: 10px;
+        p{
+            margin-top: 0;
+        }
+    }
+
+    &__direccion-datos{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    &__contenido,.carrito__vacio{
+        display: grid;
+        place-items: center; 
+    }
+
+    &__contenido{
+        margin-left: 6.5%;
+        margin-right: 6.5%;
+        width: 87%;
+    }
+
+    &__lista{
+        width: 100%;
+    }
+
+    &__articulo{
+        border-bottom: 1px solid lightgray;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    &__articulo, .carrito__precio-cantidad, .carrito__total{
+        display: flex;
+    }
+
+    &__articulo, .carrito__total{
+        justify-content: space-between;
+    }
+
+    &__imagen{
+        width: 100px;
+        height: 100px;
+        margin-bottom: 10px;
+    }
+
+    &__datos{
+        &--modal{
+            width: 200px;
+        }
+    }
+
+    &__nombre{
+        margin-top: 0;
+    }
+
+    &__precio-cantidad{
+
+        margin-top: 15px;
+        font-weight: 600;
+    }
+
+    &__precio-unitario{
+        margin-right: 5px;
+        margin-left: 5px;
+        font-weight: 400;
+        margin-bottom: 10px;
+    }
+
+    &__boton-eliminar{
+        background-color: v.$marronOscuro;
+        color: v.$beige;
+        width: 20px;
+        height: 20px;
+        border-radius: 50px;
+        display: grid;
+        place-content: center;
+        border: none;
+        &:hover{
+            cursor: pointer;
+            color: v.$marronOscuro;
+            background-color: v.$beige;
+            outline: 1px solid v.$marronOscuro;
+        }   
+    }
+
+    &__total{
+        width: 100%;
+        align-items: center;
+        font-weight: 700;
+        font-size: 25px;
+
+        &-precio{
+            font-weight: 600;
+        }
+
+        &-articulos{
+            margin-top: 0;
+        }
+    }
+
+    &__boton-confirmar{
+        margin-top: 25px;
+        margin-bottom: 25px;
+        width: 80%;
+        background-color: v.$marronOscuro;
+        border: 1px solid v.$marronOscuro; 
+
+        &:hover{
+            background-color: v.$beige;
+            border: 1px solid v.$beige;
+            color: v.$marronOscuro;
+        }
+    }
+}  

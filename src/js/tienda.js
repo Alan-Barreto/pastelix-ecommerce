@@ -1,11 +1,12 @@
 (function(){
   const tienda = document.querySelector('.tienda');
   if(tienda){
-  
-    renderizarPagina()
 
+    const iconosSVG = {};    
+    renderizarPagina();
 
     async function renderizarPagina() {
+      await cargarIconos();
       const [listaCatalogo, listaCarrito] = await Promise.all([
         crearCatalogo(),
         rearmarCarrito()
@@ -22,12 +23,12 @@
       if(listaProductos.error){
         console.log(listaProductos.error);
       }else{
-        const catalogo = document.querySelector('.contenedor-productos');
+        const catalogo = document.querySelector('.productos__contenedor');
         listaProductos.forEach(producto => {
           const articulo = crearArticulo(producto);
           catalogo.appendChild(articulo);
         });
-        const listaArticulos = document.querySelectorAll('.articulo');
+        const listaArticulos = document.querySelectorAll('.productos__articulo');
 
         return listaArticulos;
       }
@@ -35,26 +36,28 @@
 
     //Crear articulos para el catalogo
     function crearArticulo(producto){
-      const articulo = document.createElement('ARTICLE');
+      const articulo = document.createElement('LI');
       articulo.dataset.id = producto.id;
-      articulo.classList.add('articulo');
+      articulo.classList.add('productos__articulo');
 
       const imagenArticulo = document.createElement('IMG');
       imagenArticulo.src = `/img/productos/${producto.imagen}.webp`;
-      imagenArticulo.alt = 'Imagen Producto';
-      imagenArticulo.classList.add('imagen-producto');
+      imagenArticulo.alt = `Imagen ${producto.nombre}`;
+      imagenArticulo.classList.add('productos__imagen');
       articulo.appendChild(imagenArticulo);
 
-      const categoriaArticulo = document.createElement('H4');
+      const categoriaArticulo = document.createElement('P');
+      categoriaArticulo.classList.add('productos__categoria');
       categoriaArticulo.innerText =  producto.categoria;
       articulo.appendChild(categoriaArticulo);
 
       const nombreArticulo = document.createElement('H3');
+      nombreArticulo.classList.add('productos__nombre');
       nombreArticulo.innerText =  producto.nombre;
       articulo.appendChild(nombreArticulo);
         
       const precioArticulo = document.createElement('P');
-      precioArticulo.classList.add('precio');
+      precioArticulo.classList.add('productos__precio');
       precioArticulo.innerText = `$ ${producto.precio}`;
       articulo.appendChild(precioArticulo);
       
@@ -68,8 +71,8 @@
         const articuloEncontrado = Array.from(listaCarrito).find(articuloCarrito => indiceBuscado == articuloCarrito.dataset.id); 
         if(articuloEncontrado){
           const imagenArticuloCatalogo = articuloCatalogo.querySelector('img');
-          imagenArticuloCatalogo.classList.add('articulo-seleccionado');
-          const cantidadArticulo = parseInt(articuloEncontrado.querySelector('.cantidad').innerText);
+          imagenArticuloCatalogo.classList.add('productos__imagen--seleccionado');
+          const cantidadArticulo = parseInt(articuloEncontrado.querySelector('.carrito__cantidad').innerText);
           crearBtnCantidad(articuloCatalogo, cantidadArticulo);
         }else{
           crearBtnAñadir(articuloCatalogo);
@@ -79,8 +82,8 @@
 
     //Agrega la funcion adecuada a los botones
     function añadirFuncionalidadBotones(){
-      const botonesAñadir = document.querySelectorAll('.boton-añadir');
-      const botonesCantidad = document.querySelectorAll('.boton-cantidad');
+      const botonesAñadir = document.querySelectorAll('.productos__boton-añadir');
+      const botonesCantidad = document.querySelectorAll('.productos__boton-cantidad');
 
       añadirCarrito(botonesAñadir);
       cambiarCantidad(botonesCantidad);
@@ -104,35 +107,31 @@
     function crearBtnCantidad(articulo, cantidadArticulo = 1){
       const btnCantidad= document.createElement('DIV');
       btnCantidad.classList.add('boton');
-      btnCantidad.classList.add('boton-cantidad');
+      btnCantidad.classList.add('productos__boton-cantidad');
 
       const btnRestar = document.createElement('BUTTON');
-      btnRestar.classList.add('boton-restar');
+      btnRestar.classList.add('productos__boton-restar');
 
-      const imgBtnRestar = document.createElement('IMG');
-      imgBtnRestar.src = '/build/img/icon-decrement-quantity.svg';
-      imgBtnRestar.alt = 'Boton Restar';
+      const imgBtnRestar = iconosSVG['signo-menos'].cloneNode(true);
       btnRestar.appendChild(imgBtnRestar);
       btnCantidad.appendChild(btnRestar);
 
       const cantidadBtnCantidad = document.createElement('INPUT');
       cantidadBtnCantidad.type = 'number';
       cantidadBtnCantidad.name ='cantidad'
-      cantidadBtnCantidad.classList.add('cantidad');
+      cantidadBtnCantidad.classList.add('productos__cantidad');
       cantidadBtnCantidad.min = 0;
       cantidadBtnCantidad.value = cantidadArticulo;
       btnCantidad.appendChild(cantidadBtnCantidad);
 
       const btnSumar = document.createElement('BUTTON');
-      btnSumar.classList.add('boton-sumar');
+      btnSumar.classList.add('productos__boton-sumar');
 
-      const imgBtnSumar = document.createElement('IMG');
-      imgBtnSumar.src = '/build/img/icon-increment-quantity.svg';
-      imgBtnSumar.alt = 'Boton Sumar';
+      const imgBtnSumar = iconosSVG['signo-mas'].cloneNode(true);
       btnSumar.appendChild(imgBtnSumar);
       btnCantidad.appendChild(btnSumar);
 
-      const datosArticulo = articulo.querySelector('h4');
+      const datosArticulo = articulo.querySelector('.productos__categoria');
 
       articulo.insertBefore(btnCantidad,datosArticulo);
 
@@ -142,18 +141,16 @@
     function crearBtnAñadir(articulo){
       const btnAñadir= document.createElement('BUTTON');
       btnAñadir.classList.add('boton');
-      btnAñadir.classList.add('boton-añadir');
+      btnAñadir.classList.add('productos__boton-añadir');
 
-      const imgBtnAñadir = document.createElement('img');
-      imgBtnAñadir.src = '/build/img/icon-add-to-cart.svg';
-      imgBtnAñadir.alt = 'Icono Carrito'
+      const imgBtnAñadir = iconosSVG['agregar-carrito'].cloneNode(true);
       btnAñadir.appendChild(imgBtnAñadir);
 
       const textoBtnAñadir = document.createElement('P');
-      textoBtnAñadir.innerText = 'Add to Cart';
+      textoBtnAñadir.innerText = 'Añadir';
       btnAñadir.appendChild(textoBtnAñadir);
 
-      const datosArticulo = articulo.querySelector('h4');
+      const datosArticulo = articulo.querySelector('.productos__categoria');
 
       articulo.insertBefore(btnAñadir,datosArticulo);
 
@@ -164,13 +161,13 @@
     function  asignarFuncionalidadCantidad(botonCantidad){
       const articulo = botonCantidad.parentElement;
       const idBuscado = articulo.dataset.id;
-      const botonResta = botonCantidad.querySelector('.boton-restar');
-      const botonSuma = botonCantidad.querySelector('.boton-sumar');
-      const inputCantidad = botonCantidad.querySelector('.cantidad');
+      const botonResta = botonCantidad.querySelector('.productos__boton-restar');
+      const botonSuma = botonCantidad.querySelector('.productos__boton-sumar');
+      const inputCantidad = botonCantidad.querySelector('.productos__cantidad');
       
       inputCantidad.addEventListener('change', async function(){
             
-        const listaCarrito = Array.from(document.querySelectorAll('.articulo-carrito'));
+        const listaCarrito = Array.from(document.querySelectorAll('.carrito__articulo'));
         
               
         if(inputCantidad.value <= 0){
@@ -178,7 +175,7 @@
 
           if(resultado.error != false){
             const seccionProductos = document.querySelector('.productos');
-            const contenedorProductos = document.querySelector('.contenedor-productos');
+            const contenedorProductos = document.querySelector('.productos__contenedor');
             const alerta = crearAlerta('error',resultado.error);
 
             seccionProductos.insertBefore(alerta,contenedorProductos);
@@ -186,7 +183,7 @@
           }else{
             const btnAñadir = crearBtnAñadir(articulo);
             asignarFuncionalidadAñadir(btnAñadir);
-            articulo.querySelector('.imagen-producto').classList.remove('articulo-seleccionado');
+            articulo.querySelector('.productos__imagen').classList.remove('productos__imagen--seleccionado');
             botonCantidad.remove();
                 
             const articuloBuscado = listaCarrito.find(articuloCarrito => idBuscado == articuloCarrito.dataset.id);
@@ -199,7 +196,7 @@
           const resultado = await actualizarCantidadProductoDelCarrito({'producto_id': idBuscado, 'cantidad': inputCantidad.value} )
           if(resultado.error != false){
             const seccionProductos = document.querySelector('.productos');
-            const contenedorProductos = document.querySelector('.contenedor-productos');
+            const contenedorProductos = document.querySelector('.productos__contenedor');
             const alerta = crearAlerta('error','Ocurrio un error al actualizar el carrito, por favor recargue la pagina');
 
             seccionProductos.insertBefore(alerta,contenedorProductos);
@@ -218,7 +215,7 @@
           const resultado = await actualizarCantidadProductoDelCarrito({'producto_id': idBuscado, 'cantidad': inputCantidad.value} )
           if(resultado.error != false){
             const seccionProductos = document.querySelector('.productos');
-            const contenedorProductos = document.querySelector('.contenedor-productos');
+            const contenedorProductos = document.querySelector('.productos__contenedor');
             const alerta = crearAlerta('error','Ocurrio un error al actualizar el carrito, por favor recargue la pagina');
 
             seccionProductos.insertBefore(alerta,contenedorProductos);
@@ -230,7 +227,7 @@
           const resultado = await eliminarProductoDelCarritoDB(idBuscado);
           if(resultado.error != false){
             const seccionProductos = document.querySelector('.productos');
-            const contenedorProductos = document.querySelector('.contenedor-productos');
+            const contenedorProductos = document.querySelector('.productos__contenedor');
             const alerta = crearAlerta('error',resultado.error);
 
             seccionProductos.insertBefore(alerta,contenedorProductos);
@@ -241,9 +238,9 @@
             asignarFuncionalidadAñadir(btnAñadir);
             botonCantidad.remove();
 
-            articulo.querySelector('.imagen-producto').classList.remove('articulo-seleccionado'); 
+            articulo.querySelector('.productos__imagen').classList.remove('productos__imagen--seleccionado'); 
 
-            const listaCarrito = Array.from(document.querySelectorAll('.articulo-carrito'));
+            const listaCarrito = Array.from(document.querySelectorAll('.carrito__articulo'));
 
             const articuloBuscado = listaCarrito.find(articuloCarrito => idBuscado == articuloCarrito.dataset.id);
 
@@ -262,7 +259,7 @@
 
         if(resultado.error !== false){
           const seccionProductos = document.querySelector('.productos');
-          const contenedorProductos = document.querySelector('.contenedor-productos');
+          const contenedorProductos = document.querySelector('.productos__contenedor');
           const alerta = crearAlerta('error','Ocurrio un error al actualizar el carrito, por favor recargue la pagina');
 
           seccionProductos.insertBefore(alerta,contenedorProductos);
@@ -278,9 +275,9 @@
       const articulo = botonAñadir.parentElement;
       botonAñadir.addEventListener('click', async function(){
         const idArticulo = articulo.dataset.id;
-        const listaCarrito = Array.from(document.querySelectorAll('.articulo-carrito'));
+        const listaCarrito = Array.from(document.querySelectorAll('.carrito__articulo'));
         const seccionProductos = document.querySelector('.productos');
-        const contenedorProductos = document.querySelector('.contenedor-productos');
+        const contenedorProductos = document.querySelector('.productos__contenedor');
 
         const articuloRepetido = listaCarrito.find(articulo => articulo.dataset.id === idArticulo);
 
@@ -295,8 +292,8 @@
             seccionProductos.insertBefore(alerta,contenedorProductos);
           }else{
 
-            const imagenArticulo = articulo.querySelector('.imagen-producto');
-            imagenArticulo.classList.add('articulo-seleccionado');
+            const imagenArticulo = articulo.querySelector('.productos__imagen');
+            imagenArticulo.classList.add('productos__imagen--seleccionado');
 
             crearCarrito(datosProducto)
 
@@ -316,13 +313,13 @@
         const idBotonBorrar = articuloCarrito.dataset.id
       
         botonBorrar.addEventListener('click', async function(){
-          const articulosMostrados = Array.from(document.querySelectorAll('.articulo'));
+          const articulosMostrados = Array.from(document.querySelectorAll('.productos__articulo'));
 
           const resultado = await eliminarProductoDelCarritoDB(idBotonBorrar);
 
           if(resultado.error != false){
             const seccionProductos = document.querySelector('.productos');
-            const contenedorProductos = document.querySelector('.contenedor-productos');
+            const contenedorProductos = document.querySelector('.productos__contenedor');
             const alerta = crearAlerta('error',resultado.error);
 
             seccionProductos.insertBefore(alerta,contenedorProductos);
@@ -330,10 +327,10 @@
           }else{
             const articuloEncontrado = articulosMostrados.find(articulo => articulo.dataset.id === idBotonBorrar);          
             if (articuloEncontrado){
-              const imagenArticulo = articuloEncontrado.querySelector('.imagen-producto');
-              imagenArticulo.classList.remove('articulo-seleccionado');
+              const imagenArticulo = articuloEncontrado.querySelector('.productos__imagen');
+              imagenArticulo.classList.remove('productos__imagen--seleccionado');
 
-              const botonCantidad = articuloEncontrado.querySelector('.boton-cantidad');  
+              const botonCantidad = articuloEncontrado.querySelector('.productos__boton-cantidad');  
 
               if(botonCantidad){
                 const botonAñadir = crearBtnAñadir(articuloEncontrado);
@@ -350,27 +347,27 @@
     //Recalcula el subtotal de un articulo al cambiar la cantidad de este
     function actualizarCantidadSubtotal(articuloTienda){
         const articulo = articuloTienda.parentElement;
-        const articulosCarrito = Array.from(document.querySelectorAll('.articulo-carrito'));
-        const nuevaCantidad= articuloTienda.querySelector('.cantidad').value;
+        const articulosCarrito = Array.from(document.querySelectorAll('.carrito__articulo'));
+        const nuevaCantidad= articuloTienda.querySelector('.productos__cantidad').value;
         const indiceBuscado = articulo.dataset.id;
 
         const articuloBuscado = articulosCarrito.find(articuloCarrito => articuloCarrito.dataset.id == indiceBuscado);
 
         if(!articuloBuscado){
           const seccionProductos = document.querySelector('.productos');
-          const contenedorProductos = document.querySelector('.contenedor-productos');
+          const contenedorProductos = document.querySelector('.productos__contenedor');
           const alerta = crearAlerta('error','Ocurrio un error al actualizar el carrito, por favor recargue la pagina');
 
           seccionProductos.insertBefore(alerta,contenedorProductos);
           return;
         }
 
-        const precioUnidad = Number(articuloBuscado.querySelector('.precio-unidad').innerText.replace('@', ''));
+        const precioUnidad = Number(articuloBuscado.querySelector('.carrito__precio-unitario').innerText.replace('@', ''));
   
-        const cantidadActualizada = articuloBuscado.querySelector('.cantidad');
+        const cantidadActualizada = articuloBuscado.querySelector('.carrito__cantidad');
         cantidadActualizada.innerText = `${nuevaCantidad}x`;
 
-        const subtotal = articuloBuscado.querySelector('.precio-total');
+        const subtotal = articuloBuscado.querySelector('.carrito__subtotal');
         subtotal.innerText = `$${(precioUnidad * nuevaCantidad).toFixed(2)}`;
     }
     
@@ -378,11 +375,11 @@
     function calcularPrecioCantidad(){
       let nuevoPrecioFinal = 0;
       let nuevaCantidadCarrito = 0;
-      const listaCarrito = document.querySelectorAll('.articulo-carrito');
+      const listaCarrito = document.querySelectorAll('.carrito__articulo');
       if(listaCarrito.length > 0){
         listaCarrito.forEach(producto => {    
-          const precioTotal =Number(producto.querySelector('.precio-total').innerText.replace('$', ''));
-          const cantidadProducto = Number(producto.querySelector('.cantidad').innerText.replace('x', ''));
+          const precioTotal =Number(producto.querySelector('.carrito__subtotal').innerText.replace('$', ''));
+          const cantidadProducto = Number(producto.querySelector('.carrito__cantidad').innerText.replace('x', ''));
           nuevoPrecioFinal +=precioTotal;
           nuevaCantidadCarrito += cantidadProducto;
         });
@@ -391,7 +388,7 @@
         const carritoLocalStorage = Array.from(listaCarrito).map(productoCarrito => {
           return{
             producto_id: productoCarrito.dataset.id ,
-            cantidad: Number(productoCarrito.querySelector('.cantidad').innerText.replace('x', ''))
+            cantidad: Number(productoCarrito.querySelector('.carrito__cantidad').innerText.replace('x', ''))
           }
         });
         localStorage.setItem('carrito', JSON.stringify(carritoLocalStorage));
@@ -403,24 +400,24 @@
 
       }
 
-      let contadorCarrito = document.querySelector('.contador-carrito').querySelector('b');
+      let contadorCarrito = document.querySelector('.carrito__contador').querySelector('b');
       contadorCarrito.innerText = nuevaCantidadCarrito;
 
       if(nuevaCantidadCarrito == 0){
-        let carritoVacio = document.querySelector('.carrito-vacio');
+        let carritoVacio = document.querySelector('.carrito__vacio');
         if(!carritoVacio){
           crearCarritoVacio();
         }
       }
   
-      let precioFinal= document.querySelector('.precio-final');
+      let precioFinal= document.querySelector('.carrito__total-precio');
       if(precioFinal){
         precioFinal.innerText= `$${nuevoPrecioFinal.toFixed(2)}`
       }
     }
       
     function crearCarrito(articulo, cantidadArticulo = 1){ 
-        const contenidoCarrito = document.querySelector('.contenido-carrito');
+        const contenidoCarrito = document.querySelector('.carrito__contenido');
         const nombreArticulo = articulo.nombre;
         const precioArticulo = Number(articulo.precio);
         const idArticulo = articulo.id;
@@ -428,45 +425,46 @@
         if(!contenidoCarrito){
           crearContenidoCarrito();
         }
-        const articulosCarrito = document.querySelector('.articulos__carrito');
+        const articulosCarrito = document.querySelector('.carrito__lista');
 
         const articuloCarrito = document.createElement('LI');
-        articuloCarrito.classList.add('articulo-carrito');
+        articuloCarrito.classList.add('carrito__articulo');
         articuloCarrito.dataset.id = idArticulo;
         articulosCarrito.appendChild(articuloCarrito);
         
         const datosArticulo=document.createElement('DIV');
+        datosArticulo.classList.add('carrito__datos');
         articuloCarrito.appendChild(datosArticulo);
         
         const nombre=document.createElement('H3');
+        nombre.classList.add('carrito__nombre');
         nombre.innerText=nombreArticulo;
         datosArticulo.appendChild(nombre);
         
         const precioCantidad = document.createElement('DIV');
-        precioCantidad.classList.add('precio-cantidad');
+        precioCantidad.classList.add('carrito__precio-cantidad');
         datosArticulo.appendChild(precioCantidad);
         
         const cantidad= document.createElement('P');
-        cantidad.classList.add('cantidad');
+        cantidad.classList.add('carrito__cantidad');
         cantidad.innerText= `${cantidadArticulo}x`;
         precioCantidad.appendChild(cantidad);
         
         const precioUnidad= document.createElement('P');
-        precioUnidad.classList.add('precio-unidad');
-        precioUnidad.innerText= `@${precioArticulo.toFixed(2)}` ;
+        precioUnidad.classList.add('carrito__precio-unitario');
+        precioUnidad.innerText= ` @${precioArticulo.toFixed(2)}` ;
         precioCantidad.appendChild(precioUnidad);
         
         const precioTotal= document.createElement('P');
-        precioTotal.classList.add('precio-total');
+        precioTotal.classList.add('carrito__subtotal');
         precioTotal.innerText = `$${(precioArticulo * cantidadArticulo).toFixed(2)}`;
         precioCantidad.appendChild(precioTotal);
                
         const eliminarProducto= document.createElement('BUTTON');
-        eliminarProducto.classList.add('eliminar');
+        eliminarProducto.classList.add('carrito__boton-eliminar');
         articuloCarrito.appendChild(eliminarProducto);
         
-        const imagenEliminar = document.createElement('IMG');
-        imagenEliminar.src='build/img/icon-remove-item.svg';
+        const imagenEliminar = iconosSVG['signo-eliminar'].cloneNode(true);;
         eliminarProducto.appendChild(imagenEliminar);
         
         asignarFuncionalidadEliminar(articuloCarrito, eliminarProducto); 
@@ -475,10 +473,10 @@
     //Crea la apariencia del carrito cuando NO tiene articulos dentro
     function crearCarritoVacio(){
       const carrito = document.querySelector('.carrito');
-      const contenidoCarrito = document.querySelector('.contenido-carrito');
+      const contenidoCarrito = document.querySelector('.carrito__contenido');
       
       const carritoVacio = document.createElement('DIV');
-      carritoVacio.classList.add('carrito-vacio');
+      carritoVacio.classList.add('carrito__vacio');
 
       const imgCarritoVacio = document.createElement('IMG');
       imgCarritoVacio.src = '/build/img/illustration-empty-cart.svg';
@@ -486,8 +484,8 @@
       carritoVacio.appendChild(imgCarritoVacio);
 
       const textoCarritoVacio = document.createElement('P');
-      textoCarritoVacio.classList.add('texto-carrito-vacio');
-      textoCarritoVacio.innerText = 'Your added items will appear here';
+      textoCarritoVacio.classList.add('carrito__vacio-texto');
+      textoCarritoVacio.innerText = 'Los productos añadidos se mostraran aquí';
       carritoVacio.appendChild(textoCarritoVacio);
 
       carrito.appendChild(carritoVacio);   
@@ -499,50 +497,32 @@
     //Crea la apariencia del carrito cuando tiene articulos dentro
     function crearContenidoCarrito(){
       const carrito = document.querySelector('.carrito');
-      const carritoVacio = document.querySelector('.carrito-vacio');
+      const carritoVacio = document.querySelector('.carrito__vacio');
       
       const contenidoCarrito = document.createElement('DIV');
-      contenidoCarrito.classList.add('contenido-carrito');
+      contenidoCarrito.classList.add('carrito__contenido');
 
       const listaContenidoCarrito = document.createElement('UL');
-      listaContenidoCarrito.classList.add('articulos__carrito');
+      listaContenidoCarrito.classList.add('carrito__lista');
       contenidoCarrito.appendChild(listaContenidoCarrito);
 
       const totalOrden = document.createElement('DIV');
-      totalOrden.classList.add('total-orden');
+      totalOrden.classList.add('carrito__total');
       const textoTotalOrden = document.createElement('P');
-      textoTotalOrden.innerText = 'Order Total';
+      textoTotalOrden.classList.add('carrito__total-texto');
+      textoTotalOrden.innerText = 'Total';
       const precioFinal = document.createElement('P');
-      precioFinal.classList.add('precio-final');
+      precioFinal.classList.add('carrito__total-precio');
 
       totalOrden.appendChild(textoTotalOrden);
       totalOrden.appendChild(precioFinal);
       contenidoCarrito.appendChild(totalOrden);
 
-      const cartelEcologico = document.createElement('DIV');
-      cartelEcologico.classList.add('ecologico');
-
-      const imgCartelEcologico = document.createElement('IMG');
-      imgCartelEcologico.src = '/build/img/icon-carbon-neutral.svg';
-      cartelEcologico.appendChild(imgCartelEcologico);
-
-      const textoCartelEcologico = document.createElement('P');
-      const primerTexto = document.createTextNode('This is a ');
-      textoCartelEcologico.appendChild(primerTexto);
-
-      const negritaCartelEcologico = document.createElement('B');
-      negritaCartelEcologico.innerText = 'carbon-neutral';
-      textoCartelEcologico.appendChild(negritaCartelEcologico);
-
-      const segundoTexto = document.createTextNode(' delibery');
-      textoCartelEcologico.appendChild(segundoTexto);
-      cartelEcologico.appendChild(textoCartelEcologico);
-
       const botonConfirmarOrden = document.createElement('A');
       botonConfirmarOrden.href = '/checkout';
       botonConfirmarOrden.classList.add('boton');
-      botonConfirmarOrden.classList.add('confirmar-orden');
-      botonConfirmarOrden.innerText = 'Confirm Order';
+      botonConfirmarOrden.classList.add('carrito__boton-confirmar');
+      botonConfirmarOrden.innerText = 'Confirmar Pedido';
 
       contenidoCarrito.appendChild(botonConfirmarOrden);
 
@@ -582,7 +562,7 @@
           productosPrecios = await recuperarPrecio(carritoLocalStorage);
           if(productosPrecios.error){
             const seccionProductos = document.querySelector('.productos');
-            const contenedorProductos = document.querySelector('.contenedor-productos');
+            const contenedorProductos = document.querySelector('.productos__contenedor');
             const alerta = crearAlerta('error','Ocurrio un error al actualizar el carrito, por favor recargue la pagina o intentelo de nuevo mas tarde');
 
             seccionProductos.insertBefore(alerta,contenedorProductos);
@@ -612,7 +592,7 @@
       });
       calcularPrecioCantidad();
 
-      const listaCarrito = document.querySelectorAll('.articulo-carrito');
+      const listaCarrito = document.querySelectorAll('.carrito__articulo');
       return listaCarrito;
     }
 
@@ -626,6 +606,21 @@
       return carritoNormalizado;
     }
 
+
+    //Carga y almacena los svg para usarlos sin llamadas constantes
+
+    async function cargarIconos() {
+      const tipos = ['agregar-carrito','signo-mas', 'signo-menos', 'signo-eliminar'];
+
+      for (let tipo of tipos) {
+        const res = await fetch(`build/img/icon-${tipo}.svg`);
+        const svgTxt = await res.text();
+        const parser = new DOMParser();
+        const svgNode = parser.parseFromString(svgTxt, "image/svg+xml").documentElement;
+
+        iconosSVG[tipo] = svgNode;
+      }
+    }
 
     //Funciones para llamar APIS
 

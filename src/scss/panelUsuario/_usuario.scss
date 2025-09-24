@@ -1,45 +1,116 @@
- @use '../base/variables' as v;
+@use '../base/variables' as v;
+@use 'sass:color';
 
  .usuario{
-    margin:0 10% 0 10%;
-    &__contenedor{
-        display: flex;
+
+    p:not(.mensaje__error){
+        margin-top: 0;
     }
 
-   &__navegacion{margin-right: 5rem;
-    ul{
-        list-style: none;
-        padding: 0;
-    }
-   }
-
-   .datos{
-    &__tipo{
+    b{
         font-weight: v.$bold;
         text-transform: uppercase;
     }
-   }
 
-   &__acciones{
-    margin-bottom: 3rem;
-   }
-
-   .formulario{
     &__contenedor{
-        display: flex;
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        grid-template-rows: auto auto auto;
+        column-gap: 100px;
+
+        @media (max-width: v.$desktop) {
+            column-gap: 25px;
+        }
+    }
+
+    &__navegacion{
+        width: 220px;
+        
+        li{
+            height: 50px;   
+        }
+    }
+
+    &__enlace{
+        align-content: center;
+        height: 100%;
+        width: 90%;
+        display: inline-block;
+        font-size: 20px;
+        color: v.$marronOscuro;
+        padding-left: 1rem;
+        border-radius: 6px;
+
+        &.ruta_actual{
+            background-color: color.adjust(v.$marronOscuro, $lightness: 10%);
+            color: v.$beige;
+        }
+        &:hover{
+            background-color:  color.adjust(v.$marronOscuro, $lightness: 15%);
+            color: v.$beige;
+            cursor: pointer;
+            font-weight: 800;
+        }
+
+        
         
     }
 
-    &__cerrar{
-        height: 30px;
-        width: 30px;
-        border-radius: 50px;
-        &:hover{
-            cursor: pointer;
+    .datos__contenedor{
+        display: grid;
+        grid-template-columns: 600px 200px;
+
+        @media (max-width: v.$xl_desktop) {
+            grid-template-columns: 640px;   
         }
     }
-    &--ocultar{
-        display: none;
+
+    &__datos{
+        display: grid;
+        grid-template-columns: 300px 200px;
+        height: 150px;
+
+        @media (max-width: v.$tablet) {
+            grid-template-columns: 350px;
+            height: fit-content;   
+        }
     }
+
+    &__acciones{
+        margin-bottom: 3rem;
+
+        @media (max-width: v.$xl_desktop) {
+            display: flex; 
+            gap: 20px;
+        }
+
+        @media (max-width: v.$desktop) {
+            flex-direction: column;
+            gap: 0;
+        }
+    }
+
+    &__accion{
+        width: 200px;
+        margin-bottom: 10px;
+    }
+
+   .formulario{
+            grid-row: 4;   
+
+        &__contenedor{
+            display: flex; 
+        }
+
+   }
+
+   .alerta{
+    grid-row: 3;
+   }
+
+   
+
+   @media (max-width: v.$telefono) {
+        padding: 0;
    }
  }

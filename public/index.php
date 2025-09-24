@@ -70,6 +70,8 @@ $router->get('/checkout', [PaginasController::class, 'checkout']);
 
 //APIS
 $router->get('/api/recuperarPedido', [APIDatosUsuario::class, 'recuperarPedido']);
+$router->post('/api/validarFormularioUsuario', [APIDatosUsuario::class, 'validarFormularioUsuario']);
+$router->post('/api/guardarNuevosDatos', [APIDatosUsuario::class, 'guardarNuevosDatos']);
 $router->get('/api/recuperarCatalogo', [APICarrito::class, 'recuperarCatalogo']);
 $router->get('/api/recuperarCarrito', [APICarrito::class, 'recuperarCarrito']);
 $router->post('/api/actualizarCarritoDB', [APICarrito::class, 'actualizarCarritoDB']);

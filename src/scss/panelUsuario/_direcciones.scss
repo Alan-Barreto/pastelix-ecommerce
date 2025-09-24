@@ -1,0 +1,30 @@
+@use '../base/variables' as v;
+@use 'sass:color';
+
+ .usuario{
+
+    &__lista-direcciones{
+        width: 350px;
+        margin-top: 20px;
+    }
+
+    &__direccion{
+        border: 1px solid v.$marronOscuro;
+        padding: 10px 15px 15px 15px;
+        background-color: v.$beigeClaro;
+        border-radius: 5px;
+        h3, p{
+            display: inline;
+        }
+    }
+
+    &__direccion-datos{
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    &__direccion-acciones{
+        display: flex;
+        gap: 5px;
+    }
+ }

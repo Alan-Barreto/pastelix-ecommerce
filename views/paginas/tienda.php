@@ -1,17 +1,17 @@
 <main class="tienda">
   
     <section class="productos">
-      <h2>Desserts</h2>
-      <div class="contenedor-productos">
+      <h2 class="productos__titulo">Productos</h2>
+      <ul class="productos__contenedor">
  
-      </div>
+      </ul>
     </section>
 
     <section class="carrito">
-      <h2 class="contador-carrito">Your Cart (<b>0</b>)</h2>
-      <div class="carrito-vacio ">
-        <img src="/build/img/illustration-empty-cart.svg" alt="Imagen Carrito Vacio">
-        <p class="texto-carrito-vacio">Your added items will appear here</p>
+      <h2 class="carrito__contador">Tu Carrito (<b>0</b>)</h2>
+      <div class="carrito__vacio">
+        <img class="carrito__vacio-imagen" src="/build/img/illustration-empty-cart.svg" alt="Imagen Carrito Vacio">
+        <p class="carrito__vacio-texto">Los productos añadidos se mostraran aquí</p>
       </div>
     </section>
 

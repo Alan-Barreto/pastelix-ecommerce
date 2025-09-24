@@ -4,18 +4,27 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: v.$rose400;
     height: 8rem;
-    width: 89%;
     padding-left: 5.5%;
     padding-right: 5.5%;
-    margin-bottom: 50px;
+   
+    background: v.$marronOscuro;
+    background-image: url("../img/onda.svg");
+    background-repeat: repeat-x;
+    background-size: 150px 80px;
+    background-position: bottom;
+    
+    color: v.$beige;
+    padding-bottom: 40px;
+
+
     &__logo{
         font-size: 3rem;
-        color: v.$rose900;
+        color: v.$beige;
         font-weight: v.$extrabold;
         &:hover{
             font-size: 3.1rem;
+            color: v.$doradoMetalico;
         }
     }
 
@@ -29,15 +38,17 @@
             padding: 0;
             width: 100%;
         }
+
+        
     }
 
     &__enlace{
-        color: white;
+        color: v.$beige;
         font-size: 1.2rem;
         font-weight: v.$bold;
         &:hover{
             cursor: pointer;
-            color: v.$red;
+            color: v.$doradoMetalico;
         }
     }
 
@@ -53,4 +64,5 @@
             display: flex;
         }
     }
+
 }
