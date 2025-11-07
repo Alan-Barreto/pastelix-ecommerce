@@ -19,6 +19,9 @@
                         <li class="usuario__direccion">
                             <h3>Direccion <?php echo $key + 1; ?></h3>
 
+                            <?php if($direccion->predeterminada == 1){ ?>
+                                <p class="usuario__direccion-predeterminada">Predeterminada</p>
+                            <?php } ?>
                             <div class="usuario__direccion-datos">
                                 <p>
                                     <?php echo $direccion->calle . ", " . $direccion->ciudad . ", "; ?>

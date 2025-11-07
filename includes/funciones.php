@@ -3,6 +3,7 @@
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 use Model\Usuario;
+use Model\UsuarioSesion;
 
 date_default_timezone_set('Europe/Madrid');
 
@@ -11,6 +12,29 @@ function debuguear($variable) : string {
     var_dump($variable);
     echo "</pre>";
     exit;
+}
+
+function verificarSesion(){
+    $tokenHash = hash('sha256', $_COOKIE['recordarme']);
+    $sesionExistente = UsuarioSesion::where('token', $tokenHash);
+
+    if($sesionExistente){
+        $usuario = array_shift(Usuario::thisWhere(['id', 'nombre', 'apellido', 'email', 'telefono', 'admin'], 'id', $sesionExistente->usuario_id));
+        if($usuario){
+            session_start();
+            session_regenerate_id(true);
+            $_SESSION['id'] = $usuario->id;
+            $_SESSION['nombre'] = $usuario->nombre;
+            $_SESSION['apellido'] =  $usuario->apellido;
+            $_SESSION['email'] = $usuario->email;
+            $_SESSION['telefono'] = $usuario->telefono;
+            if($usuario->admin == 1){
+                $_SESSION['rol'] = 'admin';
+            }else{
+                $_SESSION['rol'] = 'usuario';
+            }
+        }
+    }
 }
 
 function is_auth(){

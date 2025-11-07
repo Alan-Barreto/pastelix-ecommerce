@@ -901,14 +901,16 @@
                                 if(resultadoGuardar.error === true){
                                     throw new Error(`${resultadoGuardar.mensaje}`);
                                 }else{
-                                    console.log('gracias por su compra')
                                     localStorage.removeItem('carrito')
+                                    window.location.href = '/gracias';
                                 }
                             }
                         } catch (error) {
                             console.error(error);
+                            const mensajeAlerta = document.querySelector('#result-message');
+                            mensajeAlerta.classList.remove('hidden');
                             resultMessage(
-                                `Sorry, your transaction could not be processed...<br><br>${error}`
+                                `Sorry, your transaction could not be processed...<br>${error}`
                             );
                         }
                     },

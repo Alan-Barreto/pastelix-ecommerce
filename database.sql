@@ -13,15 +13,33 @@ CREATE TABLE IF NOT EXISTS productos (
 
 -- Insertar datos de ejemplo en productos
 INSERT INTO productos (nombre, categoria, precio, imagen) VALUES
-('Waffle with Berries', 'Waffle', 6.50, 'image-waffle'),
-('Vanilla Bean Crème Brûlée', 'Crème Brûlée', 7.00, 'image-creme-brulee'),
-('Macaron Mix of Five', 'Macaron', 8.00, 'image-macaron'),
-('Classic Tiramisu', 'Tiramisu', 5.50, 'image-tiramisu'),
-('Pistachio Baklava', 'Baklava', 4.00, 'image-baklava'),
-('Lemon Meringue Pie', 'Pie', 5.00, 'image-meringue'),
-('Red Velvet Cake', 'Cake', 4.50, 'image-cake'),
-('Salted Caramel Brownie', 'Brownie', 4.50, 'image-brownie'),
-('Vanilla Panna Cotta', 'Panna Cotta', 6.50, 'image-panna-cotta');
+('Pastel de Chocolate', 'Pastel', 28.00, 'imagen-pastel-chocolate'),
+('Pastel Red Velvet', 'Pastel', 30.00, 'imagen-pastel-red-velvet'),
+
+('Helado de Chocolate', 'Helado de Crema', 2.80, 'imagen-helado-chocolate'),
+('Helado de Pistacho', 'Helado de Crema', 3.20, 'imagen-helado-pistacho'),
+
+('Tarta de Manzana', 'Tarta', 18.00, 'imagen-tarta-manzana'),
+('Tarta de Frutos Rojos', 'Tarta', 21.00, 'imagen-tarta-frutos-rojos'),
+
+('Cupcake Chocolate', 'Cupcake', 2.50, 'imagen-cupcake-chocolate'),
+('Cupcake Red Velvet', 'Cupcake', 2.80, 'imagen-cupcake-red-velvet'),
+
+('Galleta de Avena y Miel', 'Galleta', 1.20, 'imagen-galleta-avena'),
+('Galleta de Chocolate', 'Galleta', 1.50, 'imagen-galleta-chocolate'),
+
+('Brownie Clásico', 'Brownie', 2.00, 'imagen-brownie-clasico'),
+('Brownie con Nueces', 'Brownie', 2.50, 'imagen-brownie-nueces'),
+
+('Cheesecake Clásico', 'Cheesecake', 3.50, 'imagen-cheesecake-clasico'),
+('Cheesecake de Oreo', 'Cheesecake', 4.20, 'imagen-cheesecake-oreo'),
+
+('Macaron Frambuesa', 'Macaron', 1.40, 'imagen-macaron-frambuesa'),
+('Macaron Chocolate', 'Macaron', 1.60, 'imagen-macaron-chocolate'),
+
+('Donut Chocolate', 'Donut', 1.70, 'imagen-donut-chocolate'),
+('Donut Azúcar y Canela', 'Donut', 1.40, 'imagen-donut-azucar-canela'),
+;
 
 -- Tabla: usuarios
 CREATE TABLE IF NOT EXISTS usuarios (
@@ -46,6 +64,15 @@ INSERT INTO usuarios (id, nombre, confirmado, admin) VALUES
 INSERT INTO usuarios (nombre, apellido, email, telefono, password, confirmado, admin, baneo) VALUES
 ('Admin', 'User', 'admin@pastelix.com', '1234567', '$2y$10$R.9tOuQ1OcLn6LDNWiRZ7.gp1YG08zjlE/JC3qOuudUutAVTbw6s.', 1, 1, 0),
 ('Cliente', 'Ejemplo', 'cliente@pastelix.com', '1234567' '$2y$10$Lf51rawlegGW9AvcPcVHUe6gt5FgIHJ3FJXEKjT//sAslpKBnSPAW', 1, 0, 0);
+
+CREATE TABLE IF NOT EXISTS usuario_sesion (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NULL,
+    token VARCHAR(64) NULL,
+    fecha_creacion DATETIME NULL,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+);
+
 
 -- Tabla: tokens
 CREATE TABLE IF NOT EXISTS tokens (

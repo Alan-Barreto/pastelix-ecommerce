@@ -31,8 +31,9 @@ class UsuariosController{
         $selector = filter_var($_GET['selector'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $token = Token::where('selector', $selector);
         $tokenInput = $_GET['token']; 
-
+        $botonLogin = false;
         if(isset($token) && $token->validarToken($tokenInput)){
+            
             $usuario = Usuario::where('id', $token->usuario_id);
             if($token->accion === 'Confirmar Correo'){
 
@@ -40,6 +41,7 @@ class UsuariosController{
                 $usuario->confirmado = 1;
                 $usuario->guardar();
                 $resultado = $token->delete();
+                $botonLogin = true;
             }else{
                 if(is_auth()){
                     if($_SESSION['id'] === $token->usuario_id){
@@ -81,10 +83,8 @@ class UsuariosController{
                                 $usuario->email = $token->nuevoEmail;
                                 $usuario->guardar();
                                 $resultado = $token->delete();
-                                //Tal vez faltaria enviar confirmacion de correo al neuvo email y no hacer el cambio hasta entonces
                                 if($resultado){ 
                                     $alertas = Token::setAlerta('exito', 'Correo cambiado con exito, puede cerrar esta pestaña');
-                
                                 }else{
                                     $alertas = Token::setAlerta('error', 'Hubo un error gestionando su peticion');
                                 }
@@ -103,7 +103,8 @@ class UsuariosController{
 
         $router->render('usuario/actualizar',[
             'alertas' => $alertas,
-            'titulo' => 'Actualiza los datos de tu cuenta'
+            'titulo' => 'Actualiza los datos de tu cuenta',
+            'botonLogin' => $botonLogin
         ]);
     }
 
@@ -165,9 +166,24 @@ class UsuariosController{
                     $direccion->setPaisNombre();
                     $direccion->setFechaCreacion();
 
+                    if(isset($_POST['predeterminada']) && $_POST['predeterminada'] == 'si'){
+                        $direccion->predeterminada = 1;
+
+                        $predeterminadaActual = array_shift(Direccion::whereArray(['usuario_id' => $_SESSION['id'], 'predeterminada' => 1]));
+                    }else{
+                        $direccion->predeterminada = 0;
+                    }
+
+                    
+
                     $contadorDirecciones = Direccion::count('usuario_id', $_SESSION['id']);
                     if($contadorDirecciones === 0){
                         $direccion->predeterminada = 1;
+                    }
+
+                    if($predeterminadaActual){
+                        $predeterminadaActual->predeterminada = 0;
+                        $predeterminadaActual->guardar();
                     }
 
                     $direccion->guardar();
@@ -200,12 +216,29 @@ class UsuariosController{
                 $paisesAceptados = Direccion::getPaisesAceptados();
                 $direccion->pais = $direccion->pais_codigo;
                 if($_SERVER['REQUEST_METHOD'] === 'POST'){
+        
                     $direccion->sincronizar($_POST);
+
+    
                     $alertas = $direccion->validarFormulario();
                     if(empty($alertas)){
                         $direccion->setPaisCodigo();
                         $direccion->setPaisNombre();
                         $direccion->setFechaActualizacion();
+
+                        if(isset($_POST['predeterminada']) && $_POST['predeterminada'] == 'si'){
+                            $direccion->predeterminada = 1;
+
+                            $predeterminadaActual = array_shift(Direccion::whereArray(['usuario_id' => $_SESSION['id'], 'predeterminada' => 1]));
+                        }else{
+                            $direccion->predeterminada = 0;
+                        }
+
+                        if($predeterminadaActual){
+                            $predeterminadaActual->predeterminada = 0;
+                            $predeterminadaActual->guardar();
+                        }
+
                         $direccion->guardar();
                         setAlertaSession('exito', 'Direccion actualizada con exito');
                         header('Location: /usuario/direcciones');   

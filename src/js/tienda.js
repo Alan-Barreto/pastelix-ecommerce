@@ -2,8 +2,13 @@
   const tienda = document.querySelector('.tienda');
   if(tienda){
 
-    const iconosSVG = {};    
+    const iconosSVG = {};   
+    let numeroPagina = 1;
+    let paginasTotales = 1;
+    let filtroBusqueda = null;
+    let ordenBusqueda = 'default'; 
     renderizarPagina();
+    añadirFuncionalidadFiltro();
 
     async function renderizarPagina() {
       await cargarIconos();
@@ -14,24 +19,78 @@
 
       sincronizarBotones(listaCatalogo,listaCarrito)
       añadirFuncionalidadBotones();
+    }
 
+    //Vuelve a crear el catalogo con los nuevos filtros
+    async function rearmarCatalogo(){
+      const selectOrden = document.querySelector('.filtro__select');
+      ordenBusqueda = selectOrden.value;
+      const filtroInput = document.querySelector('.filtro__input');
+      let productoBuscado = filtroInput.value;
+
+      if(productoBuscado.trim() == ''){
+        filtroBusqueda = null;
+      }else{
+        filtroBusqueda = productoBuscado;
+      }
+
+      limpiarCatalogo();
+      const listaCarrito = document.querySelectorAll('.carrito__articulo');
+      const listaCatalogo = await crearCatalogo();
+
+      if(listaCatalogo.length > 0){
+        sincronizarBotones(listaCatalogo,listaCarrito)
+        añadirFuncionalidadBotones();
+      }
+      
+      console.log(numeroPagina);
     }
     
     //Crear el catalogo de productos
     async function crearCatalogo(){
-      const listaProductos = await recuperarCatalogo();
-      if(listaProductos.error){
-        console.log(listaProductos.error);
+      const listaProductos = await recuperarCatalogo(filtroBusqueda, ordenBusqueda, numeroPagina);
+      paginasTotales = listaProductos.paginas;
+      if((listaProductos.productos).length == 0){
+        crearMensajeCatalogoVacio();
+        return [];
       }else{
         const catalogo = document.querySelector('.productos__contenedor');
-        listaProductos.forEach(producto => {
+        listaProductos.productos.forEach(producto => {
           const articulo = crearArticulo(producto);
           catalogo.appendChild(articulo);
         });
-        const listaArticulos = document.querySelectorAll('.productos__articulo');
+        crearPaginacion();
 
+        const listaArticulos = document.querySelectorAll('.productos__articulo');
         return listaArticulos;
       }
+    }
+
+    function limpiarCatalogo(){
+      const listaProductos = document.querySelectorAll('.productos__articulo');
+      listaProductos.forEach(producto => {
+        producto.remove();
+      });
+
+      const mensajeCatalogoVacio = document.querySelector('.mensaje-catalogo-vacio');
+      if(mensajeCatalogoVacio){
+        mensajeCatalogoVacio.remove();
+      }
+
+      const paginacion = document.querySelector('.paginacion');
+      if(paginacion){
+        paginacion.remove();
+      }
+    }
+
+    function crearMensajeCatalogoVacio(){
+      const catalogo = document.querySelector('.productos');
+      const mensaje = document.createElement('P');
+
+      mensaje.classList.add('mensaje-catalogo-vacio');
+      mensaje.innerText = 'No se encontraron productos que coincidan';
+
+      catalogo.appendChild(mensaje);
     }
 
     //Crear articulos para el catalogo
@@ -64,6 +123,58 @@
       return articulo;
     }
 
+    function crearPaginacion(){
+      let contadorPaginas = 1;
+      const contenedorProductos = document.querySelector('.productos');
+      const contenedorPaginacion = document.createElement('DIV');
+      contenedorPaginacion.classList.add('paginacion');
+
+      if(numeroPagina > 1){
+        const botonPrimeraPagina = document.createElement('BUTTON');
+        botonPrimeraPagina.classList.add('paginacion__primera-pagina');
+        botonPrimeraPagina.classList.add('paginacion__boton');
+        botonPrimeraPagina.title = 'Primera pagina';
+        botonPrimeraPagina.innerText = '<';
+        contenedorPaginacion.appendChild(botonPrimeraPagina);
+      }
+
+      if(numeroPagina > 3){
+        contadorPaginas = numeroPagina - 2; 
+      }
+
+      while( contadorPaginas <= paginasTotales && contadorPaginas <= numeroPagina + 2){
+        if(contadorPaginas == numeroPagina){
+          const paginaActual = document.createElement('SPAN');
+          paginaActual.classList.add('paginacion__pagina-actual');
+          paginaActual.classList.add('paginacion__boton');
+          paginaActual.title = 'Pagina actual';
+          paginaActual.innerText = contadorPaginas;
+
+          contenedorPaginacion.appendChild(paginaActual);
+        }else{
+          const botonPagina = document.createElement('BUTTON');
+          botonPagina.classList.add(`paginacion__pagina`);
+          botonPagina.classList.add(`paginacion__boton`);
+          botonPagina.title = `Pagina ${contadorPaginas}`;
+          botonPagina.dataset.pagina = contadorPaginas;
+          botonPagina.innerText = contadorPaginas;
+          contenedorPaginacion.appendChild(botonPagina);
+        }
+        contadorPaginas ++;
+      }
+
+      if(numeroPagina != paginasTotales){
+        const botonUltimaPagina = document.createElement('BUTTON');
+        botonUltimaPagina.classList.add('paginacion__ultima-pagina');
+        botonUltimaPagina.classList.add('paginacion__boton');
+        botonUltimaPagina.title = `Ultima Pagina (${paginasTotales})`;
+        botonUltimaPagina.innerText = '>';
+        contenedorPaginacion.appendChild(botonUltimaPagina);
+      }
+
+      contenedorProductos.appendChild(contenedorPaginacion);
+    }
+
     //Añade el boton correspondiente segun los productos en el carrito
     function sincronizarBotones(listaCatalogo,listaCarrito){
       listaCatalogo.forEach( articuloCatalogo => {
@@ -84,9 +195,69 @@
     function añadirFuncionalidadBotones(){
       const botonesAñadir = document.querySelectorAll('.productos__boton-añadir');
       const botonesCantidad = document.querySelectorAll('.productos__boton-cantidad');
+      
 
       añadirCarrito(botonesAñadir);
       cambiarCantidad(botonesCantidad);
+      cambiarPagina();
+    }
+
+    function añadirFuncionalidadFiltro(){
+      const inputBuscar = document.querySelector('.filtro__input');
+      const botonBuscar = document.querySelector('.filtro__boton');
+      const selectOrden = document.querySelector('.filtro__select');
+
+      cambiarOrden(selectOrden);
+      buscarProducto(inputBuscar,botonBuscar);
+    }
+
+    function buscarProducto(inputBuscar,botonBuscar){
+      botonBuscar.addEventListener('click', function (){
+        numeroPagina = 1;
+        rearmarCatalogo();
+      } );
+
+      inputBuscar.addEventListener('keydown', function (e){
+        if(e.key == 'Enter'){
+          numeroPagina = 1;
+          rearmarCatalogo();
+        }
+       
+      } );
+    }
+
+    function cambiarOrden(selectOrden){
+      selectOrden.addEventListener('change', function(){
+        numeroPagina = 1;
+        rearmarCatalogo();
+      } );
+    }
+
+    function cambiarPagina(){
+      const botonPrimeraPagina = document.querySelector('.paginacion__primera-pagina');
+      const botonUltimaPagina = document.querySelector('.paginacion__ultima-pagina');
+      const botonesPagina = document.querySelectorAll('.paginacion__pagina');
+       
+      if(botonPrimeraPagina){
+        botonPrimeraPagina.addEventListener('click', function(){
+          numeroPagina = 1;
+          rearmarCatalogo();
+        });
+      }
+
+      if(botonUltimaPagina){
+        botonUltimaPagina.addEventListener('click', function(){
+          numeroPagina = paginasTotales;
+          rearmarCatalogo();
+        });
+      }
+
+      botonesPagina.forEach(boton => {
+        boton.addEventListener('click', function(){
+          numeroPagina = Number(boton.dataset.pagina);
+          rearmarCatalogo();
+        });
+      });
     }
 
     //Agrega la funcion "añadir" a todos los botones de este tipo que se le pasen
@@ -193,6 +364,10 @@
           }
           
         }else{
+          if(inputCantidad.value > 99){
+            inputCantidad.value = 99;
+          }
+
           const resultado = await actualizarCantidadProductoDelCarrito({'producto_id': idBuscado, 'cantidad': inputCantidad.value} )
           if(resultado.error != false){
             const seccionProductos = document.querySelector('.productos');
@@ -212,6 +387,9 @@
           
         if(inputCantidad.value > 1){
           inputCantidad.value --;
+          if(inputCantidad.value > 99){
+            inputCantidad.value = 99;
+          }
           const resultado = await actualizarCantidadProductoDelCarrito({'producto_id': idBuscado, 'cantidad': inputCantidad.value} )
           if(resultado.error != false){
             const seccionProductos = document.querySelector('.productos');
@@ -254,7 +432,9 @@
 
       botonSuma.addEventListener('click', async function(){
         inputCantidad.value ++;
-
+        if(inputCantidad.value > 99){
+          inputCantidad.value = 99;
+        }
         const resultado = await actualizarCantidadProductoDelCarrito({'producto_id': idBuscado, 'cantidad': inputCantidad.value} )
 
         if(resultado.error !== false){
@@ -548,7 +728,6 @@
       const carritoProductos = await recuperarCarrito();
       let carritoNormalizado = [];
       if(carritoProductos.error){
-        console.log(carritoProductos.error);
         const carritoLocalStorage = JSON.parse(localStorage.getItem('carrito') || '[]');
         if(carritoLocalStorage.length <= 0){
           console.log('localStorage vacio');
@@ -626,8 +805,8 @@
 
     //luego se le pueden agregar como parametros que tipo de orden quiere y por que valor ordenarlo
     //ademas del numero de pagina donde se encuentra para rearmar el catalogo segun la pagina
-    async function recuperarCatalogo() {
-       const url = `/api/recuperarCatalogo`;
+    async function recuperarCatalogo(filtro, orden, pagina) {
+       const url = `/api/recuperarCatalogo?filtro=${filtro}&orden=${orden}&pagina=${pagina}`;
       const resultado = await fetch(url);
       const productos = await resultado.json();
 

@@ -133,7 +133,8 @@ class ActiveRecord{
         $query .= " FROM " . static::$tabla;
         $query .= " ORDER BY $orden $sentido ";
         $query .= "LIMIT $limit OFFSET $offset";
-        $resultado = self::consultarSQL($query);
+    
+        $resultado = self::consultarSQL($query);                                      
         return $resultado;
     }
 

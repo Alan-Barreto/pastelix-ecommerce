@@ -884,7 +884,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
         },
         onApprove: function onApprove(data, actions) {
           return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee9() {
-            var _orderData$details2, response, orderData, errorDetail, _orderData$purchase_u, _orderData$purchase_u2, transaction, datosPedido;
+            var _orderData$details2, response, orderData, errorDetail, _orderData$purchase_u, _orderData$purchase_u2, transaction, datosPedido, mensajeAlerta;
             return _regeneratorRuntime().wrap(function _callee9$(_context9) {
               while (1) switch (_context9.prev = _context9.next) {
                 case 0:
@@ -948,17 +948,19 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
                   }
                   throw new Error("".concat(resultadoGuardar.mensaje));
                 case 30:
-                  console.log('gracias por su compra');
                   localStorage.removeItem('carrito');
+                  window.location.href = '/gracias';
                 case 32:
-                  _context9.next = 38;
+                  _context9.next = 40;
                   break;
                 case 34:
                   _context9.prev = 34;
                   _context9.t0 = _context9["catch"](0);
                   console.error(_context9.t0);
-                  resultMessage("Sorry, your transaction could not be processed...<br><br>".concat(_context9.t0));
-                case 38:
+                  mensajeAlerta = document.querySelector('#result-message');
+                  mensajeAlerta.classList.remove('hidden');
+                  resultMessage("Sorry, your transaction could not be processed...<br>".concat(_context9.t0));
+                case 40:
                 case "end":
                   return _context9.stop();
               }
@@ -1213,42 +1215,100 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
       return function renderizarPagina() {
         return _ref.apply(this, arguments);
       };
-    }(); //Crear el catalogo de productos
-    var crearCatalogo = /*#__PURE__*/function () {
+    }(); //Vuelve a crear el catalogo con los nuevos filtros
+    var rearmarCatalogo = /*#__PURE__*/function () {
       var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-        var listaProductos, catalogo, listaArticulos;
+        var selectOrden, filtroInput, productoBuscado, listaCarrito, listaCatalogo;
         return _regeneratorRuntime().wrap(function _callee2$(_context2) {
           while (1) switch (_context2.prev = _context2.next) {
             case 0:
-              _context2.next = 2;
-              return recuperarCatalogo();
-            case 2:
-              listaProductos = _context2.sent;
-              if (!listaProductos.error) {
-                _context2.next = 7;
-                break;
+              selectOrden = document.querySelector('.filtro__select');
+              ordenBusqueda = selectOrden.value;
+              filtroInput = document.querySelector('.filtro__input');
+              productoBuscado = filtroInput.value;
+              if (productoBuscado.trim() == '') {
+                filtroBusqueda = null;
+              } else {
+                filtroBusqueda = productoBuscado;
               }
-              console.log(listaProductos.error);
-              _context2.next = 11;
-              break;
-            case 7:
-              catalogo = document.querySelector('.productos__contenedor');
-              listaProductos.forEach(function (producto) {
-                var articulo = crearArticulo(producto);
-                catalogo.appendChild(articulo);
-              });
-              listaArticulos = document.querySelectorAll('.productos__articulo');
-              return _context2.abrupt("return", listaArticulos);
-            case 11:
+              limpiarCatalogo();
+              listaCarrito = document.querySelectorAll('.carrito__articulo');
+              _context2.next = 9;
+              return crearCatalogo();
+            case 9:
+              listaCatalogo = _context2.sent;
+              if (listaCatalogo.length > 0) {
+                sincronizarBotones(listaCatalogo, listaCarrito);
+                añadirFuncionalidadBotones();
+              }
+              console.log(numeroPagina);
+            case 12:
             case "end":
               return _context2.stop();
           }
         }, _callee2);
       }));
-      return function crearCatalogo() {
+      return function rearmarCatalogo() {
         return _ref2.apply(this, arguments);
       };
-    }(); //Crear articulos para el catalogo
+    }(); //Crear el catalogo de productos
+    var crearCatalogo = /*#__PURE__*/function () {
+      var _ref3 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+        var listaProductos, catalogo, listaArticulos;
+        return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+          while (1) switch (_context3.prev = _context3.next) {
+            case 0:
+              _context3.next = 2;
+              return recuperarCatalogo(filtroBusqueda, ordenBusqueda, numeroPagina);
+            case 2:
+              listaProductos = _context3.sent;
+              paginasTotales = listaProductos.paginas;
+              if (!(listaProductos.productos.length == 0)) {
+                _context3.next = 9;
+                break;
+              }
+              crearMensajeCatalogoVacio();
+              return _context3.abrupt("return", []);
+            case 9:
+              catalogo = document.querySelector('.productos__contenedor');
+              listaProductos.productos.forEach(function (producto) {
+                var articulo = crearArticulo(producto);
+                catalogo.appendChild(articulo);
+              });
+              crearPaginacion();
+              listaArticulos = document.querySelectorAll('.productos__articulo');
+              return _context3.abrupt("return", listaArticulos);
+            case 14:
+            case "end":
+              return _context3.stop();
+          }
+        }, _callee3);
+      }));
+      return function crearCatalogo() {
+        return _ref3.apply(this, arguments);
+      };
+    }();
+    var limpiarCatalogo = function limpiarCatalogo() {
+      var listaProductos = document.querySelectorAll('.productos__articulo');
+      listaProductos.forEach(function (producto) {
+        producto.remove();
+      });
+      var mensajeCatalogoVacio = document.querySelector('.mensaje-catalogo-vacio');
+      if (mensajeCatalogoVacio) {
+        mensajeCatalogoVacio.remove();
+      }
+      var paginacion = document.querySelector('.paginacion');
+      if (paginacion) {
+        paginacion.remove();
+      }
+    };
+    var crearMensajeCatalogoVacio = function crearMensajeCatalogoVacio() {
+      var catalogo = document.querySelector('.productos');
+      var mensaje = document.createElement('P');
+      mensaje.classList.add('mensaje-catalogo-vacio');
+      mensaje.innerText = 'No se encontraron productos que coincidan';
+      catalogo.appendChild(mensaje);
+    }; //Crear articulos para el catalogo
     var crearArticulo = function crearArticulo(producto) {
       var articulo = document.createElement('LI');
       articulo.dataset.id = producto.id;
@@ -1271,6 +1331,51 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
       precioArticulo.innerText = "$ ".concat(producto.precio);
       articulo.appendChild(precioArticulo);
       return articulo;
+    };
+    var crearPaginacion = function crearPaginacion() {
+      var contadorPaginas = 1;
+      var contenedorProductos = document.querySelector('.productos');
+      var contenedorPaginacion = document.createElement('DIV');
+      contenedorPaginacion.classList.add('paginacion');
+      if (numeroPagina > 1) {
+        var botonPrimeraPagina = document.createElement('BUTTON');
+        botonPrimeraPagina.classList.add('paginacion__primera-pagina');
+        botonPrimeraPagina.classList.add('paginacion__boton');
+        botonPrimeraPagina.title = 'Primera pagina';
+        botonPrimeraPagina.innerText = '<';
+        contenedorPaginacion.appendChild(botonPrimeraPagina);
+      }
+      if (numeroPagina > 3) {
+        contadorPaginas = numeroPagina - 2;
+      }
+      while (contadorPaginas <= paginasTotales && contadorPaginas <= numeroPagina + 2) {
+        if (contadorPaginas == numeroPagina) {
+          var paginaActual = document.createElement('SPAN');
+          paginaActual.classList.add('paginacion__pagina-actual');
+          paginaActual.classList.add('paginacion__boton');
+          paginaActual.title = 'Pagina actual';
+          paginaActual.innerText = contadorPaginas;
+          contenedorPaginacion.appendChild(paginaActual);
+        } else {
+          var botonPagina = document.createElement('BUTTON');
+          botonPagina.classList.add("paginacion__pagina");
+          botonPagina.classList.add("paginacion__boton");
+          botonPagina.title = "Pagina ".concat(contadorPaginas);
+          botonPagina.dataset.pagina = contadorPaginas;
+          botonPagina.innerText = contadorPaginas;
+          contenedorPaginacion.appendChild(botonPagina);
+        }
+        contadorPaginas++;
+      }
+      if (numeroPagina != paginasTotales) {
+        var botonUltimaPagina = document.createElement('BUTTON');
+        botonUltimaPagina.classList.add('paginacion__ultima-pagina');
+        botonUltimaPagina.classList.add('paginacion__boton');
+        botonUltimaPagina.title = "Ultima Pagina (".concat(paginasTotales, ")");
+        botonUltimaPagina.innerText = '>';
+        contenedorPaginacion.appendChild(botonUltimaPagina);
+      }
+      contenedorProductos.appendChild(contenedorPaginacion);
     }; //Añade el boton correspondiente segun los productos en el carrito
     var sincronizarBotones = function sincronizarBotones(listaCatalogo, listaCarrito) {
       listaCatalogo.forEach(function (articuloCatalogo) {
@@ -1293,6 +1398,55 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
       var botonesCantidad = document.querySelectorAll('.productos__boton-cantidad');
       añadirCarrito(botonesAñadir);
       cambiarCantidad(botonesCantidad);
+      cambiarPagina();
+    };
+    var añadirFuncionalidadFiltro = function añadirFuncionalidadFiltro() {
+      var inputBuscar = document.querySelector('.filtro__input');
+      var botonBuscar = document.querySelector('.filtro__boton');
+      var selectOrden = document.querySelector('.filtro__select');
+      cambiarOrden(selectOrden);
+      buscarProducto(inputBuscar, botonBuscar);
+    };
+    var buscarProducto = function buscarProducto(inputBuscar, botonBuscar) {
+      botonBuscar.addEventListener('click', function () {
+        numeroPagina = 1;
+        rearmarCatalogo();
+      });
+      inputBuscar.addEventListener('keydown', function (e) {
+        if (e.key == 'Enter') {
+          numeroPagina = 1;
+          rearmarCatalogo();
+        }
+      });
+    };
+    var cambiarOrden = function cambiarOrden(selectOrden) {
+      selectOrden.addEventListener('change', function () {
+        numeroPagina = 1;
+        rearmarCatalogo();
+      });
+    };
+    var cambiarPagina = function cambiarPagina() {
+      var botonPrimeraPagina = document.querySelector('.paginacion__primera-pagina');
+      var botonUltimaPagina = document.querySelector('.paginacion__ultima-pagina');
+      var botonesPagina = document.querySelectorAll('.paginacion__pagina');
+      if (botonPrimeraPagina) {
+        botonPrimeraPagina.addEventListener('click', function () {
+          numeroPagina = 1;
+          rearmarCatalogo();
+        });
+      }
+      if (botonUltimaPagina) {
+        botonUltimaPagina.addEventListener('click', function () {
+          numeroPagina = paginasTotales;
+          rearmarCatalogo();
+        });
+      }
+      botonesPagina.forEach(function (boton) {
+        boton.addEventListener('click', function () {
+          numeroPagina = Number(boton.dataset.pagina);
+          rearmarCatalogo();
+        });
+      });
     }; //Agrega la funcion "añadir" a todos los botones de este tipo que se le pasen
     var añadirCarrito = function añadirCarrito(botonesAñadir) {
       botonesAñadir.forEach(function (botonAñadir) {
@@ -1350,29 +1504,29 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
       var botonResta = botonCantidad.querySelector('.productos__boton-restar');
       var botonSuma = botonCantidad.querySelector('.productos__boton-sumar');
       var inputCantidad = botonCantidad.querySelector('.productos__cantidad');
-      inputCantidad.addEventListener('change', /*#__PURE__*/_asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+      inputCantidad.addEventListener('change', /*#__PURE__*/_asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
         var listaCarrito, resultado, seccionProductos, contenedorProductos, alerta, btnAñadir, articuloBuscado, _resultado, _seccionProductos, _contenedorProductos, _alerta;
-        return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-          while (1) switch (_context3.prev = _context3.next) {
+        return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+          while (1) switch (_context4.prev = _context4.next) {
             case 0:
               listaCarrito = Array.from(document.querySelectorAll('.carrito__articulo'));
               if (!(inputCantidad.value <= 0)) {
-                _context3.next = 21;
+                _context4.next = 21;
                 break;
               }
-              _context3.next = 4;
+              _context4.next = 4;
               return eliminarProductoDelCarritoDB(idBuscado);
             case 4:
-              resultado = _context3.sent;
+              resultado = _context4.sent;
               if (!(resultado.error != false)) {
-                _context3.next = 13;
+                _context4.next = 13;
                 break;
               }
               seccionProductos = document.querySelector('.productos');
               contenedorProductos = document.querySelector('.productos__contenedor');
               alerta = crearAlerta('error', resultado.error);
               seccionProductos.insertBefore(alerta, contenedorProductos);
-              return _context3.abrupt("return");
+              return _context4.abrupt("return");
             case 13:
               btnAñadir = crearBtnAñadir(articulo);
               asignarFuncionalidadAñadir(btnAñadir);
@@ -1385,81 +1539,87 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
                 articuloBuscado.remove();
               }
             case 19:
-              _context3.next = 33;
+              _context4.next = 34;
               break;
             case 21:
-              _context3.next = 23;
+              if (inputCantidad.value > 99) {
+                inputCantidad.value = 99;
+              }
+              _context4.next = 24;
               return actualizarCantidadProductoDelCarrito({
                 'producto_id': idBuscado,
                 'cantidad': inputCantidad.value
               });
-            case 23:
-              _resultado = _context3.sent;
+            case 24:
+              _resultado = _context4.sent;
               if (!(_resultado.error != false)) {
-                _context3.next = 32;
+                _context4.next = 33;
                 break;
               }
               _seccionProductos = document.querySelector('.productos');
               _contenedorProductos = document.querySelector('.productos__contenedor');
               _alerta = crearAlerta('error', 'Ocurrio un error al actualizar el carrito, por favor recargue la pagina');
               _seccionProductos.insertBefore(_alerta, _contenedorProductos);
-              return _context3.abrupt("return");
-            case 32:
-              actualizarCantidadSubtotal(botonCantidad);
+              return _context4.abrupt("return");
             case 33:
-              calcularPrecioCantidad();
+              actualizarCantidadSubtotal(botonCantidad);
             case 34:
+              calcularPrecioCantidad();
+            case 35:
             case "end":
-              return _context3.stop();
+              return _context4.stop();
           }
-        }, _callee3);
+        }, _callee4);
       })));
-      botonResta.addEventListener('click', /*#__PURE__*/_asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+      botonResta.addEventListener('click', /*#__PURE__*/_asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
         var resultado, seccionProductos, contenedorProductos, alerta, _resultado2, _seccionProductos2, _contenedorProductos2, _alerta2, btnAñadir, listaCarrito, articuloBuscado;
-        return _regeneratorRuntime().wrap(function _callee4$(_context4) {
-          while (1) switch (_context4.prev = _context4.next) {
+        return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+          while (1) switch (_context5.prev = _context5.next) {
             case 0:
               if (!(inputCantidad.value > 1)) {
-                _context4.next = 16;
+                _context5.next = 17;
                 break;
               }
               inputCantidad.value--;
-              _context4.next = 4;
+              if (inputCantidad.value > 99) {
+                inputCantidad.value = 99;
+              }
+              _context5.next = 5;
               return actualizarCantidadProductoDelCarrito({
                 'producto_id': idBuscado,
                 'cantidad': inputCantidad.value
               });
-            case 4:
-              resultado = _context4.sent;
+            case 5:
+              resultado = _context5.sent;
               if (!(resultado.error != false)) {
-                _context4.next = 13;
+                _context5.next = 14;
                 break;
               }
               seccionProductos = document.querySelector('.productos');
               contenedorProductos = document.querySelector('.productos__contenedor');
               alerta = crearAlerta('error', 'Ocurrio un error al actualizar el carrito, por favor recargue la pagina');
               seccionProductos.insertBefore(alerta, contenedorProductos);
-              return _context4.abrupt("return");
-            case 13:
-              actualizarCantidadSubtotal(botonCantidad);
+              return _context5.abrupt("return");
             case 14:
-              _context4.next = 35;
+              actualizarCantidadSubtotal(botonCantidad);
+            case 15:
+              _context5.next = 36;
               break;
-            case 16:
-              _context4.next = 18;
+            case 17:
+              _context5.next = 19;
               return eliminarProductoDelCarritoDB(idBuscado);
-            case 18:
-              _resultado2 = _context4.sent;
+            case 19:
+              _resultado2 = _context5.sent;
               if (!(_resultado2.error != false)) {
-                _context4.next = 27;
+                _context5.next = 28;
                 break;
               }
               _seccionProductos2 = document.querySelector('.productos');
               _contenedorProductos2 = document.querySelector('.productos__contenedor');
               _alerta2 = crearAlerta('error', _resultado2.error);
               _seccionProductos2.insertBefore(_alerta2, _contenedorProductos2);
-              return _context4.abrupt("return");
-            case 27:
+              return _context5.abrupt("return");
+            case 28:
               inputCantidad.value--;
               btnAñadir = crearBtnAñadir(articulo);
               asignarFuncionalidadAñadir(btnAñadir);
@@ -1472,52 +1632,55 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
               if (articuloBuscado) {
                 articuloBuscado.remove();
               }
-            case 35:
-              calcularPrecioCantidad();
             case 36:
+              calcularPrecioCantidad();
+            case 37:
             case "end":
-              return _context4.stop();
+              return _context5.stop();
           }
-        }, _callee4);
+        }, _callee5);
       })));
-      botonSuma.addEventListener('click', /*#__PURE__*/_asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+      botonSuma.addEventListener('click', /*#__PURE__*/_asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
         var resultado, seccionProductos, contenedorProductos, alerta;
-        return _regeneratorRuntime().wrap(function _callee5$(_context5) {
-          while (1) switch (_context5.prev = _context5.next) {
+        return _regeneratorRuntime().wrap(function _callee6$(_context6) {
+          while (1) switch (_context6.prev = _context6.next) {
             case 0:
               inputCantidad.value++;
-              _context5.next = 3;
+              if (inputCantidad.value > 99) {
+                inputCantidad.value = 99;
+              }
+              _context6.next = 4;
               return actualizarCantidadProductoDelCarrito({
                 'producto_id': idBuscado,
                 'cantidad': inputCantidad.value
               });
-            case 3:
-              resultado = _context5.sent;
+            case 4:
+              resultado = _context6.sent;
               if (!(resultado.error !== false)) {
-                _context5.next = 12;
+                _context6.next = 13;
                 break;
               }
               seccionProductos = document.querySelector('.productos');
               contenedorProductos = document.querySelector('.productos__contenedor');
               alerta = crearAlerta('error', 'Ocurrio un error al actualizar el carrito, por favor recargue la pagina');
               seccionProductos.insertBefore(alerta, contenedorProductos);
-              return _context5.abrupt("return");
-            case 12:
+              return _context6.abrupt("return");
+            case 13:
               actualizarCantidadSubtotal(botonCantidad);
               calcularPrecioCantidad();
-            case 14:
+            case 15:
             case "end":
-              return _context5.stop();
+              return _context6.stop();
           }
-        }, _callee5);
+        }, _callee6);
       })));
     };
     var asignarFuncionalidadAñadir = function asignarFuncionalidadAñadir(botonAñadir) {
       var articulo = botonAñadir.parentElement;
-      botonAñadir.addEventListener('click', /*#__PURE__*/_asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
+      botonAñadir.addEventListener('click', /*#__PURE__*/_asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
         var idArticulo, listaCarrito, seccionProductos, contenedorProductos, articuloRepetido, alerta, datosProducto, _alerta3, imagenArticulo, btnCantidad;
-        return _regeneratorRuntime().wrap(function _callee6$(_context6) {
-          while (1) switch (_context6.prev = _context6.next) {
+        return _regeneratorRuntime().wrap(function _callee7$(_context7) {
+          while (1) switch (_context7.prev = _context7.next) {
             case 0:
               idArticulo = articulo.dataset.id;
               listaCarrito = Array.from(document.querySelectorAll('.carrito__articulo'));
@@ -1527,18 +1690,18 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
                 return articulo.dataset.id === idArticulo;
               });
               if (!articuloRepetido) {
-                _context6.next = 10;
+                _context7.next = 10;
                 break;
               }
               alerta = crearAlerta('error', 'El producto que intenta añadir ya se encuentra en el carrito');
               seccionProductos.insertBefore(alerta, contenedorProductos);
-              _context6.next = 14;
+              _context7.next = 14;
               break;
             case 10:
-              _context6.next = 12;
+              _context7.next = 12;
               return añadirProducto(idArticulo);
             case 12:
-              datosProducto = _context6.sent;
+              datosProducto = _context7.sent;
               if (datosProducto.error) {
                 _alerta3 = crearAlerta('error', datosProducto.error);
                 seccionProductos.insertBefore(_alerta3, contenedorProductos);
@@ -1553,32 +1716,32 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
               }
             case 14:
             case "end":
-              return _context6.stop();
+              return _context7.stop();
           }
-        }, _callee6);
+        }, _callee7);
       })));
     };
     var asignarFuncionalidadEliminar = function asignarFuncionalidadEliminar(articuloCarrito, botonBorrar) {
       var idBotonBorrar = articuloCarrito.dataset.id;
-      botonBorrar.addEventListener('click', /*#__PURE__*/_asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
+      botonBorrar.addEventListener('click', /*#__PURE__*/_asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee8() {
         var articulosMostrados, resultado, seccionProductos, contenedorProductos, alerta, articuloEncontrado, imagenArticulo, botonCantidad, botonAñadir;
-        return _regeneratorRuntime().wrap(function _callee7$(_context7) {
-          while (1) switch (_context7.prev = _context7.next) {
+        return _regeneratorRuntime().wrap(function _callee8$(_context8) {
+          while (1) switch (_context8.prev = _context8.next) {
             case 0:
               articulosMostrados = Array.from(document.querySelectorAll('.productos__articulo'));
-              _context7.next = 3;
+              _context8.next = 3;
               return eliminarProductoDelCarritoDB(idBotonBorrar);
             case 3:
-              resultado = _context7.sent;
+              resultado = _context8.sent;
               if (!(resultado.error != false)) {
-                _context7.next = 12;
+                _context8.next = 12;
                 break;
               }
               seccionProductos = document.querySelector('.productos');
               contenedorProductos = document.querySelector('.productos__contenedor');
               alerta = crearAlerta('error', resultado.error);
               seccionProductos.insertBefore(alerta, contenedorProductos);
-              return _context7.abrupt("return");
+              return _context8.abrupt("return");
             case 12:
               articuloEncontrado = articulosMostrados.find(function (articulo) {
                 return articulo.dataset.id === idBotonBorrar;
@@ -1597,9 +1760,9 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
               calcularPrecioCantidad();
             case 16:
             case "end":
-              return _context7.stop();
+              return _context8.stop();
           }
-        }, _callee7);
+        }, _callee8);
       })));
     }; //Recalcula el subtotal de un articulo al cambiar la cantidad de este
     var actualizarCantidadSubtotal = function actualizarCantidadSubtotal(articuloTienda) {
@@ -1761,57 +1924,56 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
       return alerta;
     };
     var rearmarCarrito = /*#__PURE__*/function () {
-      var _ref8 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee8() {
+      var _ref9 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee9() {
         var _carritoProductos$;
         var carritoProductos, carritoNormalizado, carritoLocalStorage, carritoDB, seccionProductos, contenedorProductos, alerta, carritoRearmado, listaCarrito;
-        return _regeneratorRuntime().wrap(function _callee8$(_context8) {
-          while (1) switch (_context8.prev = _context8.next) {
+        return _regeneratorRuntime().wrap(function _callee9$(_context9) {
+          while (1) switch (_context9.prev = _context9.next) {
             case 0:
-              _context8.next = 2;
+              _context9.next = 2;
               return recuperarCarrito();
             case 2:
-              carritoProductos = _context8.sent;
+              carritoProductos = _context9.sent;
               carritoNormalizado = [];
               if (!carritoProductos.error) {
-                _context8.next = 29;
+                _context9.next = 28;
                 break;
               }
-              console.log(carritoProductos.error);
               carritoLocalStorage = JSON.parse(localStorage.getItem('carrito') || '[]');
               if (!(carritoLocalStorage.length <= 0)) {
-                _context8.next = 11;
+                _context9.next = 10;
                 break;
               }
               console.log('localStorage vacio');
-              _context8.next = 29;
+              _context9.next = 28;
               break;
-            case 11:
+            case 10:
               if (!(carritoProductos.login == true)) {
-                _context8.next = 16;
+                _context9.next = 15;
                 break;
               }
-              _context8.next = 14;
+              _context9.next = 13;
               return actualizarCarritoDB(carritoLocalStorage);
-            case 14:
-              carritoDB = _context8.sent;
+            case 13:
+              carritoDB = _context9.sent;
               if (carritoDB.error) {
                 console.log(carritoDB.error);
               }
-            case 16:
-              _context8.next = 18;
+            case 15:
+              _context9.next = 17;
               return recuperarPrecio(carritoLocalStorage);
-            case 18:
-              productosPrecios = _context8.sent;
+            case 17:
+              productosPrecios = _context9.sent;
               if (!productosPrecios.error) {
-                _context8.next = 27;
+                _context9.next = 26;
                 break;
               }
               seccionProductos = document.querySelector('.productos');
               contenedorProductos = document.querySelector('.productos__contenedor');
               alerta = crearAlerta('error', 'Ocurrio un error al actualizar el carrito, por favor recargue la pagina o intentelo de nuevo mas tarde');
               seccionProductos.insertBefore(alerta, contenedorProductos);
-              return _context8.abrupt("return");
-            case 27:
+              return _context9.abrupt("return");
+            case 26:
               carritoRearmado = carritoLocalStorage.map(function (item) {
                 var _precio, _precio2;
                 precio = productosPrecios.find(function (p) {
@@ -1823,7 +1985,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
                 });
               });
               carritoNormalizado = normalizarListaCarrito(carritoRearmado);
-            case 29:
+            case 28:
               if ((_carritoProductos$ = carritoProductos[0]) !== null && _carritoProductos$ !== void 0 && _carritoProductos$.producto_id) {
                 carritoNormalizado = normalizarListaCarrito(carritoProductos);
               }
@@ -1833,21 +1995,21 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
               });
               calcularPrecioCantidad();
               listaCarrito = document.querySelectorAll('.carrito__articulo');
-              return _context8.abrupt("return", listaCarrito);
-            case 34:
+              return _context9.abrupt("return", listaCarrito);
+            case 33:
             case "end":
-              return _context8.stop();
+              return _context9.stop();
           }
-        }, _callee8);
+        }, _callee9);
       }));
       return function rearmarCarrito() {
-        return _ref8.apply(this, arguments);
+        return _ref9.apply(this, arguments);
       };
     }(); //Toma el carrito recuperado de la db o el localstorage y le da el formato correcto
     var normalizarListaCarrito = function normalizarListaCarrito(carritoRecuperado) {
-      var carritoNormalizado = Array.from(carritoRecuperado).map(function (_ref9) {
-        var producto_id = _ref9.producto_id,
-          resto = _objectWithoutProperties(_ref9, _excluded);
+      var carritoNormalizado = Array.from(carritoRecuperado).map(function (_ref10) {
+        var producto_id = _ref10.producto_id,
+          resto = _objectWithoutProperties(_ref10, _excluded);
         return _objectSpread({
           id: producto_id
         }, resto);
@@ -1855,79 +2017,53 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
       return carritoNormalizado;
     }; //Carga y almacena los svg para usarlos sin llamadas constantes
     var cargarIconos = /*#__PURE__*/function () {
-      var _ref10 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee9() {
+      var _ref11 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee10() {
         var tipos, _i, _tipos, tipo, res, svgTxt, parser, svgNode;
-        return _regeneratorRuntime().wrap(function _callee9$(_context9) {
-          while (1) switch (_context9.prev = _context9.next) {
+        return _regeneratorRuntime().wrap(function _callee10$(_context10) {
+          while (1) switch (_context10.prev = _context10.next) {
             case 0:
               tipos = ['agregar-carrito', 'signo-mas', 'signo-menos', 'signo-eliminar'];
               _i = 0, _tipos = tipos;
             case 2:
               if (!(_i < _tipos.length)) {
-                _context9.next = 16;
+                _context10.next = 16;
                 break;
               }
               tipo = _tipos[_i];
-              _context9.next = 6;
+              _context10.next = 6;
               return fetch("build/img/icon-".concat(tipo, ".svg"));
             case 6:
-              res = _context9.sent;
-              _context9.next = 9;
+              res = _context10.sent;
+              _context10.next = 9;
               return res.text();
             case 9:
-              svgTxt = _context9.sent;
+              svgTxt = _context10.sent;
               parser = new DOMParser();
               svgNode = parser.parseFromString(svgTxt, "image/svg+xml").documentElement;
               iconosSVG[tipo] = svgNode;
             case 13:
               _i++;
-              _context9.next = 2;
+              _context10.next = 2;
               break;
             case 16:
-            case "end":
-              return _context9.stop();
-          }
-        }, _callee9);
-      }));
-      return function cargarIconos() {
-        return _ref10.apply(this, arguments);
-      };
-    }(); //Funciones para llamar APIS
-    //luego se le pueden agregar como parametros que tipo de orden quiere y por que valor ordenarlo
-    //ademas del numero de pagina donde se encuentra para rearmar el catalogo segun la pagina
-    var recuperarCatalogo = /*#__PURE__*/function () {
-      var _ref11 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee10() {
-        var url, resultado, productos;
-        return _regeneratorRuntime().wrap(function _callee10$(_context10) {
-          while (1) switch (_context10.prev = _context10.next) {
-            case 0:
-              url = "/api/recuperarCatalogo";
-              _context10.next = 3;
-              return fetch(url);
-            case 3:
-              resultado = _context10.sent;
-              _context10.next = 6;
-              return resultado.json();
-            case 6:
-              productos = _context10.sent;
-              return _context10.abrupt("return", productos);
-            case 8:
             case "end":
               return _context10.stop();
           }
         }, _callee10);
       }));
-      return function recuperarCatalogo() {
+      return function cargarIconos() {
         return _ref11.apply(this, arguments);
       };
-    }();
-    var recuperarCarrito = /*#__PURE__*/function () {
-      var _ref12 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee11() {
+    }(); //Funciones para llamar APIS
+    //luego se le pueden agregar como parametros que tipo de orden quiere y por que valor ordenarlo
+    //ademas del numero de pagina donde se encuentra para rearmar el catalogo segun la pagina
+    var recuperarCatalogo = /*#__PURE__*/function () {
+      var _ref12 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee11(filtro, orden, pagina) {
         var url, resultado, productos;
         return _regeneratorRuntime().wrap(function _callee11$(_context11) {
           while (1) switch (_context11.prev = _context11.next) {
             case 0:
-              url = "/api/recuperarCarrito";
+              url = "/api/recuperarCatalogo?filtro=".concat(filtro, "&orden=").concat(orden, "&pagina=").concat(pagina);
               _context11.next = 3;
               return fetch(url);
             case 3:
@@ -1943,59 +2079,48 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
           }
         }, _callee11);
       }));
-      return function recuperarCarrito() {
+      return function recuperarCatalogo(_x, _x2, _x3) {
         return _ref12.apply(this, arguments);
       };
     }();
-    var actualizarCarritoDB = /*#__PURE__*/function () {
+    var recuperarCarrito = /*#__PURE__*/function () {
       var _ref13 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee12() {
-        var carrito,
-          url,
-          resultado,
-          consulta,
-          _args12 = arguments;
+        var url, resultado, productos;
         return _regeneratorRuntime().wrap(function _callee12$(_context12) {
           while (1) switch (_context12.prev = _context12.next) {
             case 0:
-              carrito = _args12.length > 0 && _args12[0] !== undefined ? _args12[0] : [];
-              url = "/api/actualizarCarritoDB";
-              _context12.next = 4;
-              return fetch(url, {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(carrito)
-              });
-            case 4:
+              url = "/api/recuperarCarrito";
+              _context12.next = 3;
+              return fetch(url);
+            case 3:
               resultado = _context12.sent;
-              _context12.next = 7;
+              _context12.next = 6;
               return resultado.json();
-            case 7:
-              consulta = _context12.sent;
-              return _context12.abrupt("return", consulta);
-            case 9:
+            case 6:
+              productos = _context12.sent;
+              return _context12.abrupt("return", productos);
+            case 8:
             case "end":
               return _context12.stop();
           }
         }, _callee12);
       }));
-      return function actualizarCarritoDB() {
+      return function recuperarCarrito() {
         return _ref13.apply(this, arguments);
       };
     }();
-    var recuperarPrecio = /*#__PURE__*/function () {
+    var actualizarCarritoDB = /*#__PURE__*/function () {
       var _ref14 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee13() {
         var carrito,
           url,
           resultado,
-          precios,
+          consulta,
           _args13 = arguments;
         return _regeneratorRuntime().wrap(function _callee13$(_context13) {
           while (1) switch (_context13.prev = _context13.next) {
             case 0:
               carrito = _args13.length > 0 && _args13[0] !== undefined ? _args13[0] : [];
-              url = "/api/recuperarPrecio";
+              url = "/api/actualizarCarritoDB";
               _context13.next = 4;
               return fetch(url, {
                 method: 'POST',
@@ -2009,57 +2134,94 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
               _context13.next = 7;
               return resultado.json();
             case 7:
-              precios = _context13.sent;
-              return _context13.abrupt("return", precios);
+              consulta = _context13.sent;
+              return _context13.abrupt("return", consulta);
             case 9:
             case "end":
               return _context13.stop();
           }
         }, _callee13);
       }));
-      return function recuperarPrecio() {
+      return function actualizarCarritoDB() {
         return _ref14.apply(this, arguments);
       };
-    }(); //Tengo que cambiar la manera de llamar esta api por un post como en recuperarPrecio
-    var añadirProducto = /*#__PURE__*/function () {
-      var _ref15 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee14(id) {
-        var url, resultado, producto;
+    }();
+    var recuperarPrecio = /*#__PURE__*/function () {
+      var _ref15 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee14() {
+        var carrito,
+          url,
+          resultado,
+          precios,
+          _args14 = arguments;
         return _regeneratorRuntime().wrap(function _callee14$(_context14) {
           while (1) switch (_context14.prev = _context14.next) {
             case 0:
-              url = "/api/a\xF1adirProducto?id=".concat(id);
-              _context14.next = 3;
-              return fetch(url);
-            case 3:
+              carrito = _args14.length > 0 && _args14[0] !== undefined ? _args14[0] : [];
+              url = "/api/recuperarPrecio";
+              _context14.next = 4;
+              return fetch(url, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(carrito)
+              });
+            case 4:
               resultado = _context14.sent;
-              _context14.next = 6;
+              _context14.next = 7;
               return resultado.json();
-            case 6:
-              producto = _context14.sent;
-              return _context14.abrupt("return", producto);
-            case 8:
+            case 7:
+              precios = _context14.sent;
+              return _context14.abrupt("return", precios);
+            case 9:
             case "end":
               return _context14.stop();
           }
         }, _callee14);
       }));
-      return function añadirProducto(_x) {
+      return function recuperarPrecio() {
         return _ref15.apply(this, arguments);
+      };
+    }(); //Tengo que cambiar la manera de llamar esta api por un post como en recuperarPrecio
+    var añadirProducto = /*#__PURE__*/function () {
+      var _ref16 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee15(id) {
+        var url, resultado, producto;
+        return _regeneratorRuntime().wrap(function _callee15$(_context15) {
+          while (1) switch (_context15.prev = _context15.next) {
+            case 0:
+              url = "/api/a\xF1adirProducto?id=".concat(id);
+              _context15.next = 3;
+              return fetch(url);
+            case 3:
+              resultado = _context15.sent;
+              _context15.next = 6;
+              return resultado.json();
+            case 6:
+              producto = _context15.sent;
+              return _context15.abrupt("return", producto);
+            case 8:
+            case "end":
+              return _context15.stop();
+          }
+        }, _callee15);
+      }));
+      return function añadirProducto(_x4) {
+        return _ref16.apply(this, arguments);
       };
     }();
     var actualizarCantidadProductoDelCarrito = /*#__PURE__*/function () {
-      var _ref16 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee15() {
+      var _ref17 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee16() {
         var producto,
           url,
           resultado,
           precios,
-          _args15 = arguments;
-        return _regeneratorRuntime().wrap(function _callee15$(_context15) {
-          while (1) switch (_context15.prev = _context15.next) {
+          _args16 = arguments;
+        return _regeneratorRuntime().wrap(function _callee16$(_context16) {
+          while (1) switch (_context16.prev = _context16.next) {
             case 0:
-              producto = _args15.length > 0 && _args15[0] !== undefined ? _args15[0] : [];
+              producto = _args16.length > 0 && _args16[0] !== undefined ? _args16[0] : [];
               url = "/api/actualizarCantidadProductoDelCarrito";
-              _context15.next = 4;
+              _context16.next = 4;
               return fetch(url, {
                 method: 'PUT',
                 headers: {
@@ -2068,30 +2230,30 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
                 body: JSON.stringify(producto)
               });
             case 4:
-              resultado = _context15.sent;
-              _context15.next = 7;
+              resultado = _context16.sent;
+              _context16.next = 7;
               return resultado.json();
             case 7:
-              precios = _context15.sent;
-              return _context15.abrupt("return", precios);
+              precios = _context16.sent;
+              return _context16.abrupt("return", precios);
             case 9:
             case "end":
-              return _context15.stop();
+              return _context16.stop();
           }
-        }, _callee15);
+        }, _callee16);
       }));
       return function actualizarCantidadProductoDelCarrito() {
-        return _ref16.apply(this, arguments);
+        return _ref17.apply(this, arguments);
       };
     }();
     var eliminarProductoDelCarritoDB = /*#__PURE__*/function () {
-      var _ref17 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee16(productoId) {
+      var _ref18 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee17(productoId) {
         var url, resultado, consulta;
-        return _regeneratorRuntime().wrap(function _callee16$(_context16) {
-          while (1) switch (_context16.prev = _context16.next) {
+        return _regeneratorRuntime().wrap(function _callee17$(_context17) {
+          while (1) switch (_context17.prev = _context17.next) {
             case 0:
               url = "/api/eliminarProductoDelCarrito";
-              _context16.next = 3;
+              _context17.next = 3;
               return fetch(url, {
                 method: 'DELETE',
                 headers: {
@@ -2100,24 +2262,29 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
                 body: JSON.stringify(productoId)
               });
             case 3:
-              resultado = _context16.sent;
-              _context16.next = 6;
+              resultado = _context17.sent;
+              _context17.next = 6;
               return resultado.json();
             case 6:
-              consulta = _context16.sent;
-              return _context16.abrupt("return", consulta);
+              consulta = _context17.sent;
+              return _context17.abrupt("return", consulta);
             case 8:
             case "end":
-              return _context16.stop();
+              return _context17.stop();
           }
-        }, _callee16);
+        }, _callee17);
       }));
-      return function eliminarProductoDelCarritoDB(_x2) {
-        return _ref17.apply(this, arguments);
+      return function eliminarProductoDelCarritoDB(_x5) {
+        return _ref18.apply(this, arguments);
       };
     }();
     var iconosSVG = {};
+    var numeroPagina = 1;
+    var paginasTotales = 1;
+    var filtroBusqueda = null;
+    var ordenBusqueda = 'default';
     renderizarPagina();
+    añadirFuncionalidadFiltro();
     ;
   } //Fin de la verificacion que revisa estar en la pagina correcta 
 })();

@@ -91,7 +91,7 @@ class AdminController{
                     break;
             }
 
-            $limitePorPagina = 5;
+            $limitePorPagina = 10;
             $totalProductos = Producto::countAll();
             $numeroPaginas = ceil(($totalProductos)/ $limitePorPagina);
 

@@ -7,7 +7,7 @@ class Producto extends ActiveRecord{
     protected static $columnasDB = ['id', 'nombre', 'categoria', 'precio', 'imagen'];
 
     //Define el peso maximo de la imagen subida en MB
-    protected static $MBs = 2;
+    protected static $MBs = 3;
     
 
     public $id;

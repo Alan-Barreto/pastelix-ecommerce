@@ -45,4 +45,10 @@ class PaginasController{
             'usuario' => $usuario[0] ?? ''
         ]);
     }
+
+    public static function gracias(Router $router){
+        $router->render('paginas/gracias', [
+            'titulo' => 'Gracias por su compra',
+        ]);
+    }
 }

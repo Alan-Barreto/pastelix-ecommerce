@@ -27,7 +27,6 @@
 
         <div class="formulario__campo">
             <label for="pais" class="formulario__label">Pais</label>
-            <!-- <input type="text" name="pais" id="pais" placeholder="Ingresa tu Pais" class="formulario__input" value="<?php //echo $direccion->pais; ?>"> -->
             <select name="pais" id="pais" class="formulario__input campo-pais">
                 <option value="" disabled selected>Seleccione un país</option>
                 <?php 
@@ -38,3 +37,15 @@
                 <?php } ?>
             </select>
         </div>  
+
+        <?php if(isset($direccion->predeterminada) && $direccion->predeterminada == 0){ ?>
+            <div class="formulario__campo">
+                <label for="predeterminada" class="formulario__label">
+                    <input type="checkbox" name="predeterminada" id="predeterminada" class="formulario__input formulario__input--radio" value="si">
+                    Direccion predeterminada
+                </label>
+                
+            </div>
+        <?php } ?>
+
+        

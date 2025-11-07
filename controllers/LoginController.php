@@ -6,6 +6,8 @@ use MVC\Router;
 use Model\Token;
 use Classes\Email;
 use Model\Usuario;
+use Model\UsuarioSesion;
+
 
 class LoginController{
     public static function login(Router $router){
@@ -15,6 +17,7 @@ class LoginController{
             
         }else{
             if($_SERVER['REQUEST_METHOD'] === 'POST'){
+                $reenviarConfirmacion = false;
                 $usuario = new Usuario($_POST);
                 $alertas= $usuario->validar_login();
                 if(empty($alertas)){
@@ -38,6 +41,18 @@ class LoginController{
                                     }else{
                                         $_SESSION['rol'] = 'usuario';
                                     }
+
+                                    if(isset($_POST['recuerdame']) && $_POST['recuerdame'] == 'si'){
+                                        $token = bin2hex(random_bytes(32));
+                                        $recordarSesion = new UsuarioSesion();
+                                        $recordarSesion->setUsuario();
+                                        $recordarSesion->setToken($token);
+                                        $recordarSesion->setFechaCreacion();
+                                        $recordarSesion->guardar();
+                                         
+                                        setcookie('recordarme', $token, time() + (86400 * 30), "/", "", false, true);
+                                    }
+
                                     if(is_admin()){
                                         header('Location: /admin');
                                     }else{
@@ -47,6 +62,7 @@ class LoginController{
                                 
                             }else{
                                 $alertas = Usuario::setAlerta('error', 'Cuenta no confirmada, desea que le reenviemos la confirmacion?');
+                                $reenviarConfirmacion = true;
                             }                       
                         }else{
                             $alertas = Usuario::setAlerta('error', 'E-mail o contraseña incorrectos');
@@ -60,15 +76,53 @@ class LoginController{
             $router->render('auth/login',[
                 'titulo' => 'Iniciar Sesión',
                 'usuario' => $usuario,
-                'alertas' => $alertas
+                'alertas' => $alertas,
+                'reenviarConfirmacion' => $reenviarConfirmacion
             ]);
         }  
+    }
+
+    public static function reenviarConfirmacion(){
+        if(is_auth()){
+            header('Location: /usuario');
+            exit();
+        }
+        if($_SERVER['REQUEST_METHOD'] === 'POST'){
+            $usuario = array_shift(Usuario::thisWhere(['id', 'nombre'], 'email', $_POST['email']));
+
+            if($usuario){
+                $token = new Token(
+                    ['usuario_id' => $usuario->id,
+                    'accion' => 'Confirmar Correo']
+                );
+            
+                $mail = new Email($_POST['email'], $usuario->nombre, $token->token, $token->selector, $token->accion);
+                $mail->enviarCorreo();
+
+                $token->hashearToken();
+                $resultado = $token->guardar();
+                if($resultado){
+                    header('Location: /mensaje');
+                }   
+            }
+
+                                 
+        }
     }
 
     public static function logout(){
 
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
             session_start();
+            if(isset($_COOKIE['recordarme'])){
+                $tokenHash = hash('sha256', $_COOKIE['recordarme']);
+                $sesionExistente = UsuarioSesion::where('token', $tokenHash);
+                if($sesionExistente){
+                    $sesionExistente->delete();
+                    setcookie('recordarme', '', time() - 3600, '/');
+                }
+            }
+
             $_SESSION = [];
             
             header('Location: /');
@@ -90,10 +144,10 @@ class LoginController{
                 if(empty($errores)){
                     $resultado = $usuario->where('email', $usuario->email);
                     if($resultado){
-                        // $errores = Usuario::setAlerta('error', 'E-mail ya registrado');
                         $errores['email'] = 'E-mail ya registrado';
                     }else{
                         $usuario->hashearPassword();    
+                        $usuario->setFechaCreacion();
                         $resultado = $usuario->guardar();
 
                         $token = new Token(

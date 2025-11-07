@@ -23,6 +23,8 @@ $router->post('/logout',[LoginController::class, 'logout']);
 $router->get('/registro',[LoginController::class, 'registro']);
 $router->post('/registro',[LoginController::class, 'registro']);
 $router->get('/mensaje',[LoginController::class, 'mensaje']);
+$router->post('/reenviar-confirmacion',[LoginController::class, 'reenviarConfirmacion']);
+
 
 //Recuperar contraseña
 $router->get('/olvide',[LoginController::class, 'olvide']);
@@ -67,6 +69,7 @@ $router->get('/admin/pedidos/pedido',[AdminController::class, 'detallesPedido'])
 $router->get('/', [PaginasController::class, 'index']);
 $router->get('/tienda', [PaginasController::class, 'tienda']);
 $router->get('/checkout', [PaginasController::class, 'checkout']);
+$router->get('/gracias', [PaginasController::class, 'gracias']);
 
 //APIS
 $router->get('/api/recuperarPedido', [APIDatosUsuario::class, 'recuperarPedido']);

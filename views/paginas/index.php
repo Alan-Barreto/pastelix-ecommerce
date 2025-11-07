@@ -5,7 +5,9 @@
 
     <a href="/tienda" class="inicio__boton boton">Comprar ahora</a>
 
-    <a href="/registro" class="inicio__registro">Crear cuenta</a>
+    <?php if(!is_auth()){ ?>
+        <a href="/registro" class="inicio__registro">Crear cuenta</a>
+    <?php } ?>
 
     <div class="inicio__ventajas">
         <div class="inicio__elemento">

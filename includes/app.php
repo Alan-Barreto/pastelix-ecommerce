@@ -12,3 +12,7 @@ require 'funciones.php';
 require 'database.php';
 
 ActiveRecord::setDB($db);
+
+if(!is_auth()){
+    verificarSesion();
+}

@@ -20,11 +20,33 @@
         width: 100%;
     }
 
+    .filtro{
+        display: flex;
+        justify-content: space-between;
+        margin: 0;
+
+        &__input{
+            height: 24px;
+            border: 1px solid v.$marronOscuro;
+            color: v.$marronOscuro;
+
+        }
+
+        &__select{
+            border: 1px solid v.$marronOscuro;
+            height: 25px;
+            color: v.$marronOscuro;
+            margin-right: 0;
+            &-texto{
+                font-size: 20px;
+            }
+        }
+    }
+
     .productos{
 
         display: flex;
         flex-direction: column;
-        justify-content: center;
         margin-right: 20px;
 
         &__contenedor{
@@ -100,6 +122,10 @@
     
         &__boton-sumar:hover img, .productos__boton-restar:hover img{
             filter:invert(.4) sepia() hue-rotate(-16deg) saturate(86) brightness(42);
+        }
+
+        .alerta{
+            width: 100%;
         }
     }
     

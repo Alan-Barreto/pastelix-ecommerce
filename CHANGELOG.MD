@@ -8,6 +8,28 @@ El formato sigue el esquema de versionado semántico: MAJOR.MINOR.PATCH
 - MINOR: nuevas funcionalidades compatibles
 - PATCH: correcciones o mejoras internas sin cambios visibles importantes
 
+## [1.0.0] - 2025-10-07
+### ➕ Agregado
+- Creada la ruta `/reenviar-confirmacion` 
+- Creada la funcion `reenviarConfirmacion` dentro del controlador `LoginController`
+- Creada la ruta `gracias`
+- Creada la funcion `gracias` dentro del controlador `PaginasController`
+- Creada la tabla `usuario_sesion`
+- Implementado el modelo `UsuarioSesion` para interactuar con la base de datos
+- Implementadas sesiones persistentes mediante cookies
+
+### 🔧 Cambiado
+- En la ruta `/tienda`:
+    - Se agrego una barra de busqueda para buscar productos por nombre/categoria
+    - Se agrego la opcion de elegir el orden en el que aparecen los productos
+    - Se agrego paginacion a la lista de productos
+    - Se agrego una validación para limitar a 99 la cantidad de cada producto individual en el pedido
+- Modificado el archivo `database.sql` para mantener coherencia con la nueva estructura
+
+### 🐛 Corregido
+- Arreglado error en la funcion `guardarNuevosDatos` del controlador `APIDatosUsuario`
+- Arreglado error al intentar registrar una cuenta nueva
+
 ## [0.9.0] - 2025-09-24
 ### ➕ Agregado
 - Creada funcion `cargarIconos` dentro del archivo `tienda.js`

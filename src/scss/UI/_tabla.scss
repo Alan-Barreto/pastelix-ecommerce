@@ -59,7 +59,7 @@
     }
 
     &--admin{
-
+        
         .tabla__fila{
             &:hover:not(.tabla__fila--no-hover){
             cursor: pointer;
@@ -79,6 +79,7 @@
             .tabla__fila{
 
                 &:nth-child(odd){
+                    color: v.$grisClaro;
                     background-color: v.$grisAzul200;
                 }
                 &:hover:not(.tabla__fila--no-hover){

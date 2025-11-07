@@ -20,7 +20,6 @@
         color: v.$marronOscuro;
         text-decoration: underline;
         margin-top: 10px;
-        margin-bottom: 30px;
         &:hover{
             color: v.$doradoMetalico;
         }
@@ -31,6 +30,7 @@
         justify-content: space-between;
         max-width: 450px;
         width: 100%;
+        margin-top: 30px;
     }
 
     &__elemento{

@@ -53,7 +53,8 @@
         <div class="boton__paypal">
     
             <div id="paypal-button-container"></div>
-            <p id="result-message"></p>
+            <!-- <p id="result-message"></p> -->
+            <div class="alerta alerta__error hidden" id="result-message"></div>
         </div>
     </div>
 </main>

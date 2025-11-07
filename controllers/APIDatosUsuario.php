@@ -143,7 +143,7 @@ class APIDatosUsuario{
             case 'datos':
                 $usuario = Usuario::where('id', $usuarioId);
                 $usuario->sincronizar($_POST);
-                //$usuario->guardar();
+                $usuario->guardar();
                 $mensaje = 'Datos actualizados con exito';
                             
                 break;
@@ -156,9 +156,9 @@ class APIDatosUsuario{
                     'nuevoEmail' => $_POST['correo']
                 ]);
                 $mail = new Email($usuario->email, $usuario->nombre, $token->token, $token->selector, $token->accion);
-                //$mail->enviarCorreo();
+                $mail->enviarCorreo();
                 $token->hashearToken();
-                //$token->guardar();
+                $token->guardar();
                 
                 $mensaje = 'Se enviara un correo de confirmacion a su E-mail actual';
 
@@ -174,10 +174,10 @@ class APIDatosUsuario{
                 ]);
 
                 $mail = new Email($usuario->email, $usuario->nombre, $token->token, $token->selector, $token->accion);
-                //$mail->enviarCorreo();
+                $mail->enviarCorreo();
                 $token->hashearToken();
                 $token->hashearPassword();
-                //$token->guardar();
+                $token->guardar();
             
                 $mensaje = 'Se enviara un correo de confirmacion a su E-mail';
       

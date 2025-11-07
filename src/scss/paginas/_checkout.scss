@@ -31,6 +31,10 @@
         }
     }
 
+    #result-message{
+        width: 385px;
+    }
+
     @media (max-width: v.$tablet){
         flex-direction: column;
         align-items: center;

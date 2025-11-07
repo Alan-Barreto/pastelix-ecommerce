@@ -8,17 +8,69 @@ use Model\Producto;
 
 class APICarrito{
     public static function recuperarCatalogo(){
-        //A futuro se puede agregar cosas como pagina y orden deseado para rearmar el carrito al cambiar de pagina y el orden 
+        $filtro = htmlspecialchars(trim($_GET['filtro'])) ?? null;
+        $orden = 'id';
+        $sentido = 'ASC';
+        $paginaActual = htmlspecialchars(trim($_GET['pagina'])) ?? 1;
+        $productos = [];
+        
+        switch($_GET['orden'] ?? 'default'){
+            case 'nombre':
+                $orden = 'nombre';
+                $sentido = 'ASC';
+                break;
 
-        $productos = Producto::all('ASC');
+            case 'nombreInvertido':
+                $orden = 'nombre';
+                $sentido = 'DESC';
+                break;
 
-        if(!$productos){
-            http_response_code(404);
-            echo json_encode(['error' => 'No se pudo recuperar los productos']);
-            exit;
+            case 'precio':
+                $orden = 'precio';
+                $sentido = 'ASC';
+                break;
+
+            case 'precioInvertido':
+                $orden = 'precio';
+                $sentido = 'DESC';
+                break;
+
+            case 'categoria':
+                $orden = 'categoria';
+                $sentido = 'ASC';
+                break;
+
+            case 'categoriaInvertida':
+                $orden = 'categoria';
+                $sentido = 'DESC';
+                break;
+
+            default:
+                $orden = 'id';
+                $sentido = 'ASC';
+            break;
         }
 
-        echo json_encode($productos);
+        $limitePorPagina = 6;
+        $totalProductos = Producto::countAll();
+        $numeroPaginas = ceil(($totalProductos)/ $limitePorPagina);
+        
+        $offset = ($paginaActual - 1) * $limitePorPagina;
+
+        if($filtro == null || $filtro == 'null'){
+            $productos = Producto::thisPaginated($limitePorPagina, $offset, $orden, $sentido,['*']);
+        }else {
+            $productos = Producto::thisWherePaginated(
+                $limitePorPagina, $offset, $orden, $sentido,['*'], 'nombre', "%$filtro%' OR categoria LIKE '%$filtro%", "LIKE"
+            );
+            $totalProductos = Producto::count("nombre LIKE '%$filtro%' OR", "%$filtro%", ' categoria LIKE');
+            $numeroPaginas = ceil(($totalProductos)/ $limitePorPagina);
+        } 
+
+        echo json_encode([
+            'productos' => $productos ?? [],
+            'paginas' => $numeroPaginas
+        ]);
         exit;
     }
 
